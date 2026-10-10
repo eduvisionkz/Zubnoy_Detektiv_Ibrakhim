@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Зубной детектив — интерактивная лаборатория напитков</title>
+<style>
+:root{
+  --navy:#0b2545;--navy2:#13315c;--teal:#13a3a8;--teal2:#0e8287;--sky:#8fd3f4;--light:#e8f5fc;
+  --bg:#eef6fb;--white:#fff;--orange:#ff8c42;--orange2:#e8701f;--ok:#2fa866;--bad:#e0524a;
+  --glass:rgba(255,255,255,.72);--line:rgba(11,37,69,.12);--muted:#5b6f86;
+  --shadow:0 10px 30px rgba(11,37,69,.10);--shadow2:0 4px 14px rgba(11,37,69,.08);
+  --r:20px;
+}
+*{box-sizing:border-box}
+html{font-size:16px}
+html.big{font-size:20px}
+body{margin:0;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--navy);
+  background:radial-gradient(1200px 600px at 80% -10%,#d4effa 0%,transparent 60%),radial-gradient(900px 500px at -10% 110%,#d7f3f1 0%,transparent 60%),var(--bg);min-height:100vh;line-height:1.5}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit}
+.hidden{display:none!important}
+
+/* ---------- layout ---------- */
+.app{display:flex;min-height:100vh}
+.side{width:17rem;flex-shrink:0;background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:1.25rem 1rem;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+.brand{display:flex;align-items:center;gap:.6rem}
+.brand svg{width:2.8rem;height:2.8rem;flex-shrink:0}
+.brand b{display:block;font-size:1.05rem;letter-spacing:.04em}
+.brand small{opacity:.7;font-size:.75rem}
+.nav{display:flex;flex-direction:column;gap:.25rem}
+.nav button{display:flex;align-items:center;gap:.65rem;text-align:left;background:transparent;border:0;color:#d6e6f5;padding:.55rem .7rem;border-radius:12px;font-size:.92rem;transition:background .2s,color .2s}
+.nav button .num{width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);font-size:.75rem;font-weight:700;flex-shrink:0;position:relative}
+.nav button.done .num{background:var(--teal)}
+.nav button.done .num::after{content:"";position:absolute;right:-3px;top:-3px;width:.6rem;height:.6rem;border-radius:50%;background:var(--orange);border:2px solid var(--navy)}
+.nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav button.active{background:rgba(143,211,244,.18);color:#fff;font-weight:600}
+.progress-box{background:rgba(255,255,255,.07);border-radius:14px;padding:.8rem}
+.progress-box p{margin:0 0 .4rem;font-size:.82rem}
+.pbar{height:.55rem;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--sky));transition:width .6s}
+.tools{display:flex;flex-direction:column;gap:.4rem;margin-top:auto}
+.tools button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:10px;padding:.5rem .7rem;font-size:.85rem;text-align:left;display:flex;align-items:center;gap:.5rem}
+.tools button:hover{background:rgba(255,255,255,.16)}
+.tools button.on{background:var(--teal);border-color:var(--teal)}
+.main{flex:1;min-width:0;padding:1.6rem 2rem 4rem}
+.page{display:none;animation:pageIn .45s ease}
+.page.show{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- shared ---------- */
+h1,h2,h3{margin:0;line-height:1.2}
+.ph-title{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.ph-title .badge{background:var(--navy);color:#fff;border-radius:12px;padding:.35rem .7rem;font-size:.78rem;font-weight:700;letter-spacing:.05em}
+.ph-title h2{font-size:1.75rem}
+.ph-title p{margin:.2rem 0 0;color:var(--muted)}
+.card{background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.9);border-radius:var(--r);box-shadow:var(--shadow);padding:1.25rem}
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.btn{border:0;border-radius:14px;padding:.75rem 1.2rem;font-weight:700;font-size:.95rem;background:var(--teal);color:#fff;box-shadow:0 6px 16px rgba(19,163,168,.3);transition:transform .15s,background .2s,box-shadow .2s,opacity .2s}
+.btn:hover{transform:translateY(-2px);background:var(--teal2)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.orange{background:var(--orange);box-shadow:0 6px 16px rgba(255,140,66,.35)}
+.btn.orange:hover{background:var(--orange2)}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:var(--shadow2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--light)}
+.btn.sm{padding:.45rem .8rem;font-size:.85rem;border-radius:10px}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:99px;letter-spacing:.02em;vertical-align:middle}
+.tag::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:currentColor}
+.tag.data{background:#dcf4ea;color:#17805a}
+.tag.cal{background:#e1ecfd;color:#2457b8}
+.tag.model{background:#fff0d9;color:#b2620d}
+.tag.viz{background:#efe6fb;color:#6b3fb3}
+.legend-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0 1rem}
+.note{border-left:4px solid var(--orange);background:#fff7ef;border-radius:0 14px 14px 0;padding:.9rem 1rem;margin-top:1rem}
+.note b{color:var(--orange2)}
+.tbl{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl th{text-align:left;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:.55rem .6rem;border-bottom:2px solid var(--line)}
+.tbl td{padding:.6rem;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.dot{display:inline-block;width:.9rem;height:.9rem;border-radius:50%;vertical-align:middle;margin-right:.4rem;border:1px solid rgba(0,0,0,.1)}
+.pill{display:inline-block;padding:.15rem .6rem;border-radius:99px;font-size:.8rem;font-weight:600;background:var(--light)}
+select,input[type=number],input[type=text]{border:2px solid var(--line);border-radius:12px;padding:.55rem .7rem;background:#fff;color:var(--navy);min-width:0}
+select:focus,input:focus{outline:none;border-color:var(--teal)}
+.fade-in{animation:pageIn .5s ease}
+
+/* ---------- Zubik ---------- */
+.zubik .zb-float{animation:zfloat 3.2s ease-in-out infinite;transform-origin:center}
+@keyframes zfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.zubik .m-sad,.zubik .m-wow{display:none}
+.zubik.sad .m-happy,.zubik.wow .m-happy{display:none}
+.zubik.sad .m-sad{display:block}
+.zubik.wow .m-wow{display:block}
+.zubik.joy .zb-float{animation:zjump .6s ease 2}
+.zubik.sad .zb-float{animation:zshake .5s ease 2}
+@keyframes zjump{0%,100%{transform:translateY(0)}40%{transform:translateY(-16px) rotate(-4deg)}}
+@keyframes zshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.zubik .tube-liq{animation:tubeGlow 2s ease-in-out infinite}
+@keyframes tubeGlow{50%{opacity:.6}}
+
+/* ---------- HOME ---------- */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:1.5rem;align-items:center;padding:2rem;border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(232,245,252,.75));box-shadow:var(--shadow);border:1px solid #fff;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:26rem;height:26rem;border-radius:50%;right:-6rem;top:-8rem;background:radial-gradient(circle,rgba(19,163,168,.18),transparent 70%)}
+.hero h1{font-size:3.1rem;letter-spacing:.02em;background:linear-gradient(90deg,var(--navy),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{font-size:1.2rem;font-weight:600;color:var(--teal2);margin:.4rem 0 1rem}
+.hero .desc{font-size:1.02rem;color:#36506d;max-width:34rem}
+.hero-art{position:relative;min-height:22rem}
+.hero-art .zubik{position:absolute;width:13rem;left:50%;top:0;transform:translateX(-50%)}
+.hero-glasses{position:absolute;bottom:2.6rem;left:0;right:0;display:flex;justify-content:center;gap:.5rem}
+.hero-glasses svg{width:2.9rem;animation:bob 3s ease-in-out infinite}
+.hero-glasses svg:nth-child(2n){animation-delay:.4s}
+.hero-glasses svg:nth-child(3n){animation-delay:.8s}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.hero-scale{position:absolute;bottom:.4rem;left:6%;right:6%;height:1.2rem;border-radius:99px;background:linear-gradient(90deg,#d7263d,#f0533a,#f58a3a,#f7b733,#f2d43b,#b5d334,#3fb950,#1fa59a,#2b7bd6,#4b4fc4,#6a2c91);box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.hero-scale span{position:absolute;top:1.3rem;font-size:.7rem;color:var(--muted);transform:translateX(-50%)}
+.hero-flask{position:absolute;width:4.5rem}
+.hero-flask.f1{left:2%;top:3.5rem;animation:bob 4s ease-in-out infinite}
+.hero-flask.f2{right:3%;top:5.5rem;animation:bob 3.5s ease-in-out infinite .6s}
+.hero-strip{position:absolute;right:16%;top:1rem;width:1.1rem;height:5rem;background:#fffdf3;border:2px solid #c9d6e2;border-radius:4px;transform:rotate(14deg);overflow:hidden}
+.hero-strip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:35%;background:#f58a3a;animation:stripC 4s ease-in-out infinite}
+@keyframes stripC{0%,100%{background:#f58a3a}33%{background:#3fb950}66%{background:#f2d43b}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem}
+.stat{display:flex;align-items:center;gap:1rem}
+.stat .n{font-size:2.6rem;font-weight:800;color:var(--teal);line-height:1}
+.stat .l{font-weight:600}
+.author{margin-top:1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+
+/* ---------- RESEARCH ---------- */
+.rq{font-size:1.15rem;font-weight:600}
+.info-list{display:grid;gap:.8rem}
+.info-item{display:grid;grid-template-columns:7.5rem 1fr;gap:.8rem;align-items:start}
+.info-item b{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--teal2);padding-top:.15rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:.3rem .75rem;font-size:.85rem;font-weight:600}
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:.6rem .2rem 1rem}
+.flow-step{flex:1 0 7.2rem;display:flex;align-items:center}
+.flow-step button{flex:1;border:2px solid var(--line);background:#fff;border-radius:16px;padding:.8rem .4rem;font-weight:800;font-size:.72rem;letter-spacing:.04em;color:var(--navy);min-height:5.2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;transition:all .2s}
+.flow-step button i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;background:var(--light);color:var(--teal2);font-size:.85rem}
+.flow-step button:hover{border-color:var(--teal);transform:translateY(-3px)}
+.flow-step button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.flow-step button.on i{background:var(--orange);color:#fff}
+.flow-line{width:1.6rem;height:4px;flex-shrink:0;background:repeating-linear-gradient(90deg,var(--teal) 0 6px,transparent 6px 11px);background-size:22px 4px;animation:dash 1s linear infinite}
+@keyframes dash{to{background-position:22px 0}}
+.flow-detail{min-height:4rem;background:linear-gradient(135deg,#fff,var(--light));border-radius:16px;padding:1rem 1.2rem;border:1px solid var(--line)}
+
+/* ---------- LAB 1 pH ---------- */
+.lab-wrap{display:grid;grid-template-columns:11rem 1fr 6.5rem;gap:1rem;align-items:stretch}
+.shelf{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;align-content:start}
+.bottle-btn{background:#fff;border:2px solid transparent;border-radius:14px;padding:.4rem .2rem .3rem;display:flex;flex-direction:column;align-items:center;gap:.1rem;font-size:.7rem;font-weight:700;color:var(--navy);box-shadow:var(--shadow2);transition:all .25s}
+.bottle-btn svg{width:2.2rem;height:3.6rem}
+.bottle-btn:hover{transform:translateY(-3px)}
+.bottle-btn.picked{border-color:var(--teal);transform:translateY(-4px) scale(1.04);box-shadow:0 8px 20px rgba(19,163,168,.3)}
+.bottle-btn.logged::after{content:"✓";position:absolute}
+.bench{position:relative;height:21rem;border-radius:22px;background:linear-gradient(180deg,#f9fcfe 0%,#e6f3fa 78%,#cfe4f0 78%,#bcd7e6 100%);overflow:hidden;border:1px solid #fff;box-shadow:inset 0 0 40px rgba(143,211,244,.25)}
+.bench .lbl{position:absolute;top:.8rem;left:1rem;right:calc(50% + 2.5rem);font-weight:700;font-size:.95rem}
+.bench .lbl small{display:block;font-weight:500;color:var(--muted)}
+.sample{position:absolute;left:12%;bottom:4.2rem;width:3.6rem;height:6.5rem;opacity:0;transform:translateX(-120px);transition:transform .7s ease,opacity .5s;transform-origin:70% 20%}
+.sample.in{opacity:1;transform:none}
+.sample.pour{transform:translate(48px,-74px) rotate(72deg)}
+.stream{position:absolute;left:calc(50% - 2.6rem);top:7.2rem;width:6px;height:0;border-radius:3px;opacity:.85;transition:height .5s}
+.stream.on{height:6.5rem}
+.beaker{position:absolute;left:50%;bottom:3.4rem;width:8rem;height:10.2rem;transform:translateX(-50%);border:4px solid rgba(11,37,69,.32);border-top:0;border-radius:0 0 24px 24px;background:rgba(255,255,255,.5);overflow:hidden;box-shadow:inset -10px 0 18px rgba(255,255,255,.7)}
+.beaker::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 24px,rgba(11,37,69,.18) 24px 26px);background-size:30% 100%;background-repeat:no-repeat;z-index:2}
+.beaker::after{content:"";position:absolute;left:10%;top:8%;width:10%;height:70%;border-radius:20px;background:rgba(255,255,255,.55);z-index:3}
+.liquid{position:absolute;left:0;right:0;bottom:0;height:0;transition:height 1.6s ease-out,background .3s}
+.liquid.full{height:70%}
+.liquid::before{content:"";position:absolute;left:-50%;top:-6px;width:200%;height:12px;background:radial-gradient(ellipse at 25% 100%,transparent 60%,rgba(255,255,255,.55) 62%) repeat-x;background-size:40px 12px;animation:wave 2.4s linear infinite}
+@keyframes wave{to{transform:translateX(40px)}}
+.strip{position:absolute;left:50%;top:0;width:1.35rem;height:9rem;margin-left:-.675rem;background:linear-gradient(90deg,#fffdf5,#f3efe3);border:2px solid #c3d1de;border-radius:4px;transform:translateY(-11rem);transition:transform 1.2s cubic-bezier(.5,0,.3,1);z-index:4}
+.strip.show{transform:translateY(-1.6rem)}
+.strip.dip{transform:translateY(6.2rem)}
+.strip .pad{position:absolute;left:2px;right:2px;bottom:3px;height:2rem;border-radius:2px;background:#efe6cf;transition:background 1.2s ease .9s}
+.strip .hand{position:absolute;top:-.6rem;left:50%;width:1.8rem;height:.9rem;margin-left:-.9rem;background:var(--navy);border-radius:4px}
+.ph-col{display:flex;flex-direction:column;align-items:stretch;gap:.4rem}
+.vscale{position:relative;flex:1;display:flex;flex-direction:column-reverse;border-radius:14px;overflow:visible;min-height:18rem}
+.vcell{flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:.4rem;font-size:.72rem;font-weight:800;color:rgba(255,255,255,.95);cursor:help;position:relative;transition:transform .15s}
+.vcell:first-child{border-radius:0 0 12px 12px}
+.vcell:last-child{border-radius:12px 12px 0 0}
+.vcell:hover{transform:scaleX(1.08);z-index:2}
+.vband{position:absolute;left:-.4rem;right:-.4rem;border:3px solid var(--navy);border-radius:8px;pointer-events:none;transition:all .6s;opacity:0;box-shadow:0 0 0 3px rgba(255,255,255,.8)}
+.vband.on{opacity:1}
+.vband::before{content:"◀";position:absolute;right:-1.3rem;top:50%;transform:translateY(-50%);color:var(--navy);font-size:.9rem}
+.scale-info{font-size:.78rem;background:#fff;border-radius:12px;padding:.5rem;min-height:4.2rem;box-shadow:var(--shadow2)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.step-n{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:50%;background:rgba(255,255,255,.3);font-size:.75rem;margin-right:.3rem}
+.result{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:center;margin-top:1rem;border-radius:18px;padding:1rem 1.2rem;background:#fff;border:2px solid var(--teal);animation:pageIn .5s}
+.result .swatch{width:4.2rem;height:4.2rem;border-radius:16px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.6)}
+.result h3{font-size:1.2rem}
+.cmp-cards{display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;margin-top:1rem}
+.cmp-card{background:#fff;border-radius:16px;padding:1rem;text-align:center;box-shadow:var(--shadow2);animation:pageIn .4s}
+.cmp-card .sw{height:1rem;border-radius:99px;margin:.5rem 0}
+.vs{font-weight:900;color:var(--orange);font-size:1.3rem}
+.cmp-concl{grid-column:1/-1;background:var(--light);border-radius:14px;padding:.8rem 1rem;font-weight:600}
+.hscale{display:flex;height:2.4rem;border-radius:14px;overflow:hidden;margin:.6rem 0 .3rem}
+.hzone{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;cursor:pointer;transition:filter .2s;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.hzone:hover,.hzone.on{filter:brightness(1.12) saturate(1.2)}
+.hnums{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);padding:0 .2rem}
+
+/* ---------- LAB 2 shell ---------- */
+.cups{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.cup{background:#fff;border-radius:18px;padding:.8rem;text-align:center;box-shadow:var(--shadow2);display:flex;flex-direction:column;gap:.4rem;align-items:center}
+.cup h3{font-size:.95rem}
+.cup svg{width:100%;max-width:9rem}
+.cup .obs{font-size:.82rem;background:var(--light);border-radius:12px;padding:.5rem;min-height:3.2rem;width:100%}
+.timeline{display:flex;gap:.4rem;justify-content:center;margin:1.2rem 0 .6rem;position:relative}
+.timeline button{border:2px solid var(--line);background:#fff;border-radius:99px;padding:.5rem 1rem;font-weight:700;color:var(--navy);transition:all .2s}
+.timeline button.on{background:var(--teal);border-color:var(--teal);color:#fff;transform:scale(1.06)}
+.day-caption{text-align:center;font-weight:600;min-height:1.6rem}
+.sbub{animation:srise 2.6s ease-in infinite;transform-box:fill-box}
+@keyframes srise{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-55px);opacity:0}}
+
+/* ---------- LAB 3 chalk ---------- */
+.chalk-stage{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2rem;padding:1.4rem 1rem 1rem;border-radius:22px;background:linear-gradient(180deg,#f9fcfe 0%,#e6f3fa 80%,#cfe4f0 80%,#bcd7e6 100%)}
+.cglass-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.cglass-wrap h3{font-size:1rem}
+.cglass{position:relative;width:9rem;height:11rem;border:4px solid rgba(11,37,69,.3);border-top:0;border-radius:0 0 24px 24px;overflow:hidden;background:rgba(255,255,255,.5);transition:box-shadow .2s}
+.cglass.over{box-shadow:0 0 0 5px rgba(255,140,66,.5)}
+.cglass .liq{position:absolute;left:0;right:0;bottom:0;height:72%}
+.cglass .liq::before{content:"";position:absolute;left:-50%;top:-6px;width:200%;height:12px;background:radial-gradient(ellipse at 25% 100%,transparent 60%,rgba(255,255,255,.6) 62%) repeat-x;background-size:40px 12px;animation:wave 2.4s linear infinite}
+.chalk-in{position:absolute;left:50%;width:3.4rem;height:1.3rem;margin-left:-1.7rem;background:linear-gradient(180deg,#fff,#e9e9e2);border-radius:5px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08);top:-2rem;transition:top 1s cubic-bezier(.5,0,.7,1)}
+.chalk-in.down{top:calc(100% - 1.8rem)}
+.bub{position:absolute;bottom:1.4rem;width:.5rem;height:.5rem;border-radius:50%;border:1.5px solid rgba(255,255,255,.95);background:rgba(255,255,255,.35);animation:brise 1.8s ease-in forwards;pointer-events:none}
+@keyframes brise{0%{transform:translateY(0) scale(.6);opacity:0}10%{opacity:1}100%{transform:translateY(-8rem) scale(1.2);opacity:0}}
+.chalk-tray{display:flex;gap:1rem;justify-content:center;margin:1rem 0 0}
+.chalk-piece{width:4.4rem;height:1.6rem;background:linear-gradient(180deg,#fff,#e8e8e0);border-radius:6px;box-shadow:0 4px 10px rgba(11,37,69,.15),inset 0 -3px 0 rgba(0,0,0,.06);cursor:grab;border:2px solid transparent;transition:transform .2s}
+.chalk-piece:hover{transform:translateY(-3px) rotate(-3deg)}
+.chalk-piece.sel{border-color:var(--orange)}
+.chalk-piece.used{visibility:hidden}
+.react-lbl{font-weight:700;font-size:.9rem;min-height:2.6rem;text-align:center;max-width:14rem}
+.quiz-opts{display:grid;gap:.5rem;margin-top:.8rem}
+.qopt{text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:.7rem 1rem;font-weight:600;color:var(--navy);transition:all .2s}
+.qopt:hover:not(:disabled){border-color:var(--teal);transform:translateX(4px)}
+.qopt.right{background:#e3f6ec;border-color:var(--ok)}
+.qopt.wrong{background:#fde8e6;border-color:var(--bad)}
+.qopt:disabled{cursor:default}
+.feedback{margin-top:.8rem;border-radius:14px;padding:.8rem 1rem;font-weight:500;animation:pageIn .4s}
+.feedback.ok{background:#e3f6ec;border:1px solid #a8dfc0}
+.feedback.no{background:#fdecea;border:1px solid #f3b9b3}
+
+/* ---------- MATH ---------- */
+.math-head{background:linear-gradient(135deg,var(--navy),#1d4f86);color:#fff;border-radius:22px;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin:1rem 0}
+.kpi{background:#fff;border-radius:18px;padding:1rem;box-shadow:var(--shadow2);border-top:4px solid var(--teal)}
+.kpi:nth-child(2){border-color:var(--orange)}
+.kpi:nth-child(3){border-color:#6b3fb3}
+.kpi:nth-child(4){border-color:var(--ok)}
+.kpi .v{font-size:2rem;font-weight:800}
+.kpi .t{font-size:.85rem;color:var(--muted)}
+.seg{display:inline-flex;background:var(--light);border-radius:12px;padding:.25rem}
+.seg button{border:0;background:transparent;padding:.45rem .8rem;border-radius:9px;font-weight:700;color:var(--muted);font-size:.85rem}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:var(--shadow2)}
+.chart svg{width:100%;height:auto;display:block}
+.bar{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 100%;transition:transform .9s cubic-bezier(.3,.8,.3,1)}
+.grown .bar{transform:scaleY(1)}
+.hbar{transform:scaleX(0);transform-box:fill-box;transform-origin:0 50%;transition:transform 1s cubic-bezier(.3,.8,.3,1)}
+.grown .hbar{transform:scaleX(1)}
+.qlegend{display:grid;gap:.25rem;font-size:.82rem;margin-top:.6rem}
+.qlegend b{color:var(--teal2);margin-right:.3rem}
+.pie-wrap{display:flex;align-items:center;gap:1rem}
+.pie{width:9rem;height:9rem;flex-shrink:0}
+.pie circle.seg1{transition:stroke-dasharray 1.2s ease}
+.pie-leg div{display:flex;align-items:center;gap:.4rem;font-weight:600}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:end}
+.calc input{width:100%}
+.calc label{min-width:0;display:flex;flex-direction:column;gap:.3rem;font-weight:600;font-size:.9rem}
+.calc-out{grid-column:1/-1;background:var(--navy);color:#fff;border-radius:16px;padding:1rem 1.2rem;font-size:1.15rem;min-height:3.6rem;display:flex;align-items:center;flex-wrap:wrap;gap:.4rem}
+.calc-out big{font-size:1.9rem;font-weight:800;color:var(--sky)}
+.calc-out.err{background:#fdecea;color:var(--bad)}
+.ops{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.8rem}
+.op{background:#fff;border-radius:16px;padding:1rem;box-shadow:var(--shadow2);border:2px solid transparent;text-align:left;color:var(--navy);transition:border .2s}
+.op:hover{border-color:var(--sky)}
+.op .f{font-family:Consolas,"Courier New",monospace;font-size:1.15rem;font-weight:800;color:var(--teal2)}
+.op .ex{font-size:.85rem;color:#36506d;max-height:0;overflow:hidden;transition:max-height .5s}
+.op.open .ex{max-height:12rem;margin-top:.4rem}
+.op .hint{font-size:.75rem;color:var(--muted)}
+
+/* ---------- PASSPORTS ---------- */
+.pass-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.pass{background:#fff;border-radius:20px;overflow:hidden;box-shadow:var(--shadow2);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;border:2px solid transparent}
+.pass:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.pass.picked{border-color:var(--orange)}
+.pass-top{display:flex;align-items:center;gap:.8rem;padding:1rem;background:linear-gradient(135deg,var(--light),#fff)}
+.pass-top svg{width:3rem;flex-shrink:0}
+.pass-top h3{font-size:1.05rem}
+.pass-body{padding:.2rem 1rem 1rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.pass-body .row{justify-content:space-between}
+.pass-detail{font-size:.88rem;display:grid;gap:.5rem;border-top:1px dashed var(--line);padding-top:.6rem;animation:pageIn .35s}
+.pass-detail b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--teal2)}
+.chk{display:flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;cursor:pointer}
+.chk input{width:1.1rem;height:1.1rem;accent-color:var(--orange)}
+
+/* ---------- GAME ---------- */
+.game{display:grid;grid-template-columns:1fr 13rem;gap:1rem}
+.game-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.gdots{display:flex;gap:.35rem}
+.gdots i{width:2rem;height:.5rem;border-radius:99px;background:var(--line)}
+.gdots i.cur{background:var(--sky)}
+.gdots i.ok{background:var(--ok)}
+.gdots i.no{background:var(--bad)}
+.score{font-weight:800;font-size:1.1rem;background:var(--navy);color:#fff;padding:.4rem .9rem;border-radius:12px}
+.task-title{font-size:1.35rem;margin-bottom:.3rem}
+.task-k{font-size:.78rem;font-weight:800;color:var(--orange2);letter-spacing:.08em;text-transform:uppercase}
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1rem}
+.pick{background:#fff;border:3px solid var(--line);border-radius:18px;padding:.7rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;font-weight:700;color:var(--navy);transition:all .2s}
+.pick svg{width:3rem;height:4rem}
+.pick:hover:not(:disabled){border-color:var(--teal);transform:translateY(-3px)}
+.pick.right{border-color:var(--ok);background:#e3f6ec}
+.pick.wrong{border-color:var(--bad);background:#fdecea}
+.pick:disabled{cursor:default}
+.pick.cupk svg{width:5.5rem;height:auto}
+.zones{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-top:1rem}
+.zone{border-radius:16px;padding:.5rem;min-height:9.5rem;display:flex;flex-direction:column;gap:.35rem;border:3px dashed rgba(255,255,255,.7);transition:box-shadow .2s,transform .2s;cursor:pointer}
+.zone h4{margin:0;color:#fff;font-size:.82rem;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.zone.over{box-shadow:0 0 0 4px var(--orange);transform:scale(1.02)}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;min-height:3.2rem;margin-top:1rem;padding:.6rem;border-radius:14px;background:var(--light);border:2px dashed var(--line)}
+.dcard{background:#fff;border-radius:10px;padding:.4rem .7rem;font-weight:700;font-size:.82rem;box-shadow:var(--shadow2);cursor:grab;border:2px solid transparent;user-select:none;display:flex;align-items:center;gap:.35rem;touch-action:none}
+.dcard.sel{border-color:var(--orange);transform:scale(1.05)}
+.dcard.right{border-color:var(--ok)}
+.dcard.wrong{border-color:var(--bad);background:#fdecea}
+.tf{display:flex;gap:1rem;margin-top:1rem}
+.tf button{flex:1;padding:1.2rem;font-size:1.2rem;font-weight:800;border-radius:18px;border:3px solid var(--line);background:#fff;color:var(--navy);transition:all .2s}
+.tf button:hover:not(:disabled){border-color:var(--teal)}
+.tf button.right{background:#e3f6ec;border-color:var(--ok)}
+.tf button.wrong{background:#fdecea;border-color:var(--bad)}
+.statement{font-size:1.15rem;font-weight:700;background:linear-gradient(135deg,#fff7ef,#fff);border:2px solid #ffd7b8;border-radius:16px;padding:1rem 1.2rem;margin-top:.8rem}
+.ginput{display:flex;gap:.6rem;align-items:center;margin-top:1rem;flex-wrap:wrap}
+.ginput input{width:8rem;font-size:1.3rem;font-weight:800;text-align:center}
+.side-zubik{text-align:center}
+.side-zubik .zubik{width:10rem}
+.bubble{position:relative;background:#fff;border-radius:16px;padding:.8rem;font-size:.88rem;font-weight:600;box-shadow:var(--shadow2);margin-bottom:.8rem}
+.bubble::after{content:"";position:absolute;bottom:-10px;left:50%;margin-left:-10px;border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+.final{text-align:center;padding:1rem}
+.final .big{font-size:3.4rem;font-weight:900;color:var(--teal)}
+.final .grid{margin:1rem 0}
+.ring{width:9rem;height:9rem;margin:0 auto}
+
+/* ---------- DISCOVERIES ---------- */
+.concl{display:grid;gap:.6rem;counter-reset:c}
+.concl div{display:flex;gap:.8rem;align-items:flex-start;background:#fff;border-radius:16px;padding:.9rem 1rem;box-shadow:var(--shadow2);animation:pageIn .5s both}
+.concl div::before{counter-increment:c;content:counter(c);flex-shrink:0;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:var(--teal);color:#fff;font-weight:800}
+.memo{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
+.flip{perspective:900px;height:10rem;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:center}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.8rem;gap:.4rem}
+.flip-f{background:linear-gradient(135deg,var(--teal),#1b7fb0);color:#fff;font-weight:700;box-shadow:var(--shadow2)}
+.flip-f .ic{width:2.6rem;height:2.6rem;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900;font-size:1.1rem}
+.flip-b{background:#fff;transform:rotateY(180deg);font-size:.85rem;box-shadow:var(--shadow2);border:2px solid var(--sky)}
+.smile-head{background:linear-gradient(135deg,var(--orange),#ffb057);color:#fff;border-radius:20px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.smile-head h3{font-size:1.4rem;letter-spacing:.04em}
+.jgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.jbox{background:#fff;border-radius:16px;padding:1rem;box-shadow:var(--shadow2)}
+.jbox h4{margin:0 0 .4rem;font-size:.85rem;color:var(--teal2);text-transform:uppercase;letter-spacing:.05em}
+
+/* ---------- helper toast ---------- */
+.helper{position:fixed;right:1.2rem;bottom:1.2rem;display:flex;align-items:flex-end;gap:.4rem;z-index:50;pointer-events:none}
+.helper .zubik{width:4.6rem;pointer-events:auto;cursor:pointer}
+.helper .say{background:#fff;border-radius:16px 16px 4px 16px;padding:.7rem .9rem;box-shadow:var(--shadow);max-width:16rem;font-size:.85rem;font-weight:600;opacity:0;transform:translateY(8px);transition:all .35s;pointer-events:auto}
+.helper .say.on{opacity:1;transform:none}
+.modal{position:fixed;inset:0;background:rgba(11,37,69,.45);display:grid;place-items:center;z-index:100;padding:1rem}
+.modal .card{max-width:26rem;background:#fff}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .lab-wrap{grid-template-columns:9rem 1fr 5.5rem}
+  .pass-grid{grid-template-columns:repeat(2,1fr)}
+  .memo{grid-template-columns:repeat(2,1fr)}
+  .game{grid-template-columns:1fr}
+  .side-zubik{display:flex;align-items:center;gap:1rem;text-align:left}
+  .side-zubik .zubik{width:5.5rem}
+  .side-zubik .bubble{margin:0;flex:1}
+  .side-zubik .bubble::after{display:none}
+}
+@media (max-width:900px){
+  .app{flex-direction:column}
+  .side{width:auto;height:auto;position:relative;z-index:40;padding:.6rem .8rem;gap:.5rem}
+  .brand small,.progress-box p{display:none}
+  .nav{flex-direction:row;overflow-x:auto;padding-bottom:.2rem}
+  .nav button{flex-shrink:0;font-size:.8rem;padding:.4rem .6rem}
+  .tools{flex-direction:row;flex-wrap:wrap;margin-top:0}
+  .tools button{font-size:.75rem;padding:.35rem .55rem}
+  .main{padding:1rem 1rem 6rem}
+  .hero{grid-template-columns:1fr;padding:1.3rem}
+  .hero h1{font-size:2.2rem}
+  .g2,.g3,.g4,.kpis,.jgrid{grid-template-columns:1fr 1fr}
+  .lab-wrap{grid-template-columns:1fr}
+  .shelf{grid-template-columns:repeat(6,1fr)}
+  .vscale{min-height:auto;flex-direction:row;height:2.6rem}
+  .vcell{justify-content:center;padding:0}
+  .vcell:first-child{border-radius:12px 0 0 12px}.vcell:last-child{border-radius:0 12px 12px 0}
+  .vband{top:-.4rem!important;bottom:-.4rem!important;height:auto!important}
+  .vband::before{display:none}
+  .cups{grid-template-columns:repeat(2,1fr)}
+  .zones{grid-template-columns:repeat(2,1fr)}
+  .pick-grid{grid-template-columns:repeat(2,1fr)}
+  .info-item{grid-template-columns:1fr;gap:.1rem}
+}
+@media (max-width:560px){
+  .g2,.g3,.g4,.kpis,.jgrid,.pass-grid,.memo,.calc{grid-template-columns:1fr}
+  .shelf{grid-template-columns:repeat(3,1fr)}
+  .stats{grid-template-columns:1fr}
+  .cmp-cards{grid-template-columns:1fr}
+  .vs{text-align:center}
+  .chalk-stage{gap:.5rem;padding:1rem .4rem}
+  .cglass{width:7rem;height:9rem}
+  .pie-wrap{flex-direction:column}
+}
+/* big-screen mode */
+html.big .g3,html.big .g4,html.big .kpis{grid-template-columns:repeat(2,1fr)}
+html.big .pass-grid{grid-template-columns:repeat(2,1fr)}
+html.big .memo{grid-template-columns:repeat(2,1fr)}
+html.big .game{grid-template-columns:1fr}
+html.big .side-zubik{display:none}
+html.big .bench{height:24rem}
+
+/* ---------- v2 additions to labs ---------- */
+.day-rec{font-size:.82rem;background:#e6f7ef;border-radius:10px;padding:.35rem .5rem;width:100%;min-height:2.6rem}
+.day-rec b{color:#17805a}
+.sh-tbl td,.sh-tbl th{font-size:.84rem}
+.sh-tbl .hl{background:#fff3e6}
+.model-box{background:#fff;border-radius:16px;padding:1rem;box-shadow:var(--shadow2)}
+.model-box h4{margin:0 0 .3rem;font-size:.98rem}
+.model-box p{font-size:.84rem;margin:0 0 .6rem}
+.freq-l{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;font-weight:600}
+.freq-l input{accent-color:var(--orange);width:100%}
+.freq-bar{display:flex;gap:3px;margin:.6rem 0;flex-wrap:wrap}
+.freq-bar i{height:1.4rem;width:2.2rem;border-radius:6px;background:linear-gradient(180deg,#ffb36e,#f58a3a);animation:pageIn .3s}
+.mid-row{display:grid;grid-template-columns:7.2rem 1fr 2.6rem;gap:.4rem;align-items:center;font-size:.82rem;margin:.25rem 0}
+.mid-row .tr{height:.9rem;background:var(--light);border-radius:99px;overflow:hidden}
+.mid-row .tr i{display:block;height:100%;border-radius:99px}
+
+/* ---------- HOME v2 ---------- */
+.hero-actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;position:relative;z-index:1}
+.hbtn{display:flex;align-items:center;gap:.7rem;text-align:left;border:0;border-radius:18px;padding:.85rem .9rem;color:#fff;box-shadow:0 8px 20px rgba(11,37,69,.15);transition:transform .15s,filter .2s;min-height:4.6rem}
+.hbtn:hover{transform:translateY(-3px);filter:brightness(1.05)}
+.hbtn .hi{width:2.4rem;height:2.4rem;border-radius:12px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
+.hbtn b{display:block;font-size:.98rem;line-height:1.2}
+.hbtn small{display:block;font-size:.75rem;opacity:.85;margin-top:.15rem}
+.hbtn.lab{background:linear-gradient(135deg,var(--teal),#1b8fb8)}
+.hbtn.smile{background:linear-gradient(135deg,var(--orange),#ffad5c)}
+.hbtn.def{background:linear-gradient(135deg,var(--navy),#2a5d9c)}
+.author-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed var(--line)}
+.author-grid b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--teal2)}
+.author-grid span{font-weight:600;font-size:.92rem}
+.def-side{background:linear-gradient(135deg,var(--orange),#ffad5c);color:#fff;border:0;border-radius:12px;padding:.65rem .8rem;font-weight:800;letter-spacing:.02em;text-align:left;box-shadow:0 6px 16px rgba(255,140,66,.35)}
+.def-side:hover{filter:brightness(1.06)}
+.smile-head.cta{border:0;cursor:pointer;width:100%;margin:0;transition:transform .15s}
+.smile-head.cta:hover{transform:translateY(-3px)}
+.smile-head.navy{background:linear-gradient(135deg,var(--navy),#2a5d9c)}
+.cta-ic{width:4rem;height:4rem;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:1.6rem;flex-shrink:0}
+
+/* ---------- SMILE PAGE ---------- */
+.smile-hero{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.6rem 1.8rem;border-radius:26px;background:linear-gradient(135deg,#fff3e8,#fff 55%,#e3f6f6);border:1px solid #fff;box-shadow:var(--shadow)}
+.smile-hero h2{font-size:2.3rem;margin:.4rem 0;color:var(--navy)}
+.smile-hero p{margin:0;color:#36506d;max-width:36rem}
+.badge-w{background:var(--orange);color:#fff;border-radius:10px;padding:.3rem .65rem;font-size:.75rem;font-weight:800;letter-spacing:.06em}
+.smile-hero-z{width:9rem;flex-shrink:0}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1rem;margin-top:1rem;align-items:start}
+.rule{background:#fff;border-radius:22px;box-shadow:var(--shadow2);padding:1rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.6rem;border:2px solid transparent;transition:border .2s,transform .2s}
+.rule:hover{transform:translateY(-2px)}
+.rule.open{border-color:var(--sky)}
+.rule-art{height:8.5rem;border-radius:16px;background:linear-gradient(180deg,var(--light),#f6fbfe);display:grid;place-items:center;position:relative}
+.rule-art svg{height:7.4rem;width:auto}
+.rule-n{position:absolute;left:.6rem;top:.6rem;width:2rem;height:2rem;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.rule h3{font-size:1.08rem;line-height:1.3}
+.rule .why{align-self:flex-start}
+.rule-ex{font-size:.92rem;color:#2a4562;background:#f2fafb;border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:.7rem .85rem;display:none}
+.rule.open .rule-ex{display:block;animation:ruleIn .45s ease}
+.rule.open .rule-art svg{animation:ruleBounce .6s ease}
+@keyframes ruleIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes ruleBounce{0%,100%{transform:scale(1)}40%{transform:scale(1.08)}}
+.sq-q{font-size:1.1rem;font-weight:700;margin-bottom:.2rem}
+.sq-steps{display:flex;gap:.3rem;margin-bottom:.8rem}
+.sq-steps i{flex:1;height:.4rem;border-radius:99px;background:var(--line)}
+.sq-steps i.ok{background:var(--ok)}.sq-steps i.no{background:var(--bad)}.sq-steps i.cur{background:var(--sky)}
+
+#printMemo{display:none}
+.rule.advice{background:linear-gradient(180deg,#fff7ef,#fff)}
+.d-toast{position:absolute;left:50%;bottom:5rem;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:.7rem 1.1rem;border-radius:12px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10}
+.d-toast.on{opacity:1;transform:translateX(-50%)}
+
+/* ---------- DEFENSE MODE ---------- */
+#defense{position:fixed;inset:0;z-index:300;background:#f6fafd;display:flex;flex-direction:column;color:var(--navy)}
+#defense.hidden{display:none!important}
+.d-top{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.6rem 1rem;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.d-brand{display:flex;align-items:center;gap:.6rem}
+.d-brand svg{width:2.4rem;height:2.6rem}
+.d-brand b{display:block;font-size:1rem}
+.d-brand small{color:var(--muted);font-size:.78rem}
+.d-ctrl{display:flex;gap:.4rem;flex-wrap:wrap}
+.dbtn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;padding:.45rem .75rem;font-weight:700;font-size:.85rem}
+.dbtn:hover{background:var(--light)}
+.dbtn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.dbtn.exit{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dbtn.sm{padding:.3rem .6rem;font-size:.78rem}
+.d-menu{position:absolute;top:3.6rem;right:1rem;z-index:5;background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:.6rem;width:22rem;max-height:75vh;overflow:auto;border:1px solid var(--line)}
+.d-menu button{display:flex;gap:.6rem;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:.5rem .6rem;border-radius:10px;font-size:.92rem;color:var(--navy)}
+.d-menu button:hover{background:var(--light)}
+.d-menu button.cur{background:var(--navy);color:#fff}
+.d-menu button i{font-style:normal;width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;background:var(--light);font-weight:800;font-size:.78rem;flex-shrink:0;color:var(--navy)}
+.d-menu button.key i{background:#ffe3cc;color:var(--orange2)}
+.d-menu .sec{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.5rem .6rem .2rem}
+.d-body{flex:1;position:relative;min-height:0;display:flex}
+.d-stage-wrap{flex:1;position:relative;overflow:hidden}
+.d-stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;background:#fff;border-radius:22px;box-shadow:0 20px 50px rgba(11,37,69,.12);overflow:hidden;font-size:22px;line-height:1.4}
+.d-notes{width:24rem;flex-shrink:0;background:#fffdf6;border-left:3px solid var(--orange);padding:1rem 1.1rem;overflow:auto;font-size:1.02rem;line-height:1.55;box-shadow:-10px 0 24px rgba(11,37,69,.08)}
+.d-notes.hidden{display:none}
+#dNotesText p{margin:.7rem 0}
+.d-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 1rem;background:#fff;border-top:1px solid var(--line)}
+.d-ind{display:flex;align-items:center;gap:.8rem;font-weight:800;min-width:0}
+.d-dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.d-dots button{width:1.6rem;height:.55rem;border:0;border-radius:99px;background:var(--line);padding:0}
+.d-dots button.key{background:#ffd6b5}
+.d-dots button.cur{background:var(--teal);width:2.4rem}
+.d-dots button.key.cur{background:var(--orange)}
+/* slide internals (px inside 1280x720 stage) */
+.sl{position:absolute;inset:0;padding:44px 60px 40px;display:flex;flex-direction:column}
+.sl.anim{animation:slIn .4s ease}
+@keyframes slIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.sl-k{font-size:16px;font-weight:800;letter-spacing:.12em;color:var(--teal2);text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.sl-k .key{background:#ffe8d6;color:var(--orange2);border-radius:8px;padding:3px 10px;font-size:13px;letter-spacing:.06em}
+.sl h2{font-size:44px;margin:8px 0 22px;color:var(--navy);line-height:1.12}
+.sl-grid{display:grid;gap:22px;flex:1;min-height:0}
+.sl-card{background:#f4f9fc;border-radius:20px;padding:22px 26px;border:1px solid #e3eef5}
+.sl-card h3{font-size:22px;color:var(--teal2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.sl-card p{margin:0}
+.sl-big{font-size:30px;font-weight:700;line-height:1.3}
+.sl ul{margin:0;padding-left:28px}
+.sl li{margin:6px 0}
+.sl-tbl{width:100%;border-collapse:collapse;font-size:20px}
+.sl-tbl th{text-align:left;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid #dbe7ef}
+.sl-tbl td{padding:9px 10px;border-bottom:1px solid #e6eef4}
+.sl-tag{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:800;padding:4px 12px;border-radius:99px}
+.sl-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.sl-tag.data{background:#dcf4ea;color:#17805a}.sl-tag.model{background:#fff0d9;color:#b2620d}.sl-tag.calc{background:#e1ecfd;color:#2457b8}.sl-tag.viz{background:#efe6fb;color:#6b3fb3}
+.sl-title{align-items:center;justify-content:center;text-align:center;background:radial-gradient(800px 400px at 85% 0%,#d4effa,transparent 60%),radial-gradient(700px 400px at 0% 100%,#d7f3f1,transparent 60%),#fff}
+.sl-title h1{font-size:64px;margin:6px 0 4px;background:linear-gradient(90deg,var(--navy),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
+.sl-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 40px;margin-top:30px;text-align:left;font-size:22px}
+.sl-meta b{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal2)}
+.sl-z svg{width:150px}
+.sl-chalk{display:flex;gap:40px;justify-content:center;align-items:flex-end}
+.sl-glass{width:170px;height:200px;border:5px solid rgba(11,37,69,.3);border-top:0;border-radius:0 0 30px 30px;position:relative;overflow:hidden;background:#fff}
+.sl-glass .liq{position:absolute;left:0;right:0;bottom:0;height:72%}
+.sl-glass .ck{position:absolute;left:50%;margin-left:-35px;width:70px;height:26px;background:linear-gradient(180deg,#fff,#e8e8e0);border-radius:6px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08);top:-40px;transition:top 1s cubic-bezier(.5,0,.7,1)}
+.sl-glass.go .ck{top:calc(100% - 34px)}
+.sl-glass .bub{bottom:30px}
+.freq-days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+.freq-day{background:#fff;border-radius:12px;padding:6px 4px;text-align:center;font-size:14px;font-weight:700;border:1px solid #e3eef5;min-height:86px}
+.freq-day .drops{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:6px}
+.freq-day .drops i{width:12px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#f58a3a}
+.d-range{position:relative;height:30px;border-radius:8px;background:linear-gradient(90deg,#d7263d,#f0533a,#f58a3a,#f7b733,#f2d43b,#b5d334,#3fb950,#1fa59a,#2b7bd6,#4b4fc4,#6a2c91);opacity:.22}
+.sl-qchips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.sl-qchips button{border:2px solid #dbe7ef;background:#fff;border-radius:14px;padding:10px 16px;font-size:18px;font-weight:700;color:var(--navy)}
+.sl-qchips button:hover{border-color:var(--teal)}
+.sl-prod{display:flex;flex-direction:column;gap:10px}
+.sl-prod .ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;color:#fff}
+
+@media (max-width:900px){
+  .hero-actions{grid-template-columns:1fr}
+  .author-grid{grid-template-columns:1fr 1fr}
+  .def-side{flex-shrink:0}
+  .smile-hero{flex-direction:column-reverse;align-items:flex-start;padding:1.2rem}
+  .smile-hero h2{font-size:1.8rem}
+  .smile-hero-z{width:6rem}
+  .d-notes{position:absolute;right:0;top:0;bottom:0;width:min(24rem,90vw);z-index:4}
+  .d-brand small{display:none}
+}
+@media (max-width:560px){.author-grid{grid-template-columns:1fr}.d-dots{display:none}}
+html.big .hero-actions{grid-template-columns:1fr}
+html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
+
+/* ---------- PRINT ---------- */
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff!important}
+  .side,.helper,.modal,#defense,.actions,.tools{display:none!important}
+  .main{padding:0!important}
+  html.print-memo body>*:not(#printMemo){display:none!important}
+  html.print-memo #printMemo{display:block!important;color:#0b2545;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .pm-head{display:flex;align-items:center;gap:14px;border-bottom:3px solid #13a3a8;padding-bottom:8px;margin-bottom:10px}
+  .pm-head svg{width:62px;height:68px}
+  .pm-head h1{font-size:26pt;margin:0;color:#0b2545}
+  .pm-head p{margin:2px 0 0;font-size:10.5pt;color:#36506d}
+  .pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .pm-rule{border:1.5px solid #cfe3ee;border-radius:12px;padding:8px 10px;display:flex;gap:10px;break-inside:avoid;page-break-inside:avoid}
+  .pm-rule svg{width:58px;height:58px;flex-shrink:0}
+  .pm-rule b{font-size:12pt;display:block;margin-bottom:2px}
+  .pm-rule span{font-size:9.5pt;color:#2a4562;line-height:1.35}
+  .pm-rule .n{display:inline-block;background:#0b2545;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;font-size:9pt;line-height:18px;margin-right:4px}
+  .pm-foot{margin-top:10px;font-size:9pt;color:#36506d;border-top:1px dashed #b9cfdc;padding-top:6px}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .bub{animation:none!important;opacity:.85}
+  .sbub{animation:none!important;opacity:.8}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><span id="brandZ"></span><div><b>ЗУБНОЙ ДЕТЕКТИВ</b><small>лаборатория напитков</small></div></div>
+    <nav class="nav" id="nav"></nav>
+    <button class="def-side" data-defense="1" type="button">▶ Защита проекта</button>
+    <div class="progress-box"><p id="progText">Прогресс исследования: 0 из 9 этапов</p><div class="pbar"><i id="progBar"></i></div></div>
+    <div class="tools">
+      <button id="btnBig" type="button">⤢ Крупный экран</button>
+      <button id="btnFull" type="button">⛶ Полноэкранный режим</button>
+      <button id="btnReset" type="button">↺ Начать заново</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+  <!-- ================= 1. HOME ================= -->
+  <section class="page" id="p-home">
+    <div class="hero">
+      <div>
+        <h1>ЗУБНОЙ ДЕТЕКТИВ</h1>
+        <div class="sub">Интерактивная лаборатория исследования кислотности напитков</div>
+        <p class="desc">Почему одни напитки более кислые, чем другие? Что покажет индикаторная полоска? Как кислая среда взаимодействует с минеральными веществами? Проведи виртуальные эксперименты и раскрой тайну шести напитков!</p>
+      </div>
+      <div class="hero-art" id="heroArt">
+        <div class="hero-strip"></div>
+        <div class="hero-glasses" id="heroGlasses"></div>
+        <div class="hero-scale"><span style="left:0">0</span><span style="left:50%">7</span><span style="left:100%">14</span></div>
+      </div>
+      <div class="hero-actions">
+        <button class="hbtn lab" data-go="ph" type="button"><span class="hi">⚗</span><span><b>Начать исследование</b><small>Открыть лабораторию pH</small></span></button>
+        <button class="hbtn smile" data-go="smile" type="button"><span class="hi">☺</span><span><b>Береги свою улыбку!</b><small>Интерактивная памятка</small></span></button>
+        <button class="hbtn def" data-defense="1" type="button"><span class="hi">▶</span><span><b>Защита проекта</b><small>Режим выступления для жюри</small></span></button>
+      </div>
+    </div>
+    <div class="card stats-card" style="margin-top:1.2rem">
+      <div class="stats">
+        <div class="stat"><span class="n">6</span><span class="l">напитков<br><span class="muted" style="font-weight:400;font-size:.85rem">исследована кислотность</span></span></div>
+        <div class="stat"><span class="n">3</span><span class="l">эксперимента<br><span class="muted" style="font-weight:400;font-size:.85rem">pH, скорлупа, мел</span></span></div>
+        <div class="stat"><span class="n">20</span><span class="l">участников<br><span class="muted" style="font-weight:400;font-size:.85rem">анкетирования</span></span></div>
+      </div>
+      <div class="author-grid">
+        <div><b>Исследовательская тема</b><span>«Кислотность напитков и их влияние на зубы»</span></div>
+        <div><b>Автор</b><span>Сагидолда Ибрахим, 4 «Б» класс</span></div>
+        <div><b>Руководитель</b><span>Токашова С. Заманбековна</span></div>
+        <div><b>Школа</b><span>КГУ «Средняя школа имени Шокана Уалиханова», село Тугыл, 2026 год</span></div>
+      </div>
+      <div class="author">
+        <span class="muted" style="font-size:.88rem">Сайт создан по результатам исследования и является его практическим продуктом.</span>
+        <button class="btn" data-go="ph" type="button">Открыть лабораторию →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. RESEARCH ================= -->
+  <section class="page" id="p-research">
+    <div class="ph-title"><span class="badge">РАЗДЕЛ 2</span><div><h2>Моё исследование</h2><p>Исследовательская карта работы Ибрахима</p></div></div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="task-k">Проблемный вопрос</div>
+        <p class="rq">«Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами?»</p>
+        <div class="info-list">
+          <div class="info-item"><b>Цель</b><span>Сравнить кислотность шести распространённых напитков и на основе собственных наблюдений объяснить, почему следует разумно употреблять кислые напитки.</span></div>
+          <div class="info-item"><b>Гипотеза</b><span>Среди выбранных напитков будут образцы с разным pH, а в кислых напитках изменения яичной скорлупы будут заметнее, чем в воде. Влияние напитков непосредственно на человеческую эмаль в опытах не проверялось.</span></div>
+          <div class="info-item"><b>Задачи</b><span>1) изучить понятие pH; 2) выяснить особенности зубной эмали; 3) проанализировать ответы одноклассников; 4) сравнить кислотность напитков; 5) обобщить наблюдения за скорлупой и мелом; 6) создать понятные рекомендации и наглядный продукт.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="info-list">
+          <div class="info-item"><b>Объект</b><span>Распространённые напитки.</span></div>
+          <div class="info-item"><b>Предмет</b><span>Их кислотность и наблюдаемое взаимодействие кислых жидкостей с минеральными материалами.</span></div>
+          <div class="info-item"><b>Методы</b><div class="chips"><span class="chip">Изучение литературы</span><span class="chip">Анкетирование</span><span class="chip">Сравнение</span><span class="chip">Наблюдение</span><span class="chip">Индикаторные полоски</span><span class="chip">Расчёт процентов</span><span class="chip">Таблицы и диаграммы</span><span class="chip">Моделирование</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="row" style="justify-content:space-between"><h3>Путь исследования</h3><span class="muted" style="font-size:.85rem">Нажми на этап, чтобы узнать подробнее</span></div>
+      <div class="flow" id="flow"></div>
+      <div class="flow-detail" id="flowDetail"></div>
+    </div>
+  </section>
+
+  <!-- ================= 3. LAB pH ================= -->
+  <section class="page" id="p-ph">
+    <div class="ph-title"><span class="badge">ЛАБОРАТОРИЯ №1</span><div><h2>Тайна pH</h2><p>Выбери напиток, налей его в стакан и опусти индикаторную полоску</p></div></div>
+    <div class="legend-tags"><span class="tag data">Диапазоны pH — данные исследования (ориентировочные)</span><span class="tag viz">Цвет полоски — условная визуализация</span></div>
+    <div class="card">
+      <div class="lab-wrap">
+        <div class="shelf" id="shelf"></div>
+        <div>
+          <div class="bench" id="bench">
+            <div class="lbl" id="benchLbl">Шаг 1. Выбери напиток на полке<small>Нажми на бутылочку слева</small></div>
+            <div class="sample" id="sample"></div>
+            <div class="stream" id="stream"></div>
+            <div class="strip" id="strip"><span class="hand"></span><div class="pad" id="pad"></div></div>
+            <div class="beaker"><div class="liquid" id="liquid"></div></div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="bPour" type="button" disabled><span class="step-n">2</span>Налить</button>
+            <button class="btn" id="bDip" type="button" disabled><span class="step-n">3</span>Опустить индикатор</button>
+            <button class="btn orange" id="bLog" type="button" disabled><span class="step-n">6</span>Добавить в журнал</button>
+            <button class="btn ghost" id="bNew" type="button">Новый опыт</button>
+          </div>
+        </div>
+        <div class="ph-col">
+          <div class="vscale" id="vscale"><div class="vband" id="vband"></div></div>
+          <div class="scale-info" id="scaleInfo">Наведи на шкалу или коснись её</div>
+        </div>
+      </div>
+      <div id="phResult"></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><h3>Журнал исследователя</h3><button class="btn ghost sm" id="bClearJ" type="button">Очистить журнал</button></div>
+        <table class="tbl" style="margin-top:.6rem"><thead><tr><th>Напиток</th><th>pH</th><th>Среда</th><th>Статус</th></tr></thead><tbody id="jBody"></tbody></table>
+      </div>
+      <div class="card">
+        <h3>Сравни два напитка</h3>
+        <div class="row" style="margin-top:.6rem"><select id="cmpA"></select><select id="cmpB"></select><button class="btn sm" id="bCmp" type="button">Сравнить</button></div>
+        <div id="cmpOut"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <h3>Интерактивная шкала pH</h3>
+      <div class="hscale" id="hscale"></div>
+      <div class="hnums"><span>0</span><span>7</span><span>14</span></div>
+      <div class="flow-detail" id="hInfo" style="margin-top:.7rem"><b>Чем меньше значение pH, тем кислее среда.</b> Коснись участка шкалы, чтобы узнать о нём.</div>
+      <p class="muted" style="font-size:.85rem;margin:.7rem 0 0">Интересный факт: шкала pH логарифмическая. Это значит, что каждый шаг на шкале — большое изменение кислотности, а не маленькое. Считать это пока не нужно — достаточно помнить: меньше pH — кислее.</p>
+    </div>
+  </section>
+
+  <!-- ================= 4. LAB SHELL ================= -->
+  <section class="page" id="p-shell">
+    <div class="ph-title"><span class="badge">ЛАБОРАТОРИЯ №2</span><div><h2>Пять дней со скорлупой</h2><p>Кусочек яичной скорлупы в четырёх напитках · наблюдение 5 дней</p></div></div>
+    <div class="legend-tags"><span class="tag data">Записи по дням — данные исследования</span><span class="tag viz">Рисунки скорлупы — условная визуализация</span></div>
+    <div class="card">
+      <div class="cups" id="cups"></div>
+      <div class="timeline" id="timeline"></div>
+      <div class="day-caption" id="dayCap"></div>
+    </div>
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card">
+        <h3>Таблица наблюдений</h3>
+        <div class="row" style="margin-top:.6rem"><select id="shSel"></select><button class="btn sm" id="bShSel" type="button">Показать итог</button></div>
+        <div style="overflow-x:auto"><table class="tbl sh-tbl" style="margin-top:.8rem"><thead id="shHead"></thead><tbody id="shBody"></tbody></table></div>
+        <div id="shSum"></div>
+      </div>
+      <div class="card">
+        <div class="note" style="margin-top:0"><b>Важно знать</b><br>Яичная скорлупа состоит преимущественно из карбоната кальция. Зубная эмаль имеет другой минеральный состав. Поэтому опыт со скорлупой помогает наблюдать взаимодействие кислой среды с минеральным материалом, но не показывает точную скорость повреждения настоящих зубов.</div>
+        <p class="muted" style="font-size:.88rem">В исследовании скорлупу не взвешивали: слова «хрупкая», «тоньше», «рыхлая» — это описания, а не измерения. Поэтому нельзя рассчитать, сколько вещества потерял каждый образец. В газированном напитке пузырьки могут быть связаны не только с реакцией, но и с выделением растворённого газа.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. LAB CHALK ================= -->
+  <section class="page" id="p-chalk">
+    <div class="ph-title"><span class="badge">ЛАБОРАТОРИЯ №3</span><div><h2>Секрет мела</h2><p>Перетащи кусочек мела в стакан или нажми кнопку под стаканом</p></div></div>
+    <div class="legend-tags"><span class="tag data">Результат опыта — данные исследования</span><span class="tag viz">Анимация пузырьков — условная визуализация</span></div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="chalk-stage">
+          <div class="cglass-wrap">
+            <h3>Стакан А — вода</h3>
+            <div class="cglass" id="glassA" data-g="A"><div class="liq" style="background:linear-gradient(180deg,rgba(176,226,250,.75),rgba(143,211,244,.85))"></div></div>
+            <button class="btn sm" data-drop="A" type="button">Опустить мел</button>
+            <div class="react-lbl" id="lblA"></div>
+          </div>
+          <div class="cglass-wrap">
+            <h3>Стакан Б — лимонный сок</h3>
+            <div class="cglass" id="glassB" data-g="B"><div class="liq" style="background:linear-gradient(180deg,rgba(250,240,140,.8),rgba(240,220,90,.9))"></div></div>
+            <button class="btn sm" data-drop="B" type="button">Опустить мел</button>
+            <div class="react-lbl" id="lblB"></div>
+          </div>
+        </div>
+        <div class="chalk-tray" id="tray"><div class="chalk-piece" draggable="true" id="ch1" title="Кусочек мела"></div><div class="chalk-piece" draggable="true" id="ch2" title="Кусочек мела"></div></div>
+        <div class="row" style="justify-content:center;margin-top:1rem"><button class="btn ghost" id="bChalkReset" type="button">↺ Повторить опыт</button></div>
+      </div>
+      <div class="card">
+        <div id="chalkExplain" class="hidden fade-in" style="margin-bottom:1rem">
+          <div class="note" style="margin-top:0;border-color:var(--teal);background:#e6f7f7"><b style="color:var(--teal2)">Объяснение</b><br>Мел содержит карбонат кальция. При взаимодействии с кислотой может выделяться углекислый газ. Поэтому мы наблюдаем пузырьки.<br><span class="muted" style="font-size:.88rem">Ограничения: опыт демонстрационный — количество газа не измерялось, а состав школьного мела бывает разным. Опыт не показывает, что эмаль зуба растворяется так же.</span></div>
+        </div>
+        <h3>Почему в лимонном соке появились пузырьки?</h3>
+        <div class="quiz-opts" id="chalkQuiz"></div>
+        <div id="chalkFb"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. MATH ================= -->
+  <section class="page" id="p-math">
+    <div class="ph-title"><span class="badge">АНАЛИТИЧЕСКИЙ ЦЕНТР</span><div><h2>Математика исследования</h2><p>Анкетирование 20 школьников: диаграммы, проценты, сравнения</p></div></div>
+    <div class="math-head">
+      <div><b style="font-size:1.1rem">Результаты анкетирования 20 школьников</b><br><span style="opacity:.8;font-size:.88rem">Фактические ответы из исследовательской работы: 20 учащихся, 6 вопросов с ответами «да» и «нет». Проценты — расчёт по этим ответам.</span></div>
+      <span class="tag data" style="font-size:.8rem">Данные исследования</span>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid g2">
+      <div class="card chart" style="grid-column:1/-1">
+        <div class="row" style="justify-content:space-between"><h3>Диаграмма 1. Ответы «Да» и «Нет»</h3><div class="seg" id="segMode"><button class="on" data-m="n" type="button">Количество учеников</button><button data-m="p" type="button">Проценты</button></div></div>
+        <div id="chart1"></div>
+        <div class="qlegend" id="qlegend"></div>
+      </div>
+      <div class="card"><h3>Диаграмма 2. Пьёшь ли ты газированные напитки?</h3><div id="pie1"></div></div>
+      <div class="card"><h3>Диаграмма 3. Знаешь ли ты, что кислые напитки могут воздействовать на эмаль?</h3><div id="pie2"></div></div>
+      <div class="card chart"><h3>Диаграмма 4. Готовность чаще выбирать воду</h3><div id="chart4"></div></div>
+      <div class="card">
+        <h3>Калькулятор процентов <span class="tag cal">Расчёт</span></h3>
+        <p class="muted" style="font-size:.88rem;margin:.3rem 0 .8rem">Процент = количество ответов ÷ общее количество × 100%</p>
+        <div class="calc">
+          <label>Количество ответов<input type="number" id="cA" value="15" min="0" step="1"></label>
+          <label>Всего участников<input type="number" id="cN" value="20" min="1" step="1"></label>
+          <div class="calc-out" id="cOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="row" style="justify-content:space-between"><h3>Сравнительный анализ</h3><span class="tag cal">Расчёты на основе данных анкеты</span></div>
+      <p class="muted" style="font-size:.88rem;margin:.3rem 0 .8rem">Нажми на карточку, чтобы увидеть объяснение вычисления.</p>
+      <div class="ops" id="ops"></div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="row" style="justify-content:space-between"><h3>Расчётные модели из исследования</h3><span class="tag model">Расчётная модель — не измерение</span></div>
+      <p class="muted" style="font-size:.88rem;margin:.3rem 0 .8rem">Модели помогают объяснить результаты. Они не заменяют наблюдения и не прогнозируют повреждение зубной эмали.</p>
+      <div class="grid g3 models">
+        <div class="model-box">
+          <h4>Модель 1. Середины диапазонов pH</h4>
+          <p class="muted">Середина диапазона — расчётная точка для сравнения с водой (раздел 2.8).</p>
+          <div id="midChart"></div>
+        </div>
+        <div class="model-box">
+          <h4>Модель 2. Частота употребления</h4>
+          <p class="muted">T = n × t, где t — условные 20 минут после одного приёма (раздел 2.11).</p>
+          <label class="freq-l">Сколько отдельных приёмов: <b id="freqN">4</b><input type="range" id="freqR" min="1" max="8" value="4"></label>
+          <div class="freq-bar" id="freqBar"></div>
+          <div class="calc-out" id="freqOut" style="font-size:1rem;min-height:auto"></div>
+        </div>
+        <div class="model-box">
+          <h4>Модель 3. Логарифмическая шкала pH</h4>
+          <p class="muted">R = 10<sup>(5 − pH)</sup>: во сколько раз выше активность ионов водорода, чем при pH 5 (раздел 2.12).</p>
+          <table class="tbl"><thead><tr><th>pH</th><th>R</th></tr></thead><tbody><tr><td>5</td><td>1</td></tr><tr><td>4</td><td>10</td></tr><tr><td>3</td><td>100</td></tr><tr><td>2</td><td>1000</td></tr></tbody></table>
+          <p class="muted" style="font-size:.82rem;margin:.5rem 0 0">Это не значит, что напиток в 10 или 100 раз опаснее для зубов.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 7. PASSPORTS ================= -->
+  <section class="page" id="p-pass">
+    <div class="ph-title"><span class="badge">КАТАЛОГ</span><div><h2>Паспорта напитков</h2><p>Открой паспорт или отметь два напитка и нажми «Сравнить»</p></div></div>
+    <div class="row" style="margin-bottom:1rem;justify-content:space-between">
+      <span class="muted" id="passHint">Выбрано для сравнения: 0 из 2</span>
+      <button class="btn orange" id="bPassCmp" type="button" disabled>Сравнить</button>
+    </div>
+    <div id="passCmpOut"></div>
+    <div class="pass-grid" id="passGrid"></div>
+  </section>
+
+  <!-- ================= 8. GAME ================= -->
+  <section class="page" id="p-game">
+    <div class="ph-title"><span class="badge">ИГРА</span><div><h2>Зубной детектив</h2><p>7 заданий · 10 баллов за каждое · максимум 70</p></div></div>
+    <div class="game">
+      <div class="card" id="gameBox"></div>
+      <div class="side-zubik"><div class="bubble" id="gBubble">Привет, детектив! Я буду рядом. Каждое задание — новая загадка.</div><span id="gZubik"></span></div>
+    </div>
+  </section>
+
+  <!-- ================= 9. DISCOVERIES ================= -->
+  <section class="page" id="p-disc">
+    <div class="ph-title"><span class="badge">ИТОГИ</span><div><h2>Мои открытия</h2><p>Выводы исследования, памятка и личный журнал</p></div></div>
+    <div class="grid g2">
+      <div class="card">
+        <h3 style="margin-bottom:.8rem">Основные выводы <span class="tag data">По результатам исследования</span></h3>
+        <div class="concl">
+          <div>Исследованные напитки отличаются по кислотности.</div>
+          <div style="animation-delay:.1s">Вода имела показатель pH, близкий к нейтральному.</div>
+          <div style="animation-delay:.2s">В некоторых кислых напитках наблюдались изменения яичной скорлупы.</div>
+          <div style="animation-delay:.3s">Лимонный сок взаимодействовал с мелом с образованием пузырьков.</div>
+          <div style="animation-delay:.4s">Результаты показывают взаимодействие кислой среды с минеральными материалами, но не являются прямым измерением повреждения зубной эмали.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.8rem">Личный журнал исследователя</h3>
+        <div class="jgrid" id="jSummary"></div>
+        <div class="note"><b>Научная точность</b><br>Зубная эмаль состоит преимущественно из минералов на основе фосфата кальция, а скорлупа и мел — преимущественно из карбоната кальция. На воздействие напитков на эмаль влияют не только pH, но и другие свойства напитка, частота употребления и защитные свойства слюны.</div>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:1rem">
+      <button type="button" class="smile-head cta" data-go="smile"><span id="smileZ" style="width:4rem;display:block"></span><div style="text-align:left"><h3>БЕРЕГИ СВОЮ УЛЫБКУ!</h3><span style="opacity:.9">7 правил, мини-тест и памятка для печати →</span></div></button>
+      <button type="button" class="smile-head cta navy" data-defense="1"><span class="cta-ic">▶</span><div style="text-align:left"><h3>ЗАЩИТА ПРОЕКТА</h3><span style="opacity:.9">12 экранов для выступления перед жюри →</span></div></button>
+    </div>
+  </section>
+
+  <!-- ================= 10. SMILE ================= -->
+  <section class="page" id="p-smile">
+    <div class="smile-hero">
+      <div>
+        <span class="badge-w">ПАМЯТКА</span>
+        <h2>Береги свою улыбку!</h2>
+        <p>Семь простых правил, которые помогают заботиться о зубах. Открой каждую карточку и узнай, почему это важно.</p>
+        <div class="row" style="margin-top:1rem">
+          <button class="btn orange" id="bSmileOpenAll" type="button">Открыть все объяснения</button>
+          <button class="btn ghost" id="bPrintMemo" type="button">🖨 Распечатать памятку</button>
+        </div>
+      </div>
+      <span id="smileHeroZ" class="smile-hero-z"></span>
+    </div>
+    <div class="rules" id="rules"></div>
+    <div class="note" style="margin-top:1rem"><b>Важно</b><br>Эти советы основаны на общих правилах ухода за зубами и на результатах исследования кислотности напитков. Они не заменяют консультацию стоматолога. Опыты со скорлупой и мелом показывают действие кислоты на карбонат кальция, а не измеряют повреждение зубной эмали.</div>
+    <div class="card" style="margin-top:1rem">
+      <div class="row" style="justify-content:space-between"><h3>Мини-тест «Умеешь ли ты беречь улыбку?»</h3><span class="score" id="sqScore">0 / 5</span></div>
+      <div id="sq" style="margin-top:.8rem"></div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<div class="helper"><div class="say" id="say"></div><span id="helperZ"></span></div>
+
+<!-- ================= PRINT MEMO (A4) ================= -->
+<div id="printMemo" aria-hidden="true"></div>
+
+<!-- ================= DEFENSE MODE ================= -->
+<div id="defense" class="hidden" role="dialog" aria-label="Режим защиты проекта">
+  <div class="d-top">
+    <div class="d-brand"><span id="dBrandZ"></span><div><b>Защита проекта</b><small>«Кислотность напитков и их влияние на зубы»</small></div></div>
+    <div class="d-ctrl">
+      <button type="button" class="dbtn" id="dMenuBtn" aria-expanded="false">☰ Экраны</button>
+      <button type="button" class="dbtn" id="dNotesBtn" aria-pressed="false">📝 Текст выступления</button>
+      <button type="button" class="dbtn" id="dFullBtn">⛶ Полный экран</button>
+      <button type="button" class="dbtn" id="dRestart">↺ Начать защиту заново</button>
+      <button type="button" class="dbtn exit" id="dExit">✕ Вернуться на сайт</button>
+    </div>
+  </div>
+  <div class="d-menu hidden" id="dMenu"></div>
+  <div class="d-body" id="dBody">
+    <div class="d-stage-wrap"><div class="d-stage" id="dStage"></div></div>
+    <aside class="d-notes hidden" id="dNotes"><div class="row" style="justify-content:space-between"><b>Текст выступления</b><button type="button" class="dbtn sm" id="dNotesClose">Скрыть</button></div><div id="dNotesText"></div><p class="muted" style="font-size:.8rem;margin-top:1rem">Подсказка видна только на этом экране. Перед показом жюри нажми «Скрыть».</p></aside>
+  </div>
+  <div class="d-bottom">
+    <button type="button" class="btn ghost" id="dPrev">← Назад</button>
+    <div class="d-ind"><div class="d-dots" id="dDots"></div><span id="dCount">1 / 12</span></div>
+    <button type="button" class="btn" id="dNext">Далее →</button>
+  </div>
+</div>
+<div class="modal hidden" id="modal"><div class="card"><h3 id="mTitle">Начать заново?</h3><p id="mText">Журнал, прогресс и результаты игры будут удалены.</p><div class="row" style="justify-content:flex-end"><button class="btn ghost" id="mNo" type="button">Отмена</button><button class="btn orange" id="mYes" type="button">Да, начать заново</button></div></div></div>
+
+<script>
+(function(){
+"use strict";
+var RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function wait(ms){return RM?Math.min(ms,60):ms;}
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+
+/* ================= DATA ================= */
+var DRINKS=[
+ {id:"water",name:"Вода",lo:7,hi:7,ph:"около 7",color:"#bfe6fb",env:"Близкая к нейтральной",
+  explain:"Вода показала pH около 7 — среда, близкая к нейтральной: не кислая и не щелочная.",
+  shell:"Почти без изменений все пять дней; на 5-й день существенных изменений нет.",
+  comment:"Вода — нейтральный образец. С ней удобно сравнивать остальные напитки."},
+ {id:"tea",name:"Чай",lo:5,hi:6,ph:"5–6",color:"#c98a3e",env:"Слабокислая",
+  explain:"Чай показал pH 5–6 — слабокислая среда. Он кислее воды, но менее кислый, чем соки и лимонад в этом исследовании.",
+  shell:null,
+  comment:"Среди исследованных напитков чай оказался ближе всего к воде по кислотности."},
+ {id:"apple",name:"Яблочный сок",lo:3,hi:4,ph:"3–4",color:"#f3cf55",env:"Кислая",
+  explain:"Яблочный сок показал pH 3–4 — кислая среда. Во фруктовых соках есть природные кислоты.",
+  shell:"Небольшие пузырьки, поверхность стала шероховатее, скорлупа — более хрупкой и тоньше; на 5-й день поверхность заметно изменилась.",
+  comment:"Даже натуральный фруктовый сок может быть кислым."},
+ {id:"orange",name:"Апельсиновый сок",lo:3,hi:4,ph:"3–4",color:"#ffa53a",env:"Кислая",
+  explain:"Апельсиновый сок показал pH 3–4 — кислая среда, как у яблочного сока.",
+  shell:null,
+  comment:"По индикатору его диапазон совпал с яблочным соком."},
+ {id:"lemonade",name:"Лимонад",lo:2,hi:3,ph:"2–3",color:"#e6f29a",env:"Кислая",
+  explain:"Лимонад показал pH 2–3 — кислая среда. Вместе с газированным напитком это самые низкие значения в таблице.",
+  shell:"Пузырьки, изменения поверхности становились всё заметнее; на 5-й день скорлупа стала хрупкой.",
+  comment:"Диапазон лимонада совпал с газированным напитком."},
+ {id:"soda",name:"Газированный напиток",lo:2,hi:3,ph:"2–3",color:"#7a3a1a",env:"Кислая",
+  explain:"Газированный напиток показал pH 2–3 — кислая среда, одно из самых низких значений в таблице.",
+  shell:"Пузырьки, изменилась поверхность, появилась рыхлость; на 5-й день скорлупа рыхлая.",
+  comment:"Вместе с лимонадом — самый кислый диапазон в исследовании."}
+];
+function D(id){for(var i=0;i<DRINKS.length;i++){if(DRINKS[i].id===id)return DRINKS[i];}return null;}
+var SHELL_IDS=["water","apple","lemonade","soda"];
+/* Таблица наблюдений по дням — из исследовательской работы (раздел 2.4) */
+var SHELL_DAYS={
+ water:["Почти без изменений","Почти без изменений","Незначительные изменения","Почти без изменений","Без существенных изменений"],
+ apple:["Небольшие пузырьки","Поверхность шероховатее","Более хрупкая","Скорлупа стала тоньше","Поверхность заметно изменилась"],
+ lemonade:["Пузырьки","Изменения заметнее","Поверхность заметно изменилась","Изменения хорошо заметны","Скорлупа стала хрупкой"],
+ soda:["Пузырьки","Поверхность изменилась","Появилась рыхлость","Более рыхлая","Скорлупа рыхлая"]
+};
+var SURVEY=[
+ ["Пьёшь ли ты газированные напитки?",15,5],
+ ["Часто ли ты пьёшь соки или лимонад?",16,4],
+ ["Знаешь ли ты, что некоторые напитки содержат кислоты?",11,9],
+ ["Знаешь ли ты, что кислые напитки могут воздействовать на эмаль?",8,12],
+ ["Обращаешь ли ты внимание на состав напитка?",6,14],
+ ["Готов ли ты чаще выбирать воду?",17,3]
+];
+var STAGES=[["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Опыт со скорлупой"],["chalk","Опыт с мелом"],["math","Математика"],["pass","Паспорта напитков"],["game","Игра"],["disc","Мои открытия"],["smile","Памятка"]];
+var PAGES=[["home","Главная"],["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Эксперимент со скорлупой"],["chalk","Эксперимент с мелом"],["math","Математика исследования"],["pass","Паспорта напитков"],["game","Игра «Зубной детектив»"],["disc","Мои открытия"],["smile","Береги свою улыбку!"]];
+var TIPS={
+ home:"Привет! Я Зубик. Начнём расследование шести напитков?",
+ research:"Каждое исследование начинается с вопроса. Нажми на этапы пути!",
+ ph:"Выбери напиток, налей его и опусти индикатор. Не забудь записать результат в журнал!",
+ shell:"Переключай дни и смотри, как меняется скорлупа. А итог — в кнопке «Посмотреть наблюдения».",
+ chalk:"Перетащи мел в стакан. Что случится в лимонном соке?",
+ math:"Здесь работают проценты: количество ÷ всего × 100%.",
+ pass:"У каждого напитка — свой паспорт. Сравни любые два!",
+ game:"Пора проверить, какой из тебя детектив. Удачи!",
+ disc:"Посмотри, что ты открыл. И береги свою улыбку!",
+ smile:"Открой каждую карточку и пройди мини-тест. Памятку можно распечатать!"
+};
+
+/* ================= STATE ================= */
+var KEY="zubnoy_detektiv_ibrakhim_v1";
+function fresh(){return {visited:{},journal:[],labs:{},game:{last:null,best:0,history:[]},big:false};}
+var S=fresh();
+var canStore=true;
+function load(){try{var raw=window.localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);for(var k in o){if(Object.prototype.hasOwnProperty.call(o,k))S[k]=o[k];}}}catch(e){canStore=false;}}
+function save(){try{window.localStorage.setItem(KEY,JSON.stringify(S));}catch(e){canStore=false;}}
+function mark(k){if(!S.visited[k]){S.visited[k]=true;save();}updateProgress();}
+function updateProgress(){
+  var n=0;STAGES.forEach(function(s){if(S.visited[s[0]])n++;});
+  $("progText").textContent="Прогресс исследования: "+n+" из "+STAGES.length+" этапов";
+  $("progBar").style.width=(n/STAGES.length*100)+"%";
+  var btns=$("nav").querySelectorAll("button");
+  for(var i=0;i<btns.length;i++){btns[i].classList.toggle("done",!!S.visited[btns[i].getAttribute("data-page")]);}
+}
+
+/* ================= COLORS ================= */
+var STOPS=[[0,"#d7263d"],[1,"#e2362f"],[2,"#f0533a"],[3,"#f58a3a"],[4,"#f7b733"],[5,"#f2d43b"],[6,"#b5d334"],[7,"#3fb950"],[8,"#1fa59a"],[9,"#1f8fbf"],[10,"#2b7bd6"],[11,"#3b63cf"],[12,"#4b4fc4"],[13,"#5a3daa"],[14,"#6a2c91"]];
+function hex2rgb(h){return [parseInt(h.substr(1,2),16),parseInt(h.substr(3,2),16),parseInt(h.substr(5,2),16)];}
+function phColor(p){
+  p=Math.max(0,Math.min(14,p));var i=Math.floor(p);if(i>=14)return STOPS[14][1];
+  var a=hex2rgb(STOPS[i][1]),b=hex2rgb(STOPS[i+1][1]),t=p-i;
+  return "rgb("+Math.round(a[0]+(b[0]-a[0])*t)+","+Math.round(a[1]+(b[1]-a[1])*t)+","+Math.round(a[2]+(b[2]-a[2])*t)+")";
+}
+function envOf(p){return p<7?"кислая":(p>7?"щелочная":"нейтральная");}
+
+/* ================= SVG ART ================= */
+function zubikSVG(cls){
+  return '<svg class="zubik '+(cls||"")+'" viewBox="0 0 160 175" role="img" aria-label="Зубик">'+
+  '<ellipse cx="80" cy="168" rx="42" ry="5" fill="#0b2545" opacity=".12"/>'+
+  '<g class="zb-float">'+
+  '<path d="M40 42 C38 14 66 8 80 24 C94 8 122 14 120 42 C121 70 114 86 110 112 C107 138 97 152 91 134 C87 120 73 120 69 134 C63 152 53 138 50 112 C46 86 39 70 40 42Z" fill="#ffffff" stroke="#0b2545" stroke-width="3.2"/>'+
+  '<path d="M52 30 C56 22 66 20 72 26" fill="none" stroke="#dfeef7" stroke-width="5" stroke-linecap="round"/>'+
+  '<path d="M45 86 C47 98 49 106 50 113 C53 138 62 146 68 132 C72 121 88 121 92 132 C98 146 107 138 110 113 C111 106 113 98 115 86 L97 86 L80 106 L63 86Z" fill="#13a3a8" stroke="#0b2545" stroke-width="3"/>'+
+  '<path d="M63 86 L80 106 L73 86Z M97 86 L80 106 L87 86Z" fill="#e8f5fc" stroke="#0b2545" stroke-width="2"/>'+
+  '<rect x="94" y="108" width="12" height="9" rx="2" fill="#0e8287" stroke="#0b2545" stroke-width="1.5"/>'+
+  '<rect x="99" y="101" width="3" height="10" rx="1.2" fill="#ff8c42"/>'+
+  '<circle cx="64" cy="56" r="11" fill="#e8f5fc" stroke="#0b2545" stroke-width="3"/>'+
+  '<circle cx="96" cy="56" r="11" fill="#e8f5fc" stroke="#0b2545" stroke-width="3"/>'+
+  '<path d="M75 55 L85 55" stroke="#0b2545" stroke-width="3"/>'+
+  '<circle cx="66" cy="57" r="4.2" fill="#0b2545"/><circle cx="98" cy="57" r="4.2" fill="#0b2545"/>'+
+  '<circle cx="67.5" cy="55.5" r="1.4" fill="#fff"/><circle cx="99.5" cy="55.5" r="1.4" fill="#fff"/>'+
+  '<circle cx="54" cy="74" r="4.5" fill="#ffb8a8" opacity=".7"/><circle cx="106" cy="74" r="4.5" fill="#ffb8a8" opacity=".7"/>'+
+  '<path class="m-happy" d="M70 74 Q80 84 90 74" fill="none" stroke="#0b2545" stroke-width="3" stroke-linecap="round"/>'+
+  '<path class="m-sad" d="M70 80 Q80 72 90 80" fill="none" stroke="#0b2545" stroke-width="3" stroke-linecap="round"/>'+
+  '<ellipse class="m-wow" cx="80" cy="77" rx="5" ry="6" fill="#0b2545"/>'+
+  '<g transform="rotate(-24 128 92)"><rect x="122" y="70" width="12" height="36" rx="6" fill="#e8f5fc" stroke="#0b2545" stroke-width="2.5"/><rect class="tube-liq" x="124.5" y="86" width="7" height="17" rx="3.5" fill="#ff8c42"/><rect x="120" y="67" width="16" height="5" rx="2" fill="#0b2545"/></g>'+
+  '<path d="M114 92 Q122 96 126 92" fill="none" stroke="#0b2545" stroke-width="3" stroke-linecap="round"/>'+
+  '</g></svg>';
+}
+function glassSVG(color,level){
+  level=level==null?.7:level;var top=24+ (1-level)*90;
+  return '<svg viewBox="0 0 60 120" aria-hidden="true"><path d="M10 18 L15 112 Q16 116 20 116 L40 116 Q44 116 45 112 L50 18" fill="rgba(255,255,255,.6)" stroke="#0b2545" stroke-opacity=".35" stroke-width="3"/>'+
+  '<path d="M'+(10.4+ (top-18)*0.053)+' '+top+' L15.8 111 Q16.5 113 20 113 L40 113 Q43.5 113 44.2 111 L'+(49.6-(top-18)*0.053)+' '+top+'Z" fill="'+color+'" opacity=".9"/>'+
+  '<rect x="16" y="26" width="4" height="70" rx="2" fill="#fff" opacity=".55"/></svg>';
+}
+function bottleSVG(color){
+  return '<svg viewBox="0 0 50 90" aria-hidden="true"><rect x="19" y="2" width="12" height="7" rx="2" fill="#0b2545"/><path d="M20 9 L30 9 L30 20 Q42 26 42 38 L42 82 Q42 88 36 88 L14 88 Q8 88 8 82 L8 38 Q8 26 20 20Z" fill="rgba(255,255,255,.75)" stroke="#0b2545" stroke-opacity=".4" stroke-width="2.5"/>'+
+  '<path d="M10 42 L40 42 L40 81 Q40 85 36 85 L14 85 Q10 85 10 81Z" fill="'+color+'"/><rect x="10" y="52" width="30" height="13" fill="#fff" opacity=".85"/><rect x="13" y="28" width="3" height="50" rx="1.5" fill="#fff" opacity=".6"/></svg>';
+}
+function flaskSVG(color){
+  return '<svg viewBox="0 0 60 80" aria-hidden="true"><path d="M23 4 L37 4 M25 4 L25 28 L8 66 Q5 74 14 74 L46 74 Q55 74 52 66 L35 28 L35 4" fill="rgba(255,255,255,.7)" stroke="#0b2545" stroke-opacity=".45" stroke-width="3"/><path d="M15 50 L45 50 L51 66 Q53 71 46 71 L14 71 Q7 71 9 66Z" fill="'+color+'" opacity=".85"/><circle cx="24" cy="60" r="2.5" fill="#fff" opacity=".8"/><circle cx="33" cy="56" r="1.8" fill="#fff" opacity=".8"/></svg>';
+}
+function rng(seed){var s=seed;return function(){s=(s*9301+49297)%233280;return s/233280;};}
+function shellCupSVG(id,day,animate){
+  var d=D(id),t=id==="water"?0:(day-1)/4,r=rng(id.charCodeAt(0)*131+id.length*17),i,out="";
+  var tint={water:"#fbf4e6",apple:"#efe0b8",lemonade:"#f1eac9",soda:"#e2cdb2"}[id];
+  var shellFill=t>0?tint:"#fbf4e6";
+  out+='<svg viewBox="0 0 120 150" aria-label="Стакан: '+esc(d.name)+', день '+day+'">';
+  out+='<path d="M22 54 L28 136 Q29 141 34 141 L86 141 Q91 141 92 136 L98 54Z" fill="'+d.color+'" opacity="'+(id==="soda"?.75:.6)+'"/>';
+  out+='<path d="M18 20 L26 138 Q27 145 34 145 L86 145 Q93 145 94 138 L102 20" fill="none" stroke="#0b2545" stroke-opacity=".35" stroke-width="3.5"/>';
+  out+='<rect x="27" y="30" width="5" height="90" rx="2.5" fill="#fff" opacity=".5"/>';
+  var dash=(id==="soda"&&t>.4)?' stroke-dasharray="4 2"':(t>.6?' stroke-dasharray="7 2"':'');
+  out+='<path d="M34 126 Q60 104 86 126 Q82 137 60 134 Q38 137 34 126Z" fill="'+shellFill+'" stroke="#a88f6b" stroke-width="2"'+dash+'/>';
+  out+='<path d="M40 124 Q60 110 80 124" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>';
+  if(id!=="water"){
+    var n=Math.round(t*14);
+    for(i=0;i<n;i++){out+='<circle cx="'+(40+r()*40).toFixed(1)+'" cy="'+(118+r()*13).toFixed(1)+'" r="'+(0.8+r()*1.6).toFixed(1)+'" fill="#8d7556" opacity=".55"/>';}
+  }
+  if(id==="apple"&&t>.4){out+='<path d="M52 118 l4 5 l-3 4 l4 4" fill="none" stroke="#8d7556" stroke-width="1.2"/>';if(t>.7)out+='<path d="M70 120 l-3 5 l4 3" fill="none" stroke="#8d7556" stroke-width="1.2"/>';}
+  if(id==="soda"&&t>.5){out+='<path d="M76 122 l3 4 l-2 3 M44 124 l3 3" fill="none" stroke="#6d5236" stroke-width="1.3"/><circle cx="90" cy="134" r="1.8" fill="'+shellFill+'" stroke="#a88f6b"/><circle cx="30" cy="136" r="1.4" fill="'+shellFill+'" stroke="#a88f6b"/>';}
+  if((id==="lemonade"||id==="soda")&&day>1){
+    var nb=Math.round(3+t*7);
+    for(i=0;i<nb;i++){var bx=(38+r()*44).toFixed(1),by=(112+r()*10).toFixed(1),br=(1.4+r()*1.6).toFixed(1);
+      out+='<circle '+(animate?'class="sbub" style="animation-delay:'+(r()*2.4).toFixed(2)+'s"':'')+' cx="'+bx+'" cy="'+by+'" r="'+br+'" fill="rgba(255,255,255,.75)" stroke="#fff" stroke-width=".8"/>';}
+  }
+  out+='</svg>';return out;
+}
+
+/* ================= NAV ================= */
+var current="home";
+function buildNav(){
+  var h="";PAGES.forEach(function(p,i){h+='<button type="button" data-page="'+p[0]+'"><span class="num">'+(i+1)+'</span>'+p[1]+'</button>';});
+  $("nav").innerHTML=h;
+  $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)go(b.getAttribute("data-page"));});
+  document.addEventListener("click",function(e){var g=e.target.closest("[data-go]");if(g)go(g.getAttribute("data-go"));});
+}
+var pageMap={home:"p-home",research:"p-research",ph:"p-ph",shell:"p-shell",chalk:"p-chalk",math:"p-math",pass:"p-pass",game:"p-game",disc:"p-disc",smile:"p-smile"};
+function go(p){
+  if(!pageMap[p])p="home";current=p;
+  for(var k in pageMap){$(pageMap[k]).classList.toggle("show",k===p);}
+  var btns=$("nav").querySelectorAll("button");
+  for(var i=0;i<btns.length;i++)btns[i].classList.toggle("active",btns[i].getAttribute("data-page")===p);
+  if(p==="research"||p==="math"||p==="disc"||p==="smile")mark(p);
+  if(p==="math")drawCharts();
+  if(p==="disc")renderSummary();
+  if(p==="shell")renderCups();
+  say(TIPS[p]);
+  try{history.replaceState(null,"","#"+p);}catch(e){}
+  window.scrollTo(0,0);
+}
+var sayT;
+function say(txt){var el=$("say");el.textContent=txt;el.classList.add("on");clearTimeout(sayT);sayT=setTimeout(function(){el.classList.remove("on");},5200);}
+function moodZ(el,m){var z=el.querySelector(".zubik");if(!z)return;z.classList.remove("joy","sad","wow");void z.getBoundingClientRect();if(m==="joy")z.classList.add("joy");if(m==="sad")z.classList.add("sad");if(m==="wow")z.classList.add("wow");}
+
+/* ================= HOME ================= */
+function buildHome(){
+  var art=$("heroArt");
+  art.insertAdjacentHTML("afterbegin",zubikSVG()+'<div class="hero-flask f1">'+flaskSVG("#13a3a8")+'</div><div class="hero-flask f2">'+flaskSVG("#ff8c42")+'</div>');
+  $("heroGlasses").innerHTML=DRINKS.map(function(d){return glassSVG(d.color,.65);}).join("");
+  $("brandZ").innerHTML=zubikSVG();$("brandZ").querySelector("svg").style.width="2.8rem";
+  $("helperZ").innerHTML=zubikSVG();$("helperZ").addEventListener("click",function(){say(TIPS[current]);});
+  $("smileZ").innerHTML=zubikSVG();
+  $("smileHeroZ").innerHTML=zubikSVG();
+  $("dBrandZ").innerHTML=zubikSVG();
+  $("gZubik").innerHTML=zubikSVG();
+}
+
+/* ================= RESEARCH ================= */
+var FLOW=[
+ ["ПРОБЛЕМА","?","Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами? Школьники каждый день пьют соки, лимонад и газировку, но редко задумываются об их кислотности."],
+ ["ГИПОТЕЗА","!","Среди выбранных напитков будут образцы с разным pH, а в кислых напитках изменения яичной скорлупы будут заметнее, чем в воде. Влияние напитков непосредственно на эмаль в опытах не проверялось."],
+ ["АНКЕТИРОВАНИЕ","20","В анкетировании участвовали 20 школьников: что они пьют, знают ли о кислотах в напитках и готовы ли чаще выбирать воду."],
+ ["ИЗМЕРЕНИЕ pH","pH","Кислотность шести напитков (вода, чай, яблочный сок, апельсиновый сок, лимонад, газированный напиток) оценивалась индикаторными полосками. Результаты — ориентировочные диапазоны."],
+ ["ЭКСПЕРИМЕНТЫ","⚗","Опыт № 2: кусочки яичной скорлупы 5 дней находились в воде, яблочном соке, лимонаде и газированном напитке. Опыт № 3: мел помещали в воду и в лимонный сок."],
+ ["АНАЛИЗ","%","Ответы анкеты переведены в проценты, построены таблицы и диаграммы. Добавлены три расчётные модели: середины диапазонов pH, частота употребления и логарифмическая шкала pH."],
+ ["ВЫВОДЫ","✓","Напитки различаются по pH; в кислых напитках скорлупа менялась заметнее, чем в воде. Гипотеза подтверждается в пределах выбранных моделей. Прямое влияние на зубную эмаль экспериментально не доказано."]
+];
+function buildFlow(){
+  var h="";FLOW.forEach(function(f,i){h+='<div class="flow-step"><button type="button" data-i="'+i+'"><i>'+f[1]+'</i>'+f[0]+'</button>'+(i<FLOW.length-1?'<span class="flow-line"></span>':'')+'</div>';});
+  $("flow").innerHTML=h;
+  $("flow").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;showFlow(+b.getAttribute("data-i"));});
+  showFlow(0);
+}
+function showFlow(i){
+  var bs=$("flow").querySelectorAll("button");for(var k=0;k<bs.length;k++)bs[k].classList.toggle("on",k===i);
+  $("flowDetail").innerHTML='<b>Этап '+(i+1)+'. '+FLOW[i][0]+'</b><br>'+FLOW[i][2];
+  $("flowDetail").classList.remove("fade-in");void $("flowDetail").offsetWidth;$("flowDetail").classList.add("fade-in");
+}
+
+/* ================= LAB 1 pH ================= */
+var L1={drink:null,stage:0,busy:false};
+function buildLab1(){
+  $("shelf").innerHTML=DRINKS.map(function(d){return '<button type="button" class="bottle-btn" data-d="'+d.id+'">'+bottleSVG(d.color)+'<span>'+d.name+'</span></button>';}).join("");
+  $("shelf").addEventListener("click",function(e){var b=e.target.closest(".bottle-btn");if(b)pickDrink(b.getAttribute("data-d"));});
+  var vs=$("vscale"),h="";
+  for(var p=0;p<=14;p++){h+='<div class="vcell" data-p="'+p+'" style="background:'+phColor(p)+'">'+p+'</div>';}
+  vs.insertAdjacentHTML("beforeend",h);
+  function info(e){var c=e.target.closest(".vcell");if(!c)return;var p=+c.getAttribute("data-p");$("scaleInfo").innerHTML='<b>pH '+p+'</b><br>'+(p<7?'Кислая среда':(p===7?'Нейтральная среда':'Щелочная среда'));}
+  vs.addEventListener("mouseover",info);vs.addEventListener("click",info);
+  $("bPour").addEventListener("click",pour);
+  $("bDip").addEventListener("click",dip);
+  $("bLog").addEventListener("click",logIt);
+  $("bNew").addEventListener("click",resetBench);
+  $("bClearJ").addEventListener("click",function(){S.journal=[];save();renderJournal();say("Журнал очищен. Можно исследовать заново!");});
+  var opts=DRINKS.map(function(d){return '<option value="'+d.id+'">'+d.name+'</option>';}).join("");
+  $("cmpA").innerHTML=opts;$("cmpB").innerHTML=opts;$("cmpB").value="soda";
+  $("bCmp").addEventListener("click",compareTwo);
+  // horizontal scale
+  var zones=[["Кислая среда",0,7,"linear-gradient(90deg,#d7263d,#f0533a,#f58a3a,#f7b733,#f2d43b,#b5d334)","pH меньше 7. Чем меньше число, тем кислее среда. Здесь находятся соки, лимонад, газированный напиток и чай."],["Нейтральная",7,7.6,"#3fb950","pH около 7. Ни кислая, ни щелочная среда. Так показала себя вода в исследовании."],["Щелочная среда",7.6,14,"linear-gradient(90deg,#1fa59a,#2b7bd6,#4b4fc4,#6a2c91)","pH больше 7. Например, мыльный раствор. В исследовании таких напитков не было."]];
+  $("hscale").innerHTML=zones.map(function(z,i){return '<div class="hzone" data-i="'+i+'" style="flex:'+(z[2]-z[1])+';background:'+z[3]+'">'+z[0]+'</div>';}).join("");
+  function hz(e){var z=e.target.closest(".hzone");if(!z)return;var i=+z.getAttribute("data-i");var all=$("hscale").querySelectorAll(".hzone");for(var k=0;k<all.length;k++)all[k].classList.toggle("on",k===i);$("hInfo").innerHTML='<b>'+zones[i][0]+'.</b> '+zones[i][4]+'<br><span class="muted">Помни: чем меньше значение pH, тем кислее среда.</span>';}
+  $("hscale").addEventListener("mouseover",hz);$("hscale").addEventListener("click",hz);
+  renderJournal();
+}
+function pickDrink(id){
+  if(L1.busy)return;
+  resetBench(true);
+  L1.drink=D(id);L1.stage=1;
+  var bs=$("shelf").querySelectorAll(".bottle-btn");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("picked",bs[i].getAttribute("data-d")===id);
+  var s=$("sample");s.innerHTML=bottleSVG(L1.drink.color);s.className="sample";void s.offsetWidth;s.classList.add("in");
+  $("benchLbl").innerHTML="Образец: "+L1.drink.name+"<small>Шаг 2. Нажми «Налить»</small>";
+  $("bPour").disabled=false;
+}
+function pour(){
+  if(L1.stage!==1||L1.busy)return;L1.busy=true;$("bPour").disabled=true;
+  var s=$("sample"),st=$("stream"),lq=$("liquid");
+  s.classList.add("pour");
+  setTimeout(function(){st.style.background=L1.drink.color;st.classList.add("on");lq.style.background="linear-gradient(180deg,"+L1.drink.color+"cc,"+L1.drink.color+")";lq.classList.add("full");},wait(650));
+  setTimeout(function(){st.classList.remove("on");s.classList.remove("pour");},wait(2100));
+  setTimeout(function(){L1.stage=2;L1.busy=false;$("strip").classList.add("show");$("bDip").disabled=false;$("benchLbl").innerHTML="Напиток налит: "+L1.drink.name+"<small>Шаг 3. Опусти индикаторную полоску</small>";},wait(2500));
+}
+function dip(){
+  if(L1.stage!==2||L1.busy)return;L1.busy=true;$("bDip").disabled=true;
+  var mid=(L1.drink.lo+L1.drink.hi)/2;
+  $("strip").classList.add("dip");
+  $("pad").style.background=phColor(mid);
+  $("benchLbl").innerHTML="Индикатор в напитке…<small>Шаг 4. Следи за цветом полоски</small>";
+  setTimeout(function(){$("strip").classList.remove("dip");},wait(2400));
+  setTimeout(function(){L1.stage=3;L1.busy=false;showResult();},wait(3300));
+}
+function showResult(){
+  var d=L1.drink,mid=(d.lo+d.hi)/2;
+  var band=$("vband"),vs=$("vscale"),cell=100/15;
+  var mobile=window.matchMedia("(max-width:900px)").matches;
+  band.removeAttribute("style");
+  if(mobile){band.style.left=(d.lo*cell)+"%";band.style.width=((d.hi-d.lo+1)*cell)+"%";}
+  else{band.style.bottom=(d.lo*cell)+"%";band.style.height=((d.hi-d.lo+1)*cell)+"%";}
+  band.classList.add("on");
+  $("phResult").innerHTML='<div class="result"><div class="swatch" style="background:'+phColor(mid)+'"></div><div><div class="row"><h3>'+d.name+'</h3><span class="pill">pH '+d.ph+'</span><span class="pill" style="background:'+phColor(mid)+';color:#fff">'+d.env+' среда</span><span class="tag data">Данные исследования</span></div><p style="margin:.4rem 0 0">'+d.explain+'</p><p class="muted" style="margin:.3rem 0 0;font-size:.85rem">Индикаторная полоска даёт ориентировочный диапазон, а не точное лабораторное значение.</p></div></div>';
+  $("benchLbl").innerHTML="Результат: pH "+d.ph+"<small>Шаг 6. Добавь результат в журнал</small>";
+  $("bLog").disabled=false;
+  say(d.id==="water"?"Близко к нейтральной! Полоска стала зелёной.":"Полоска показала кислую среду: pH "+d.ph+".");
+}
+function logIt(){
+  if(L1.stage!==3)return;var d=L1.drink;
+  var exists=S.journal.some(function(j){return j===d.id;});
+  if(!exists)S.journal.push(d.id);
+  save();renderJournal();mark("ph");
+  $("bLog").disabled=true;
+  $("benchLbl").innerHTML="Записано в журнал: "+d.name+"<small>Выбери следующий напиток</small>";
+  say(S.journal.length>=6?"Ты исследовал все шесть напитков! Отличная работа.":"Записано! Исследовано напитков: "+S.journal.length+" из 6.");
+}
+function resetBench(keepDrink){
+  L1.stage=0;L1.busy=false;L1.drink=null;
+  $("sample").className="sample";$("liquid").classList.remove("full");$("strip").className="strip";$("pad").style.background="";
+  $("vband").classList.remove("on");$("phResult").innerHTML="";
+  $("bPour").disabled=true;$("bDip").disabled=true;$("bLog").disabled=true;
+  if(keepDrink!==true){var bs=$("shelf").querySelectorAll(".bottle-btn");for(var i=0;i<bs.length;i++)bs[i].classList.remove("picked");
+  $("benchLbl").innerHTML="Шаг 1. Выбери напиток на полке<small>Нажми на бутылочку слева</small>";}
+}
+function renderJournal(){
+  if(!S.journal.length){$("jBody").innerHTML='<tr><td colspan="4" class="muted">Журнал пуст. Проведи опыт и нажми «Добавить в журнал».</td></tr>';return;}
+  $("jBody").innerHTML=S.journal.map(function(id){var d=D(id);if(!d)return "";return '<tr><td><span class="dot" style="background:'+d.color+'"></span>'+d.name+'</td><td><b>'+d.ph+'</b></td><td><span class="pill" style="background:'+phColor((d.lo+d.hi)/2)+';color:#fff">'+d.env+'</span></td><td style="color:var(--ok);font-weight:700">✓ Исследовано</td></tr>';}).join("");
+}
+function compareText(a,b){
+  if(a.id===b.id)return "Выбран один и тот же напиток. Выбери два разных напитка.";
+  var overlap=a.lo<=b.hi&&b.lo<=a.hi;
+  if(overlap)return "Диапазоны pH совпадают или пересекаются ("+a.ph+" и "+b.ph+"). По индикаторной полоске нельзя однозначно сказать, какой из этих напитков кислее.";
+  var more=a.hi<b.lo?a:b,less=more===a?b:a;
+  return "«"+more.name+"» (pH "+more.ph+") кислее, чем «"+less.name+"» (pH "+less.ph+"): его значение pH меньше, а чем меньше pH, тем кислее среда.";
+}
+function compareTwo(){
+  var a=D($("cmpA").value),b=D($("cmpB").value);
+  function card(d){var m=(d.lo+d.hi)/2;return '<div class="cmp-card"><b>'+d.name+'</b><div class="sw" style="background:'+phColor(m)+'"></div><div style="font-size:1.4rem;font-weight:800">pH '+d.ph+'</div><div class="muted">'+d.env+' среда</div></div>';}
+  $("cmpOut").innerHTML='<div class="cmp-cards">'+card(a)+'<div class="vs">VS</div>'+card(b)+'<div class="cmp-concl">'+compareText(a,b)+'</div></div>';
+}
+
+/* ================= LAB 2 SHELL ================= */
+var shellDay=1,shellSeen={};
+var DAYCAP={1:"День 1. Кусочки скорлупы помещены в четыре напитка.",2:"День 2. Наблюдаем за поверхностью скорлупы.",3:"День 3. В кислых напитках изменения заметнее.",4:"День 4. Наблюдение продолжается.",5:"День 5. Итог наблюдения — нажми «Посмотреть наблюдения»."};
+function buildLab2(){
+  var tl="";for(var i=1;i<=5;i++)tl+='<button type="button" data-day="'+i+'">День '+i+'</button>';
+  $("timeline").innerHTML=tl;
+  $("timeline").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;shellDay=+b.getAttribute("data-day");renderCups();if(shellDay===5)mark("shell");});
+  $("cups").addEventListener("click",function(e){var b=e.target.closest("[data-obs]");if(!b)return;var id=b.getAttribute("data-obs");shellSeen[id]=true;renderCups();mark("shell");});
+  $("shSel").innerHTML=SHELL_IDS.map(function(id){return '<option value="'+id+'">'+D(id).name+'</option>';}).join("");
+  $("bShSel").addEventListener("click",function(){shellSeen[$("shSel").value]=true;renderShellTable($("shSel").value);mark("shell");});
+  renderShellTable(null);
+}
+function renderCups(){
+  $("cups").innerHTML=SHELL_IDS.map(function(id){var d=D(id);
+    var obs=shellSeen[id]?'<div class="obs fade-in"><span class="tag data">Итог за 5 дней</span><br>'+d.shell+'</div>':'<div class="obs muted">Нажми, чтобы увидеть итог исследования</div>';
+    return '<div class="cup"><h3>'+d.name+'</h3>'+shellCupSVG(id,shellDay,true)+'<div class="day-rec"><b>День '+shellDay+':</b> '+SHELL_DAYS[id][shellDay-1]+'</div><button type="button" class="btn sm ghost" data-obs="'+id+'">Посмотреть наблюдения</button>'+obs+'</div>';}).join("");
+  var bs=$("timeline").querySelectorAll("button");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",+bs[i].getAttribute("data-day")===shellDay);
+  $("dayCap").innerHTML=DAYCAP[shellDay]+' <span class="tag data">запись — данные</span> <span class="tag viz">рисунок — условно</span>';
+}
+function renderShellTable(hl){
+  $("shHead").innerHTML='<tr><th>День</th>'+SHELL_IDS.map(function(id){return '<th'+(hl===id?' class="hl"':'')+'>'+D(id).name+'</th>';}).join("")+'</tr>';
+  var rows="";for(var dd=0;dd<5;dd++){rows+='<tr><td><b>'+(dd+1)+'</b></td>'+SHELL_IDS.map(function(id){return '<td'+(hl===id?' class="hl"':'')+'>'+SHELL_DAYS[id][dd]+'</td>';}).join("")+'</tr>';}
+  $("shBody").innerHTML=rows;
+  $("shSum").innerHTML=hl?'<div class="feedback ok" style="margin-top:.8rem"><b>'+D(hl).name+' — итог за 5 дней.</b> '+D(hl).shell+(hl==="soda"?' <br><span class="muted">В газированном напитке пузырьки могут быть связаны не только с реакцией, но и с выделением растворённого газа.</span>':'')+'</div>':'';
+}
+
+/* ================= LAB 3 CHALK ================= */
+var chalk={A:false,B:false,sel:null,timer:null,answered:false};
+function buildLab3(){
+  ["ch1","ch2"].forEach(function(id){var el=$(id);
+    el.addEventListener("dragstart",function(e){try{e.dataTransfer.setData("text/plain",id);}catch(x){}chalk.sel=id;});
+    el.addEventListener("click",function(){chalk.sel=id;$("ch1").classList.toggle("sel",id==="ch1");$("ch2").classList.toggle("sel",id==="ch2");say("Теперь нажми на стакан, куда положить мел.");});
+  });
+  ["A","B"].forEach(function(g){var gl=$("glass"+g);
+    gl.addEventListener("dragover",function(e){e.preventDefault();gl.classList.add("over");});
+    gl.addEventListener("dragleave",function(){gl.classList.remove("over");});
+    gl.addEventListener("drop",function(e){e.preventDefault();gl.classList.remove("over");dropChalk(g);});
+    gl.addEventListener("click",function(){if(chalk.sel)dropChalk(g);});
+  });
+  document.querySelectorAll("[data-drop]").forEach(function(b){b.addEventListener("click",function(){dropChalk(b.getAttribute("data-drop"));});});
+  $("bChalkReset").addEventListener("click",resetChalk);
+  buildChalkQuiz();
+}
+function dropChalk(g){
+  if(chalk[g])return;
+  var piece=chalk.sel&&!$(chalk.sel).classList.contains("used")?chalk.sel:(!$("ch1").classList.contains("used")?"ch1":"ch2");
+  if($(piece).classList.contains("used"))return;
+  $(piece).classList.add("used");$(piece).classList.remove("sel");chalk.sel=null;chalk[g]=true;
+  var gl=$("glass"+g);var c=document.createElement("div");c.className="chalk-in";gl.appendChild(c);
+  void c.offsetWidth;c.classList.add("down");
+  document.querySelector('[data-drop="'+g+'"]').disabled=true;
+  if(g==="A"){setTimeout(function(){$("lblA").innerHTML='Заметная реакция отсутствует';},wait(1100));say("В воде мел просто лежит на дне.");}
+  else{
+    setTimeout(function(){
+      $("lblB").innerHTML='<span style="color:var(--orange2)">Появляются пузырьки!</span><br><small class="muted">Мел постепенно изменяется</small>';
+      spawnBubbles(gl);$("chalkExplain").classList.remove("hidden");mark("chalk");
+      moodZ($("helperZ"),"wow");say("Ого! Пузырьки! Это выделяется углекислый газ.");
+    },wait(1100));
+  }
+}
+function spawnBubbles(gl){
+  if(RM){for(var i=0;i<14;i++){var b=document.createElement("span");b.className="bub";b.style.left=(25+Math.random()*50)+"%";b.style.bottom=(15+Math.random()*50)+"%";gl.appendChild(b);}return;}
+  var count=0;clearInterval(chalk.timer);
+  chalk.timer=setInterval(function(){
+    if(!document.body.contains(gl)||count>140){clearInterval(chalk.timer);return;}
+    var b=document.createElement("span");b.className="bub";b.style.left=(35+Math.random()*30)+"%";var s=4+Math.random()*7;b.style.width=s+"px";b.style.height=s+"px";
+    gl.appendChild(b);count++;setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b);},1900);
+  },110);
+}
+function resetChalk(){
+  clearInterval(chalk.timer);chalk.A=false;chalk.B=false;chalk.sel=null;
+  ["A","B"].forEach(function(g){var gl=$("glass"+g);gl.querySelectorAll(".chalk-in,.bub").forEach(function(x){x.remove();});$("lbl"+g).innerHTML="";document.querySelector('[data-drop="'+g+'"]').disabled=false;});
+  $("ch1").className="chalk-piece";$("ch2").className="chalk-piece";
+  $("chalkExplain").classList.add("hidden");
+  chalk.answered=false;buildChalkQuiz();
+}
+function buildChalkQuiz(){
+  var q=[["А","Потому что мел нагрелся.",false],["Б","Потому что кислота взаимодействует с карбонатом кальция.",true],["В","Потому что мел стал тяжелее.",false]];
+  $("chalkQuiz").innerHTML=q.map(function(o,i){return '<button type="button" class="qopt" data-i="'+i+'"><b>'+o[0]+'.</b> '+o[1]+'</button>';}).join("");
+  $("chalkFb").innerHTML="";
+  $("chalkQuiz").onclick=function(e){var b=e.target.closest(".qopt");if(!b||chalk.answered)return;chalk.answered=true;var i=+b.getAttribute("data-i");
+    var bs=$("chalkQuiz").querySelectorAll(".qopt");for(var k=0;k<bs.length;k++){bs[k].disabled=true;if(q[k][2])bs[k].classList.add("right");}
+    if(!q[i][2])b.classList.add("wrong");
+    $("chalkFb").innerHTML='<div class="feedback '+(q[i][2]?'ok':'no')+'">'+(q[i][2]?'<b>Верно!</b> ':'<b>Не совсем.</b> Правильный ответ — Б. ')+'Мел содержит карбонат кальция. Кислота лимонного сока взаимодействует с ним, и выделяется углекислый газ — это и есть пузырьки.</div>';
+    moodZ($("helperZ"),q[i][2]?"joy":"sad");
+  };
+}
+
+/* ================= MATH ================= */
+var chartMode="n";
+function pct(a,n){return Math.round(a/n*1000)/10;}
+function buildMath(){
+  var k=[[pct(15,20)+"%","пьют газированные напитки (15 из 20)"],[pct(16,20)+"%","часто пьют соки или лимонад (16 из 20)"],[pct(8,20)+"%","знают о воздействии кислых напитков на эмаль (8 из 20)"],[pct(17,20)+"%","готовы чаще выбирать воду (17 из 20)"]];
+  $("kpis").innerHTML=k.map(function(x){return '<div class="kpi"><div class="v">'+x[0]+'</div><div class="t">'+x[1]+'</div></div>';}).join("");
+  $("qlegend").innerHTML=SURVEY.map(function(q,i){return '<div><b>В'+(i+1)+'</b>'+q[0]+' — да: '+q[1]+', нет: '+q[2]+'</div>';}).join("");
+  $("segMode").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;chartMode=b.getAttribute("data-m");var bs=$("segMode").querySelectorAll("button");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i]===b);drawBars();});
+  ["cA","cN"].forEach(function(id){$(id).addEventListener("input",calc);});
+  calc();
+  var OPS=[
+   ["15 ÷ 20 × 100% = 75%","Газированные напитки","15 учеников из 20 ответили «да». Делим 15 на 20 — получаем 0,75. Умножаем на 100% — получаем 75%. Значит, 3 из каждых 4 опрошенных пьют газировку."],
+   ["16 ÷ 20 × 100% = 80%","Соки и лимонад","16 из 20 учеников часто пьют соки или лимонад. 16 ÷ 20 = 0,8 → 80%."],
+   ["8 ÷ 20 × 100% = 40%","Знания об эмали","Только 8 из 20 знают, что кислые напитки могут воздействовать на эмаль. 8 ÷ 20 = 0,4 → 40%. Остальные 60% об этом не знают."],
+   ["17 ÷ 20 × 100% = 85%","Выбор воды","17 из 20 готовы чаще выбирать воду. 17 ÷ 20 = 0,85 → 85%."],
+   ["17 − 3 = 14","Вода: «да» против «нет»","Готовых чаще выбирать воду (17) на 14 учеников больше, чем не готовых (3)."],
+   ["15 − 5 = 10","Газировка: «да» против «нет»","Пьющих газированные напитки (15) на 10 учеников больше, чем не пьющих (5)."],
+   ["16 − 4 = 12","Соки: «да» против «нет»","Часто пьющих соки или лимонад (16) на 12 учеников больше, чем тех, кто пьёт их редко (4)."],
+   ["60% − 40% = 20 п. п.","Расчёт 1. Знания об эмали","Знают о влиянии кислых напитков на эмаль 8 из 20 (40%), не знают 12 из 20 (60%). Разница между группами — 20 процентных пунктов."],
+   ["6 ÷ 20 × 100% = 30%","Расчёт 2. Состав напитка","На состав обращают внимание 6 из 20 (30%), не обращают 14 из 20 (70%). Разница — 40 процентных пунктов."],
+   ["85% − 40% = 45 п. п.","Расчёт 3. Вода и знания","Готовы чаще выбирать воду 85%, знают о влиянии на эмаль 40%. Разница 45 п. п. Это разные вопросы, поэтому расчёт не доказывает, что дети изменили поведение."],
+   ["73 ÷ 120 × 100% ≈ 60,8%","Расчёт 4. Все ответы «да»","Ответов «да»: 15 + 16 + 11 + 8 + 6 + 17 = 73, всего ответов 20 × 6 = 120. 73 ÷ 120 × 100% ≈ 60,8%. Показатель описательный: вопросы измеряют разное."]
+  ];
+  $("ops").innerHTML=OPS.map(function(o){return '<button type="button" class="op"><div class="hint">'+o[1]+'</div><div class="f">'+o[0]+'</div><div class="ex">'+o[2]+'</div></button>';}).join("");
+  $("ops").addEventListener("click",function(e){var b=e.target.closest(".op");if(b)b.classList.toggle("open");});
+}
+function calc(){
+  var a=$("cA").value,n=$("cN").value,out=$("cOut");out.classList.remove("err");
+  var A=Number(a),N=Number(n);
+  if(a===""||n===""){out.innerHTML="Введи оба числа";return;}
+  if(!isFinite(A)||!isFinite(N)||A<0||N<=0||Math.floor(A)!==A||Math.floor(N)!==N){out.classList.add("err");out.innerHTML="Введи целые числа: ответов — от 0, участников — больше 0.";return;}
+  if(A>N){out.classList.add("err");out.innerHTML="Ошибка: количество ответов ("+A+") не может быть больше числа участников ("+N+").";return;}
+  var p=Math.round(A/N*10000)/100;
+  out.innerHTML=A+" ÷ "+N+" × 100% = <big>"+String(p).replace(".",",")+"%</big>";
+}
+function grow(el){el.classList.remove("grown");void el.getBoundingClientRect();requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add("grown");});});}
+function drawBars(){
+  var W=680,H=300,pl=40,pb=40,pt=24,gw=(W-pl-10)/SURVEY.length,bw=gw*0.32,max=chartMode==="n"?20:100,svg="";
+  svg+='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Столбчатая диаграмма ответов">';
+  for(var t=0;t<=4;t++){var v=max*t/4,y=H-pb-(H-pb-pt)*t/4;svg+='<line x1="'+pl+'" x2="'+(W-10)+'" y1="'+y+'" y2="'+y+'" stroke="#0b2545" stroke-opacity=".08"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#5b6f86">'+v+(chartMode==="p"?"%":"")+'</text>';}
+  SURVEY.forEach(function(q,i){
+    var x0=pl+gw*i+gw*0.15;
+    [[q[1],"#13a3a8"],[q[2],"#ff8c42"]].forEach(function(b,j){
+      var val=chartMode==="n"?b[0]:pct(b[0],20),h=(H-pb-pt)*val/max,x=x0+j*(bw+4),y=H-pb-h;
+      svg+='<rect class="bar" style="transition-delay:'+(i*0.08)+'s" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+h+'" rx="5" fill="'+b[1]+'"/>';
+      svg+='<text x="'+(x+bw/2)+'" y="'+(y-6)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#0b2545">'+val+(chartMode==="p"?"%":"")+'</text>';
+    });
+    svg+='<text x="'+(x0+bw+2)+'" y="'+(H-pb+18)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#0e8287">В'+(i+1)+'</text>';
+  });
+  svg+='<rect x="'+(W-170)+'" y="2" width="12" height="12" rx="3" fill="#13a3a8"/><text x="'+(W-153)+'" y="12" font-size="12" fill="#0b2545">Да</text><rect x="'+(W-110)+'" y="2" width="12" height="12" rx="3" fill="#ff8c42"/><text x="'+(W-93)+'" y="12" font-size="12" fill="#0b2545">Нет</text>';
+  svg+='</svg>';
+  $("chart1").innerHTML=svg;grow($("chart1"));
+}
+function pie(el,yes,no,label){
+  var p=pct(yes,yes+no);
+  el.innerHTML='<div class="pie-wrap"><svg class="pie" viewBox="0 0 42 42" role="img" aria-label="'+label+'"><circle cx="21" cy="21" r="15.915" fill="none" stroke="#ff8c42" stroke-width="8"/><circle class="seg1" cx="21" cy="21" r="15.915" fill="none" stroke="#13a3a8" stroke-width="8" stroke-dasharray="0 100" stroke-dashoffset="25"/><text x="21" y="23.5" text-anchor="middle" font-size="7" font-weight="800" fill="#0b2545">'+p+'%</text></svg>'+
+  '<div class="pie-leg"><div><span class="dot" style="background:#13a3a8"></span>Да — '+yes+' уч. ('+p+'%)</div><div><span class="dot" style="background:#ff8c42"></span>Нет — '+no+' уч. ('+(100-p)+'%)</div><div class="muted" style="font-weight:400;font-size:.82rem;margin-top:.4rem">'+yes+' ÷ '+(yes+no)+' × 100% = '+p+'%</div></div></div>';
+  var c=el.querySelector(".seg1");requestAnimationFrame(function(){requestAnimationFrame(function(){c.setAttribute("stroke-dasharray",p+" "+(100-p));});});
+}
+function drawCharts(){
+  drawBars();
+  pie($("pie1"),15,5,"Газированные напитки: да 75%, нет 25%");
+  pie($("pie2"),8,12,"Знание о воздействии на эмаль: да 40%, нет 60%");
+  var W=420,H=150,svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Готовность выбирать воду: да 85%, нет 15%">';
+  [["Да",85,"#13a3a8",30],["Нет",15,"#ff8c42",90]].forEach(function(b){var w=(W-90)*b[1]/100;svg+='<text x="0" y="'+(b[3]+22)+'" font-size="15" font-weight="700" fill="#0b2545">'+b[0]+'</text><rect x="45" y="'+b[3]+'" width="'+(W-90)+'" height="34" rx="10" fill="#e8f5fc"/><rect class="hbar" x="45" y="'+b[3]+'" width="'+w+'" height="34" rx="10" fill="'+b[2]+'"/><text x="'+(50+w)+'" y="'+(b[3]+23)+'" font-size="15" font-weight="800" fill="#0b2545">'+b[1]+'%</text>';});
+  svg+='</svg><p class="muted" style="font-size:.85rem;margin:.2rem 0 0">17 из 20 учеников (85%) готовы чаще выбирать воду, 3 из 20 (15%) — нет.</p>';
+  $("chart4").innerHTML=svg;grow($("chart4"));
+}
+
+/* ================= PASSPORTS ================= */
+var passSel=[],passOpen={};
+function buildPass(){
+  $("passGrid").addEventListener("click",function(e){
+    var b=e.target.closest("[data-open]");if(b){var id=b.getAttribute("data-open");passOpen[id]=!passOpen[id];renderPass();mark("pass");return;}
+  });
+  $("passGrid").addEventListener("change",function(e){
+    var c=e.target.closest("[data-chk]");if(!c)return;var id=c.getAttribute("data-chk");
+    if(c.checked){if(passSel.length>=2){passSel.shift();}passSel.push(id);}else{passSel=passSel.filter(function(x){return x!==id;});}
+    renderPass();
+  });
+  $("bPassCmp").addEventListener("click",passCompare);
+  renderPass();
+}
+function shellLine(d){return d.shell?d.shell:"Исследовалась кислотность. Опыт со скорлупой не проводился.";}
+function vsWater(d){return d.id==="water"?"Это и есть вода — нейтральный образец сравнения (pH около 7).":"pH "+d.ph+" — ниже, чем у воды (около 7). Значит, «"+d.name+"» кислее воды.";}
+function renderPass(){
+  $("passGrid").innerHTML=DRINKS.map(function(d){var m=(d.lo+d.hi)/2,sel=passSel.indexOf(d.id)>=0;
+    return '<div class="pass'+(sel?' picked':'')+'"><div class="pass-top">'+glassSVG(d.color,.7)+'<div><h3>'+d.name+'</h3><span class="muted" style="font-size:.85rem">Паспорт напитка</span></div></div>'+
+    '<div class="pass-body"><div class="row"><span class="pill" style="background:'+phColor(m)+';color:#fff">pH '+d.ph+'</span><span class="pill">'+d.env+' среда</span></div>'+
+    (passOpen[d.id]?'<div class="pass-detail"><div><b>Результат исследования <span class="tag data">данные</span></b>'+d.explain+'</div><div><b>Опыт со скорлупой</b>'+shellLine(d)+'</div><div><b>Научный комментарий</b>'+d.comment+'</div><div><b>Сравнение с водой</b>'+vsWater(d)+'</div></div>':'')+
+    '<div class="row" style="margin-top:auto"><button type="button" class="btn sm ghost" data-open="'+d.id+'">'+(passOpen[d.id]?'Свернуть паспорт':'Открыть паспорт')+'</button><label class="chk"><input type="checkbox" data-chk="'+d.id+'"'+(sel?' checked':'')+'> Сравнить</label></div></div></div>';}).join("");
+  $("passHint").textContent="Выбрано для сравнения: "+passSel.length+" из 2";
+  $("bPassCmp").disabled=passSel.length!==2;
+}
+function passCompare(){
+  if(passSel.length!==2)return;var a=D(passSel[0]),b=D(passSel[1]);mark("pass");
+  function r(t,x,y){return '<tr><td><b>'+t+'</b></td><td>'+x+'</td><td>'+y+'</td></tr>';}
+  $("passCmpOut").innerHTML='<div class="card fade-in" style="margin-bottom:1rem"><div class="row" style="justify-content:space-between"><h3>Сравнение паспортов</h3><button type="button" class="btn ghost sm" id="bCloseCmp">Закрыть</button></div><table class="tbl" style="margin-top:.6rem"><thead><tr><th>Показатель</th><th>'+a.name+'</th><th>'+b.name+'</th></tr></thead><tbody>'+
+   r("Приблизительный pH",a.ph,b.ph)+r("Среда",a.env,b.env)+r("Цвет индикатора",'<span class="dot" style="background:'+phColor((a.lo+a.hi)/2)+'"></span>','<span class="dot" style="background:'+phColor((b.lo+b.hi)/2)+'"></span>')+
+   r("Опыт со скорлупой",shellLine(a),shellLine(b))+r("Сравнение с водой",vsWater(a),vsWater(b))+
+   '</tbody></table><div class="cmp-concl" style="margin-top:.8rem;background:var(--light);border-radius:14px;padding:.8rem 1rem;font-weight:600">'+compareText(a,b)+'</div></div>';
+  $("bCloseCmp").addEventListener("click",function(){$("passCmpOut").innerHTML="";});
+  $("passCmpOut").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
+}
+
+/* ================= GAME ================= */
+var ZONES=[{id:"z1",lo:2,hi:3,name:"Кислая",lab:"pH 2–3"},{id:"z2",lo:3,hi:4,name:"Кислая",lab:"pH 3–4"},{id:"z3",lo:5,hi:6,name:"Слабокислая",lab:"pH 5–6"},{id:"z4",lo:7,hi:7,name:"Близкая к нейтр.",lab:"pH ≈ 7"}];
+function zoneOk(d,z){return d.lo<=z.hi&&z.lo<=d.hi;}
+var TASKS=[
+ {k:"Задание 1",t:"Найди нейтральную среду",type:"pick"},
+ {k:"Задание 2",t:"Разгадай шкалу pH",type:"drag"},
+ {k:"Задание 3",t:"Спаси скорлупу",type:"cup"},
+ {k:"Задание 4",t:"Математический детектив",type:"input"},
+ {k:"Задание 5",t:"Правда или миф?",type:"tf"},
+ {k:"Задание 6",t:"Найди ошибку исследователя",type:"choice",
+  q:"Утверждение: «Чем ниже pH напитка, тем быстрее он обязательно разрушает зубы». Почему оно неверно?",
+  opts:["Утверждение верное: pH — единственное, что важно.","На эрозию эмали влияют разные факторы: не только pH, но и другие свойства напитка, как часто и как долго его пьют, защитные свойства слюны.","Утверждение неверно, потому что pH вообще не связан с кислотностью."],ans:1,
+  ex:"Низкий pH означает более кислую среду, но слово «обязательно» здесь ошибка. На эмаль влияют и другие свойства напитка, частота и длительность употребления, защитная роль слюны."},
+ {k:"Задание 7",t:"Главный вывод",type:"choice",
+  q:"Выбери наиболее научно корректный вывод исследования.",
+  opts:["Газированные напитки растворяют зубы за пять дней, как скорлупу.","Напитки отличаются по кислотности. Кислая среда может взаимодействовать с некоторыми минеральными веществами, но опыты со скорлупой и мелом не позволяют точно определить повреждение зубной эмали.","Все напитки имеют одинаковую кислотность, поэтому разницы нет."],ans:1,
+  ex:"Верно сказать только то, что показали опыты: напитки различаются по pH, кислая среда взаимодействует с карбонатом кальция. Скорлупа и мел — модели, а не настоящие зубы."}
+];
+var G;
+function newGame(){G={i:0,score:0,correct:0,res:[],answered:false,place:{},sel:null};renderTask();gsay("Привет, детектив! Я буду рядом. Каждое задание — новая загадка.");}
+function gsay(t,m){$("gBubble").textContent=t;if(m)moodZ($("gZubik").parentNode,m);}
+function dots(){return '<div class="gdots">'+TASKS.map(function(t,i){var c=i<G.res.length?(G.res[i]?"ok":"no"):(i===G.i?"cur":"");return '<i class="'+c+'"></i>';}).join("")+'</div>';}
+function head(){var t=TASKS[G.i];return '<div class="game-head">'+dots()+'<span class="score">'+G.score+' / 70</span></div><div class="task-k">'+t.k+' из 7</div><h3 class="task-title">'+t.t+'</h3>';}
+function renderTask(){
+  if(G.i>=TASKS.length){finish();return;}
+  var t=TASKS[G.i],h=head(),box=$("gameBox");G.answered=false;
+  if(t.type==="pick"){
+    h+='<p class="muted">Какой из шести напитков имеет нейтральную среду (pH около 7)?</p><div class="pick-grid">'+DRINKS.map(function(d){return '<button type="button" class="pick" data-a="'+d.id+'">'+glassSVG(d.color,.7)+d.name+'</button>';}).join("")+'</div>';
+  }else if(t.type==="drag"){
+    G.place={};G.sel=null;
+    h+='<p class="muted">Перетащи каждую карточку в подходящую зону шкалы — или нажми на карточку, а потом на зону. Если диапазоны напитков пересекаются, подходят несколько зон.</p><div class="pool" id="pool">'+DRINKS.map(function(d){return dcard(d);}).join("")+'</div>'+
+    '<div class="zones">'+ZONES.map(function(z){var m=(z.lo+z.hi)/2;return '<div class="zone" data-z="'+z.id+'" style="background:'+phColor(m)+'"><h4>'+z.name+'<br>'+z.lab+'</h4></div>';}).join("")+'</div>'+
+    '<div class="row" style="margin-top:1rem"><button type="button" class="btn" id="bCheckDrag" disabled>Проверить</button><span class="muted" id="dragHint">Размещено: 0 из 6</span></div>';
+  }else if(t.type==="cup"){
+    h+='<p class="muted">В каком стакане по результатам опыта со скорлупой наблюдалось меньше всего изменений?</p><div class="pick-grid">'+SHELL_IDS.map(function(id){return '<button type="button" class="pick cupk" data-a="'+id+'">'+shellCupSVG(id,5,false)+D(id).name+'</button>';}).join("")+'</div>';
+  }else if(t.type==="input"){
+    h+='<div class="statement">Из 20 школьников 15 пьют газированные напитки. Сколько это процентов?</div><div class="ginput"><input type="number" id="gIn" min="0" max="100" placeholder="?" aria-label="Ответ в процентах"><b style="font-size:1.3rem">%</b><button type="button" class="btn" id="gInBtn">Проверить</button></div>';
+  }else if(t.type==="tf"){
+    h+='<div class="statement">«Яичная скорлупа и зубная эмаль имеют одинаковый состав».</div><div class="tf"><button type="button" data-a="truth">ПРАВДА</button><button type="button" data-a="myth">МИФ</button></div>';
+  }else if(t.type==="choice"){
+    h+='<div class="statement" style="font-size:1rem">'+t.q+'</div><div class="quiz-opts">'+t.opts.map(function(o,i){return '<button type="button" class="qopt" data-a="'+i+'"><b>'+"АБВ"[i]+'.</b> '+o+'</button>';}).join("")+'</div>';
+  }
+  h+='<div id="gFb"></div>';
+  box.innerHTML=h;box.classList.remove("fade-in");void box.offsetWidth;box.classList.add("fade-in");
+  bindTask(t);
+}
+function dcard(d){return '<div class="dcard" draggable="true" data-c="'+d.id+'"><span class="dot" style="background:'+d.color+'"></span>'+d.name+'</div>';}
+function bindTask(t){
+  var box=$("gameBox");
+  if(t.type==="pick"){box.querySelector(".pick-grid").onclick=function(e){var b=e.target.closest(".pick");if(!b||G.answered)return;var ok=b.getAttribute("data-a")==="water";markPicks(".pick","water",b,ok);answer(ok,"Вода имеет pH около 7 — это нейтральная среда. Остальные напитки в исследовании кислые.");};}
+  if(t.type==="cup"){box.querySelector(".pick-grid").onclick=function(e){var b=e.target.closest(".pick");if(!b||G.answered)return;var ok=b.getAttribute("data-a")==="water";markPicks(".pick","water",b,ok);answer(ok,"В воде существенных изменений скорлупы не отмечено. В соке, лимонаде и газированном напитке поверхность скорлупы изменялась.");};}
+  if(t.type==="tf"){box.querySelector(".tf").onclick=function(e){var b=e.target.closest("button");if(!b||G.answered)return;var ok=b.getAttribute("data-a")==="myth";var bs=box.querySelectorAll(".tf button");for(var i=0;i<bs.length;i++){bs[i].disabled=true;if(bs[i].getAttribute("data-a")==="myth")bs[i].classList.add("right");}if(!ok)b.classList.add("wrong");answer(ok,"Это миф. Скорлупа состоит преимущественно из карбоната кальция, а эмаль — из минералов на основе фосфата кальция. Поэтому скорлупа — только модель.");};}
+  if(t.type==="choice"){box.querySelector(".quiz-opts").onclick=function(e){var b=e.target.closest(".qopt");if(!b||G.answered)return;var i=+b.getAttribute("data-a"),ok=i===t.ans;var bs=box.querySelectorAll(".qopt");for(var k=0;k<bs.length;k++){bs[k].disabled=true;if(k===t.ans)bs[k].classList.add("right");}if(!ok)b.classList.add("wrong");answer(ok,t.ex);};}
+  if(t.type==="input"){
+    var f=function(){if(G.answered)return;var v=$("gIn").value.replace(",",".").trim();if(v===""){$("gFb").innerHTML='<div class="feedback no">Введи число.</div>';return;}var ok=Number(v)===75;$("gIn").disabled=true;$("gInBtn").disabled=true;answer(ok,"15 ÷ 20 × 100% = 75%. Каждый ученик — это 5% от 20, а 15 × 5% = 75%.");};
+    $("gInBtn").onclick=f;$("gIn").addEventListener("keydown",function(e){if(e.key==="Enter")f();});
+  }
+  if(t.type==="drag")bindDrag();
+}
+function markPicks(sel,right,chosen,ok){var bs=$("gameBox").querySelectorAll(sel);for(var i=0;i<bs.length;i++){bs[i].disabled=true;if(bs[i].getAttribute("data-a")===right)bs[i].classList.add("right");}if(!ok)chosen.classList.add("wrong");}
+function bindDrag(){
+  var box=$("gameBox");
+  function place(cid,zid){
+    if(G.answered)return;var card=box.querySelector('[data-c="'+cid+'"]');if(!card)return;
+    var target=zid==="pool"?$("pool"):box.querySelector('[data-z="'+zid+'"]');target.appendChild(card);
+    if(zid==="pool")delete G.place[cid];else G.place[cid]=zid;
+    card.classList.remove("sel");G.sel=null;
+    var n=Object.keys(G.place).length;$("dragHint").textContent="Размещено: "+n+" из 6";$("bCheckDrag").disabled=n<6;
+  }
+  G.placeFn=place;
+  if(!box.getAttribute("data-bound")){box.setAttribute("data-bound","1");
+  box.addEventListener("dragstart",function(e){var c=e.target.closest(".dcard");if(!c)return;try{e.dataTransfer.setData("text/plain",c.getAttribute("data-c"));}catch(x){}G.sel=c.getAttribute("data-c");});
+  box.addEventListener("click",function(e){
+    if(G.answered||!TASKS[G.i]||TASKS[G.i].type!=="drag")return;
+    var c=e.target.closest(".dcard");
+    if(c){var all=box.querySelectorAll(".dcard");for(var i=0;i<all.length;i++)all[i].classList.remove("sel");c.classList.add("sel");G.sel=c.getAttribute("data-c");e.stopPropagation();return;}
+    var z=e.target.closest(".zone,#pool");
+    if(z&&G.sel)G.placeFn(G.sel,z.id==="pool"?"pool":z.getAttribute("data-z"));
+  });}
+  box.querySelectorAll(".zone,#pool").forEach(function(z){
+    z.addEventListener("dragover",function(e){e.preventDefault();z.classList.add("over");});
+    z.addEventListener("dragleave",function(){z.classList.remove("over");});
+    z.addEventListener("drop",function(e){e.preventDefault();z.classList.remove("over");var id="";try{id=e.dataTransfer.getData("text/plain");}catch(x){}id=id||G.sel;if(id)place(id,z.id==="pool"?"pool":z.getAttribute("data-z"));});
+  });
+  $("bCheckDrag").onclick=function(){
+    if(G.answered)return;var allOk=true;
+    Object.keys(G.place).forEach(function(cid){var d=D(cid),z=ZONES.filter(function(x){return x.id===G.place[cid];})[0];var ok=zoneOk(d,z);if(!ok)allOk=false;box.querySelector('[data-c="'+cid+'"]').classList.add(ok?"right":"wrong");});
+    $("bCheckDrag").disabled=true;
+    answer(allOk,(allOk?"Все карточки на своих местах! ":"Карточки с красной рамкой стоят не там. ")+"Вода — нейтральная (≈7), чай — слабокислая (5–6), соки — 3–4, лимонад и газированный напиток — 2–3. Диапазоны 2–3 и 3–4 соприкасаются на значении 3, поэтому для соков и лимонада с газировкой подходят обе кислые зоны.");
+  };
+}
+function answer(ok,ex){
+  if(G.answered)return;G.answered=true;G.res.push(ok);if(ok){G.score+=10;G.correct++;}
+  var last=G.i===TASKS.length-1;
+  $("gFb").innerHTML='<div class="feedback '+(ok?'ok':'no')+'"><b>'+(ok?'Верно! +10 баллов.':'Не совсем.')+'</b> '+ex+'</div><div class="row" style="margin-top:.8rem"><button type="button" class="btn orange" id="gNext">'+(last?'Узнать результат':'Следующее задание →')+'</button></div>';
+  $("gameBox").querySelector(".score").textContent=G.score+" / 70";
+  $("gameBox").querySelector(".gdots").outerHTML=dots();
+  $("gNext").onclick=function(){G.i++;renderTask();};
+  gsay(ok?"Отлично, детектив! Так держать.":"Ничего страшного — ошибки тоже помогают исследовать.",ok?"joy":"sad");
+}
+function finish(){
+  var p=Math.round(G.score/70*100);
+  var c=p===100?"Блестяще! Ты настоящий Зубной детектив.":p>=70?"Отличный результат! Ты хорошо понял исследование.":p>=40?"Неплохо! Загляни в лаборатории и попробуй ещё раз.":"Начало положено. Пройди лаборатории и сыграй снова!";
+  S.game.last={correct:G.correct,score:G.score,pct:p,date:new Date().toLocaleString("ru-RU")};
+  if(G.score>S.game.best)S.game.best=G.score;save();mark("game");
+  $("gameBox").innerHTML='<div class="final fade-in"><div class="task-k">Расследование завершено</div>'+
+   '<svg class="ring" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.915" fill="none" stroke="#e8f5fc" stroke-width="5"/><circle id="ringC" cx="21" cy="21" r="15.915" fill="none" stroke="#13a3a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="0 100" stroke-dashoffset="25" style="transition:stroke-dasharray 1.2s"/><text x="21" y="24" text-anchor="middle" font-size="8" font-weight="800" fill="#0b2545">'+p+'%</text></svg>'+
+   '<div class="grid g3"><div class="kpi"><div class="v">'+G.correct+' из 7</div><div class="t">правильных ответов</div></div><div class="kpi"><div class="v">'+G.score+'</div><div class="t">баллов из 70</div></div><div class="kpi"><div class="v">'+p+'%</div><div class="t">успешность</div></div></div>'+
+   '<p style="font-size:1.1rem;font-weight:700">'+c+'</p><div class="row" style="justify-content:center"><button type="button" class="btn orange" id="gAgain">Пройти ещё раз</button><button type="button" class="btn ghost" id="gSave">Сохранить результат</button></div><p class="muted" id="gSaved" style="font-size:.85rem"></p></div>';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){var r=$("ringC");if(r)r.setAttribute("stroke-dasharray",p+" "+(100-p));});});
+  $("gAgain").onclick=newGame;
+  $("gSave").onclick=function(){S.game.history.push(S.game.last);if(S.game.history.length>10)S.game.history.shift();save();$("gSaved").textContent=canStore?"Результат сохранён в журнале на этом компьютере.":"Сохранение недоступно в этом браузере, но игра работает.";$("gSave").disabled=true;};
+  gsay(c,p>=70?"joy":"wow");
+}
+
+/* ================= DISCOVERIES ================= */
+/* ================= SMILE: памятка «Береги свою улыбку!» ================= */
+var TOOTH_D="M0 18 C-1 4 13 1 20 9 C27 1 41 4 40 18 C40.5 32 37 40 35 53 C33.5 66 28.5 73 25.5 64 C23.5 57 16.5 57 14.5 64 C11.5 73 6.5 66 5 53 C3 40 -0.5 32 0 18Z";
+function toothG(x,y,s,fill){return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="'+TOOTH_D+'" fill="'+(fill||"#fff")+'" stroke="#0b2545" stroke-width="'+(3.5/s)+'" stroke-linejoin="round"/></g>';}
+function badge(cx,cy,color,inner){return '<circle cx="'+cx+'" cy="'+cy+'" r="15" fill="'+color+'"/>'+inner;}
+var CHECK=function(cx,cy){return '<path d="M'+(cx-7)+' '+cy+' l5 5 l9 -10" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>';};
+function ruleSVG(n){
+  var s='<svg viewBox="0 0 120 120" aria-hidden="true">';
+  if(n===1){s+='<path d="M28 18 L36 104 Q37 110 43 110 L73 110 Q79 110 80 104 L88 18Z" fill="#fff" stroke="#0b2545" stroke-opacity=".45" stroke-width="4"/><path d="M31 44 L36.6 103 Q37.5 106 43 106 L73 106 Q78.5 106 79.4 103 L85 44Z" fill="#8fd3f4"/><path d="M58 54 C50 66 48 72 48 77 a10 10 0 0 0 20 0 C68 72 66 66 58 54Z" fill="#fff" opacity=".9"/><rect x="36" y="24" width="5" height="70" rx="2.5" fill="#fff" opacity=".7"/>'+badge(96,26,"#2fa866",CHECK(96,26));}
+  else if(n===2){s+='<rect x="32" y="20" width="46" height="88" rx="11" fill="#e0524a"/><rect x="32" y="20" width="46" height="11" rx="5.5" fill="#b83a33"/><rect x="32" y="97" width="46" height="11" rx="5.5" fill="#b83a33"/><rect x="37" y="48" width="36" height="28" rx="5" fill="#fff" opacity=".9"/><circle cx="47" cy="62" r="3.5" fill="#e0524a"/><circle cx="56" cy="56" r="2.6" fill="#e0524a"/><circle cx="63" cy="66" r="4" fill="#e0524a"/><rect x="38" y="34" width="4" height="56" rx="2" fill="#fff" opacity=".35"/>'+badge(96,28,"#ff8c42",'<rect x="88" y="25" width="16" height="6" rx="3" fill="#fff"/>');}
+  else if(n===3){s+='<path d="M18 42 L24 108 Q25 112 30 112 L56 112 Q61 112 62 108 L68 42Z" fill="#fff" stroke="#0b2545" stroke-opacity=".45" stroke-width="4"/><path d="M21 64 L25 107 Q26 109 30 109 L56 109 Q60 109 61 107 L65 64Z" fill="#ffa53a"/><path d="M48 54 L56 14 L68 14" fill="none" stroke="#13a3a8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="88" cy="74" r="22" fill="#fff" stroke="#0b2545" stroke-width="4"/><path d="M88 60 L88 74 L98 80" fill="none" stroke="#ff8c42" stroke-width="4" stroke-linecap="round"/><path d="M70 98 L106 50" stroke="#e0524a" stroke-width="5.5" stroke-linecap="round"/>';}
+  else if(n===4){s+='<path d="M18 46 Q60 104 102 46 Q60 62 18 46Z" fill="#e0524a" stroke="#0b2545" stroke-width="4" stroke-linejoin="round"/><path d="M30 52 Q60 62 90 52 L87 59 Q60 68 33 59Z" fill="#fff"/><path d="M60 74 L60 110 M49 99 L60 110 L71 99" fill="none" stroke="#13a3a8" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="98" cy="22" r="14" fill="#fff" stroke="#0b2545" stroke-width="3"/><path d="M98 14 L98 22 L104 25" stroke="#0b2545" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M86 34 L110 10" stroke="#e0524a" stroke-width="4" stroke-linecap="round"/>';}
+  else if(n===5){s+=toothG(40,10,1,"#fff")+'<path d="M14 92 Q26 84 38 92 T62 92 T86 92 T110 92" fill="none" stroke="#13a3a8" stroke-width="5" stroke-linecap="round"/><path d="M14 106 Q26 98 38 106 T62 106 T86 106 T110 106" fill="none" stroke="#8fd3f4" stroke-width="5" stroke-linecap="round"/><path d="M22 40 C17 47 16 51 16 54 a6 6 0 0 0 12 0 C28 51 27 47 22 40Z" fill="#8fd3f4"/><path d="M100 30 C95 37 94 41 94 44 a6 6 0 0 0 12 0 C106 41 105 37 100 30Z" fill="#8fd3f4"/>';}
+  else if(n===6){s+=toothG(14,8,.95,"#fff")+'<path d="M64 20 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3Z" fill="#ff8c42"/><path d="M98 44 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2Z" fill="#13a3a8"/><rect x="8" y="92" width="80" height="13" rx="6.5" fill="#13a3a8"/><rect x="72" y="84" width="40" height="13" rx="4" fill="#0e8287"/>';
+    for(var bx=75;bx<=105;bx+=6)s+='<rect x="'+bx+'" y="68" width="4" height="17" rx="2" fill="#fff" stroke="#8fd3f4" stroke-width="1.5"/>';
+    s+='<path d="M74 68 Q80 58 88 64 Q95 56 103 64 Q110 60 110 68Z" fill="#fff" stroke="#ff8c42" stroke-width="2"/>';}
+  else if(n===7){s+='<rect x="14" y="24" width="86" height="84" rx="12" fill="#fff" stroke="#0b2545" stroke-width="4"/><rect x="14" y="24" width="86" height="22" rx="11" fill="#13a3a8"/><rect x="14" y="36" width="86" height="10" fill="#13a3a8"/><rect x="32" y="14" width="7" height="20" rx="3.5" fill="#0b2545"/><rect x="76" y="14" width="7" height="20" rx="3.5" fill="#0b2545"/>'+toothG(42,54,.72,"#e8f5fc")+badge(98,96,"#2fa866",CHECK(98,96));}
+  return s+'</svg>';
+}
+var RULES=[
+ ["Чаще выбирай обычную питьевую воду","Вода — простой вариант для ежедневного питья. В исследовании вода показала pH около 7 — среду, близкую к нейтральной. 17 из 20 опрошенных ответили, что готовы чаще выбирать воду."],
+ ["Не злоупотребляй газированными напитками","Многие газированные напитки имеют кислую среду. В исследовании газированный напиток показал pH около 2–3 — одно из самых низких значений. Отказываться полностью не обязательно: важно знать меру."],
+ ["Не пей кислые напитки маленькими глотками в течение нескольких часов","Чем дольше кислота контактирует с зубами, тем больше времени она действует на эмаль. В расчётной модели из работы четыре отдельных приёма дают условно 4 × 20 = 80 минут воздействия, а один приём — 20 минут."],
+ ["Не задерживай кислый напиток во рту","Не держи кислый напиток во рту и не полощи им рот: так кислота дольше соприкасается с зубами."],
+ ["После кислого напитка прополощи рот водой","Обычная вода помогает уменьшить количество кислоты во рту. Слюна тоже помогает нейтрализовать кислоты, но ей нужно время."],
+ ["Регулярно и правильно чисти зубы","Забота о гигиене — важная часть защиты зубов. Чисти зубы регулярно и так, как советует стоматолог."],
+ ["Посещай стоматолога для профилактического осмотра","Профилактический осмотр помогает вовремя заметить проблемы, даже если зубы не болят. Врач подскажет, как беречь именно твои зубы."]
+];
+var MAIN_ADVICE="«Не обязательно полностью отказываться от любимого напитка — важно знать меру и заботиться о своих зубах!»";
+var SQ=[
+ ["Какой напиток в исследовании показал среду, близкую к нейтральной?",["Лимонад","Вода","Апельсиновый сок"],1,"Вода показала pH около 7. Лимонад и сок оказались кислыми (pH 2–3 и 3–4)."],
+ ["Ты пьёшь лимонад. Как лучше поступить?",["Пить его маленькими глотками весь день","Выпить за один раз, а потом прополоскать рот водой","Подольше подержать напиток во рту"],1,"Если растянуть напиток на весь день, зубы дольше находятся в кислой среде. Лучше выпить его за один раз и прополоскать рот водой."],
+ ["Что можно сделать сразу после кислого напитка?",["Прополоскать рот обычной водой","Съесть дольку лимона","Ничего не делать — это не важно"],0,"Вода помогает уменьшить количество кислоты во рту."],
+ ["Зачем ходить к стоматологу, если зубы не болят?",["Незачем: к врачу идут только когда болит","Чтобы на профилактическом осмотре вовремя заметить проблемы","Чтобы получить конфету"],1,"Профилактический осмотр помогает заметить изменения раньше, чем появится боль."],
+ ["Правда ли: «Один стакан кислого напитка обязательно испортит зубы»?",["Правда","Неправда: важно, как часто и как долго пьёшь, и как заботишься о зубах"],1,"Отдельный контакт с кислым напитком нельзя приравнивать к разрушению зуба. Значение имеют частота, время контакта, слюна и гигиена."]
+];
+var SQS={i:0,score:0,res:[],answered:false};
+function buildSmile(){
+  $("rules").innerHTML=RULES.map(function(r,i){return '<div class="rule" data-r="'+i+'"><div class="rule-art"><span class="rule-n">'+(i+1)+'</span>'+ruleSVG(i+1)+'</div><h3>'+r[0]+'</h3><button type="button" class="btn sm ghost why" aria-expanded="false">Почему это важно?</button><div class="rule-ex">'+r[1]+'</div></div>';}).join("")+
+   '<div class="rule advice"><div class="rule-art" style="background:linear-gradient(135deg,#ff8c42,#ffb057)"><span style="color:#fff;font-size:3rem;font-weight:900">!</span></div><h3>Мой главный совет</h3><p style="margin:0;font-weight:600;color:#36506d">'+MAIN_ADVICE+'</p></div>';
+  $("rules").addEventListener("click",function(e){var b=e.target.closest(".why");if(!b)return;var r=b.closest(".rule");var on=!r.classList.contains("open");r.classList.toggle("open",on);b.textContent=on?"Скрыть объяснение":"Почему это важно?";b.setAttribute("aria-expanded",on);});
+  $("bSmileOpenAll").addEventListener("click",function(){var rs=$("rules").querySelectorAll(".rule[data-r]"),all=true;for(var i=0;i<rs.length;i++)if(!rs[i].classList.contains("open"))all=false;
+    for(i=0;i<rs.length;i++){rs[i].classList.toggle("open",!all);var b=rs[i].querySelector(".why");b.textContent=!all?"Скрыть объяснение":"Почему это важно?";b.setAttribute("aria-expanded",!all);}
+    this.textContent=all?"Открыть все объяснения":"Скрыть все объяснения";});
+  $("bPrintMemo").addEventListener("click",printMemo);
+  renderSQ();
+}
+function renderSQ(){
+  var box=$("sq");$("sqScore").textContent=SQS.score+" / "+SQ.length;
+  var steps='<div class="sq-steps">'+SQ.map(function(q,i){return '<i class="'+(i<SQS.res.length?(SQS.res[i]?"ok":"no"):(i===SQS.i?"cur":""))+'"></i>';}).join("")+'</div>';
+  if(SQS.i>=SQ.length){
+    var c=SQS.score===5?"Отлично! Ты знаешь, как беречь улыбку.":SQS.score>=3?"Хороший результат! Перечитай карточки — и будет 5 из 5.":"Открой карточки с правилами и попробуй ещё раз.";
+    box.innerHTML=steps+'<div class="final fade-in" style="padding:.4rem"><div class="big" style="font-size:2.6rem">'+SQS.score+' из '+SQ.length+'</div><p style="font-weight:700">'+c+'</p><button type="button" class="btn orange" id="sqAgain">Пройти ещё раз</button></div>';
+    $("sqAgain").onclick=function(){resetSQ();};return;
+  }
+  var q=SQ[SQS.i];
+  box.innerHTML=steps+'<div class="task-k">Вопрос '+(SQS.i+1)+' из '+SQ.length+'</div><div class="sq-q">'+q[0]+'</div><div class="quiz-opts">'+q[1].map(function(o,k){return '<button type="button" class="qopt" data-k="'+k+'"><b>'+"АБВ"[k]+'.</b> '+o+'</button>';}).join("")+'</div><div id="sqFb"></div>';
+  box.querySelector(".quiz-opts").onclick=function(e){var b=e.target.closest(".qopt");if(!b||SQS.answered)return;SQS.answered=true;var k=+b.getAttribute("data-k"),ok=k===q[2];
+    var bs=box.querySelectorAll(".qopt");for(var j=0;j<bs.length;j++){bs[j].disabled=true;if(j===q[2])bs[j].classList.add("right");}if(!ok)b.classList.add("wrong");
+    SQS.res.push(ok);if(ok)SQS.score++;$("sqScore").textContent=SQS.score+" / "+SQ.length;
+    $("sqFb").innerHTML='<div class="feedback '+(ok?'ok':'no')+'"><b>'+(ok?'Верно!':'Не совсем.')+'</b> '+q[3]+'</div><div class="row" style="margin-top:.7rem"><button type="button" class="btn" id="sqNext">'+(SQS.i===SQ.length-1?'Узнать результат':'Следующий вопрос →')+'</button></div>';
+    $("sqNext").onclick=function(){SQS.i++;SQS.answered=false;renderSQ();};
+    moodZ($("helperZ"),ok?"joy":"sad");
+  };
+}
+function resetSQ(){SQS={i:0,score:0,res:[],answered:false};renderSQ();}
+function resetSmile(){var rs=$("rules").querySelectorAll(".rule.open");for(var i=0;i<rs.length;i++){rs[i].classList.remove("open");var b=rs[i].querySelector(".why");if(b){b.textContent="Почему это важно?";b.setAttribute("aria-expanded","false");}}$("bSmileOpenAll").textContent="Открыть все объяснения";resetSQ();}
+function buildPrintMemo(){
+  $("printMemo").innerHTML='<div class="pm-head">'+zubikSVG()+'<div><h1>БЕРЕГИ СВОЮ УЛЫБКУ!</h1><p>7 простых правил по итогам исследования «Кислотность напитков и их влияние на зубы»</p></div></div>'+
+   '<div class="pm-grid">'+RULES.map(function(r,i){return '<div class="pm-rule">'+ruleSVG(i+1)+'<div><b><span class="n">'+(i+1)+'</span>'+r[0]+'</b><span>'+r[1]+'</span></div></div>';}).join("")+
+   '<div class="pm-rule" style="background:#fff4ea;border-color:#ffc9a0"><div><b>Мой главный совет</b><span>'+MAIN_ADVICE+'</span><br><br><span><b style="display:inline;font-size:9.5pt">Что показали pH-полоски:</b> вода — около 7, чай — 5–6, яблочный и апельсиновый сок — 3–4, лимонад и газированный напиток — 2–3 (примерные значения).</span></div></div></div>'+
+   '<div class="pm-foot">Автор: Сагидолда Ибрахим, 4 «Б» класс · Руководитель: Токашова С. Заманбековна · КГУ «Средняя школа имени Шокана Уалиханова», село Тугыл, 2026 год. Советы не заменяют консультацию стоматолога.</div>';
+}
+function printMemo(){
+  var h=document.documentElement;h.classList.add("print-memo");
+  var off=function(){h.classList.remove("print-memo");window.removeEventListener("afterprint",off);};
+  window.addEventListener("afterprint",off);
+  try{window.print();}catch(e){say("Печать недоступна в этом окне. Открой файл в браузере и нажми Ctrl+P.");}
+  setTimeout(off,1500);
+}
+
+/* ================= MATH: расчётные модели ================= */
+function fmt(x){return String(x).replace(".",",");}
+function buildModels(){
+  $("midChart").innerHTML=DRINKS.map(function(d){var m=(d.lo+d.hi)/2,diff=7-m;return '<div class="mid-row"><span>'+d.name+'</span><span class="tr"><i style="width:'+Math.max(3,diff/4.5*100)+'%;background:'+phColor(m)+'"></i></span><b>'+fmt(diff)+'</b></div>';}).join("")+'<p class="muted" style="font-size:.78rem;margin:.4rem 0 0">Число справа — отличие от воды: 7 − середина диапазона. Например, лимонад: 7 − 2,5 = 4,5.</p>';
+  var r=$("freqR");function upd(){var n=+r.value;$("freqN").textContent=n;var b="";for(var i=0;i<n;i++)b+='<i title="20 минут"></i>';$("freqBar").innerHTML=b;$("freqOut").innerHTML="T = "+n+" × 20 = <big style='font-size:1.4rem'>"+(n*20)+" мин</big>"+(n>1?" — в "+n+" раз больше, чем один приём":" — один приём");}
+  r.addEventListener("input",upd);upd();
+}
+
+/* ================= DEFENSE MODE ================= */
+var SURVEY_TAG='<span class="sl-tag data">Фактические ответы 20 школьников — данные исследования</span> <span class="sl-tag calc">Проценты — расчёт</span>';
+function T(kind,text){return '<span class="sl-tag '+kind+'">'+text+'</span>';}
+var DS={i:0,shellDay:5,freqN:4,qa:false,timer:null};
+function surveyBarsSVG(){
+  var W=540,rowH=50,top=6,x0=54,bw=460,H=top+rowH*6+36,s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block" role="img" aria-label="Ответы да и нет">';
+  SURVEY.forEach(function(q,i){var y=top+i*rowH,wy=bw*q[1]/20;
+    s+='<text x="0" y="'+(y+25)+'" font-size="19" font-weight="800" fill="#0e8287">В'+(i+1)+'</text><rect x="'+x0+'" y="'+y+'" width="'+bw+'" height="36" rx="9" fill="#ff8c42"/><rect x="'+x0+'" y="'+y+'" width="'+wy+'" height="36" rx="9" fill="#13a3a8"/>'+
+       '<text x="'+(x0+12)+'" y="'+(y+25)+'" font-size="18" font-weight="800" fill="#fff">'+q[1]+'</text><text x="'+(x0+bw-12)+'" y="'+(y+25)+'" font-size="18" font-weight="800" fill="#fff" text-anchor="end">'+q[2]+'</text>';});
+  var ly=top+rowH*6+14;
+  s+='<rect x="'+x0+'" y="'+ly+'" width="16" height="16" rx="4" fill="#13a3a8"/><text x="'+(x0+24)+'" y="'+(ly+14)+'" font-size="16" fill="#0b2545">Да</text><rect x="'+(x0+80)+'" y="'+ly+'" width="16" height="16" rx="4" fill="#ff8c42"/><text x="'+(x0+104)+'" y="'+(ly+14)+'" font-size="16" fill="#0b2545">Нет</text><text x="'+(x0+bw)+'" y="'+(ly+14)+'" font-size="15" fill="#5b6f86" text-anchor="end">длина полосы = 20 учеников</text>';
+  return s+'</svg>';
+}
+function phRangeSVG(){
+  var W=740,x0=200,x1=720,sc=(x1-x0)/14,rowH=52,top=24,H=top+rowH*6+56,s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block" role="img" aria-label="Диапазоны pH шести напитков">';
+  s+='<defs><linearGradient id="dphg">'+STOPS.map(function(st){return '<stop offset="'+(st[0]/14*100)+'%" stop-color="'+st[1]+'"/>';}).join("")+'</linearGradient></defs>';
+  for(var p=0;p<=14;p++){var x=x0+p*sc;s+='<line x1="'+x+'" x2="'+x+'" y1="'+top+'" y2="'+(top+rowH*6)+'" stroke="#0b2545" stroke-opacity=".07"/>';}
+  var nx=x0+7*sc;s+='<line x1="'+nx+'" x2="'+nx+'" y1="'+(top-14)+'" y2="'+(top+rowH*6)+'" stroke="#3fb950" stroke-width="3" stroke-dasharray="7 6"/><text x="'+(nx+8)+'" y="'+(top-2)+'" font-size="15" font-weight="700" fill="#2fa866">нейтральная среда (7)</text>';
+  DRINKS.forEach(function(d,i){var y=top+i*rowH+10,m=(d.lo+d.hi)/2;
+    s+='<text x="0" y="'+(y+21)+'" font-size="20" font-weight="700" fill="#0b2545">'+d.name+'</text>';
+    if(d.lo===d.hi)s+='<circle cx="'+(x0+d.lo*sc)+'" cy="'+(y+15)+'" r="15" fill="'+phColor(m)+'"/>';
+    else s+='<rect x="'+(x0+d.lo*sc)+'" y="'+y+'" width="'+((d.hi-d.lo)*sc)+'" height="30" rx="15" fill="'+phColor(m)+'"/>';
+    s+='<text x="'+(x0+d.hi*sc+22)+'" y="'+(y+21)+'" font-size="18" font-weight="700" fill="#5b6f86">pH '+d.ph+'</text>';});
+  var ay=top+rowH*6+10;s+='<rect x="'+x0+'" y="'+ay+'" width="'+(14*sc)+'" height="14" rx="7" fill="url(#dphg)"/>';
+  for(p=0;p<=14;p+=2)s+='<text x="'+(x0+p*sc)+'" y="'+(ay+36)+'" font-size="15" text-anchor="middle" fill="#5b6f86">'+p+'</text>';
+  s+='<text x="'+x0+'" y="'+(ay+52)+'" font-size="0"></text>';
+  return s+'</svg>';
+}
+var SLIDES=[
+ {t:"Титульный экран",sec:0,html:function(){return '<div class="sl sl-title"><div class="sl-z">'+zubikSVG()+'</div><div class="sl-k" style="justify-content:center">Исследовательская работа</div><h1>Кислотность напитков<br>и их влияние на зубы</h1><div style="font-size:24px;color:#36506d">Практический продукт — цифровая лаборатория «Зубной детектив»</div><div class="sl-meta"><div><b>Автор</b>Сагидолда Ибрахим, 4 «Б» класс</div><div><b>Руководитель</b>Токашова С. Заманбековна</div><div><b>Школа</b>КГУ «Средняя школа имени Шокана Уалиханова»</div><div><b>Место и год</b>село Тугыл, 2026 год</div></div></div>';},
+  notes:"Здравствуйте, уважаемые члены жюри! Меня зовут Сагидолда Ибрахим, я учусь в 4 «Б» классе школы имени Шокана Уалиханова.|Я представляю исследовательскую работу «Кислотность напитков и их влияние на зубы». Мой руководитель — Токашова С. Заманбековна."},
+ {t:"Почему я выбрал эту тему",sec:0,html:function(){return '<div class="sl"><div class="sl-k">Экран 2 · Актуальность</div><h2>Почему я выбрал эту тему</h2><div class="sl-grid" style="grid-template-columns:1fr 1fr"><div class="sl-card"><h3>Актуальность</h3><p>Каждый день мы выбираем, что пить: воду, чай, сок или лимонад. Мы смотрим на вкус и упаковку, но редко думаем о кислотности.</p><p style="margin-top:14px">Кислые напитки могут часто контактировать с зубами. Поэтому детям полезно понимать, что такое pH и почему важно не задерживать напиток во рту.</p></div><div class="sl-card" style="background:linear-gradient(135deg,#0b2545,#1d4f86);color:#fff;border:0"><h3 style="color:#8fd3f4">Проблемный вопрос</h3><p class="sl-big">Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами?</p></div></div><div class="sl-card" style="margin-top:22px;padding:16px 26px"><b style="color:#0e8287">Новизна:</b> в одной работе соединены сравнение pH шести напитков, анкета одноклассников, наглядные опыты и цифровая лаборатория.</div></div>';},
+  notes:"Каждый день мы выбираем, что пить: воду, чай, сок или лимонад. Обычно мы смотрим на вкус и упаковку и почти не думаем о кислотности.|Мне стало интересно: какие из знакомых напитков более кислые и почему это важно для зубов?|Мой проблемный вопрос: какие напитки из выбранных имеют более кислую среду и что показывают простые опыты с минеральными материалами?"},
+ {t:"Цель, задачи и гипотеза",sec:0,html:function(){return '<div class="sl"><div class="sl-k">Экран 3</div><h2>Цель, задачи и гипотеза</h2><div class="sl-card" style="margin-bottom:20px"><h3>Цель</h3><p style="font-size:24px">Сравнить кислотность шести напитков и на основе своих наблюдений объяснить, почему кислые напитки нужно пить разумно.</p></div><div class="sl-grid" style="grid-template-columns:1.1fr 1fr"><div class="sl-card"><h3>Задачи</h3><ul style="columns:2;column-gap:30px;font-size:20px"><li>Узнать, что такое pH</li><li>Узнать, как устроена зубная эмаль</li><li>Опросить одноклассников</li><li>Сравнить кислотность напитков</li><li>Обобщить опыты со скорлупой и мелом</li><li>Сделать памятку и наглядный продукт</li></ul></div><div class="sl-card" style="background:#fff7ef;border-color:#ffd7b8"><h3 style="color:#e8701f">Гипотеза</h3><p style="font-size:21px">Среди напитков будут образцы с разным pH, а в кислых напитках скорлупа будет меняться заметнее, чем в воде.</p><p style="font-size:16px;color:#5b6f86;margin-top:10px">Влияние напитков на настоящую эмаль в опытах не проверялось.</p></div></div></div>';},
+  notes:"Цель моей работы — сравнить кислотность шести напитков и на основе своих наблюдений объяснить, почему кислые напитки нужно пить разумно.|Для этого я поставил шесть задач: узнать, что такое pH и как устроена эмаль, опросить одноклассников, сравнить напитки, обобщить опыты и сделать памятку.|Моя гипотеза: среди напитков будут образцы с разным pH, а в кислых напитках скорлупа будет меняться заметнее, чем в воде. Влияние на настоящую эмаль я не проверял — это важно сказать честно."},
+ {t:"Анкетирование",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 4 · Моё исследование <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Анкетирование: 20 участников, 6 вопросов</h2><div style="margin-bottom:14px">'+SURVEY_TAG+'</div><div class="sl-grid" style="grid-template-columns:1.15fr 1fr;align-items:start"><table class="sl-tbl"><thead><tr><th></th><th>Вопрос</th><th>Да</th><th>Нет</th><th>Да, %</th></tr></thead><tbody>'+SURVEY.map(function(q,i){return '<tr><td><b style="color:#0e8287">В'+(i+1)+'</b></td><td style="font-size:17px">'+q[0]+'</td><td><b>'+q[1]+'</b></td><td>'+q[2]+'</td><td><b>'+pct(q[1],20)+'%</b></td></tr>';}).join("")+'</tbody></table><div>'+surveyBarsSVG()+'</div></div><div class="sl-card" style="margin-top:12px;padding:12px 22px;font-size:20px"><b>Вывод:</b> ребята часто пьют кислые напитки, но только 8 из 20 знают об их возможном влиянии на эмаль.</div></div>';},
+  notes:"Сначала я провёл анкетирование. В нём участвовали 20 школьников, я задал 6 вопросов с ответами «да» и «нет».|15 ребят пьют газированные напитки, 16 часто пьют соки или лимонад. Но только 8 из 20 знают, что кислые напитки могут воздействовать на эмаль.|А 17 из 20 готовы чаще выбирать воду. Это показало мне, что тема действительно нужна."},
+ {t:"Эксперимент № 1. pH напитков",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 5 · Эксперимент № 1 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Сравнение кислотности шести напитков</h2><div style="margin-bottom:14px">'+T("data","Ориентировочные диапазоны pH — данные исследования")+'</div><div class="sl-grid" style="grid-template-columns:1.75fr 1fr;align-items:start"><div class="sl-card" style="background:#fff;padding:16px 18px">'+phRangeSVG()+'</div><div style="display:flex;flex-direction:column;gap:16px"><div class="sl-card" style="padding:16px 20px"><h3>Метод</h3><p style="font-size:19px">Индикаторную полоску опускали в напиток и сравнивали цвет со шкалой производителя.</p></div><div class="sl-card" style="padding:16px 20px"><h3>От кислых к нейтральным</h3><p style="font-size:19px">лимонад, газировка (2–3) → яблочный и апельсиновый сок (3–4) → чай (5–6) → вода (≈7)</p></div><div class="sl-card" style="padding:16px 20px;background:#fff7ef;border-color:#ffd7b8"><p style="font-size:17px">Внутри пары с одинаковым диапазоном нельзя сказать, какой напиток кислее.</p></div></div></div></div>';},
+  notes:"Первый опыт — сравнение pH. Я наливал напитки в стаканы, опускал индикаторную полоску и сравнивал её цвет со шкалой.|Вода оказалась близкой к нейтральной — около 7. Чай — слабокислый, 5–6. Соки — 3–4. Самые низкие значения — у лимонада и газированного напитка: 2–3.|Полоски дают примерный результат, поэтому внутри пары я не могу сказать, какой напиток кислее."},
+ {t:"Эксперимент № 2. Скорлупа, 5 дней",sec:1,html:function(){var d=DS.shellDay;return '<div class="sl"><div class="sl-k">Экран 6 · Эксперимент № 2 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Пять дней наблюдения за яичной скорлупой</h2><div style="margin-bottom:12px;display:flex;gap:10px">'+T("data","Записи по дням — данные исследования")+T("viz","Рисунки — модельные изображения")+'</div><div class="sl-grid" style="grid-template-columns:1.35fr 1fr;align-items:start"><div><table class="sl-tbl" style="font-size:16px"><thead><tr><th>День</th>'+SHELL_IDS.map(function(id){return '<th>'+D(id).name+'</th>';}).join("")+'</tr></thead><tbody>'+[0,1,2,3,4].map(function(k){return '<tr style="'+(k===d-1?'background:#fff3e6;font-weight:700':'')+'"><td><b>'+(k+1)+'</b></td>'+SHELL_IDS.map(function(id){return '<td>'+SHELL_DAYS[id][k]+'</td>';}).join("")+'</tr>';}).join("")+'</tbody></table><p style="font-size:16px;color:#5b6f86;margin:12px 0 0">Скорлупу не взвешивали: «хрупкая», «тоньше», «рыхлая» — это описания, а не измерения.</p></div><div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+SHELL_IDS.map(function(id){return '<div style="text-align:center;font-size:15px;font-weight:700"><div style="height:150px">'+shellCupSVG(id,d,false).replace("<svg ",'<svg style="height:150px" ')+'</div>'+D(id).name+'</div>';}).join("")+'</div><div class="d-days" style="display:flex;gap:6px;justify-content:center;margin-top:10px">'+[1,2,3,4,5].map(function(k){return '<button type="button" class="dbtn'+(k===d?' on':'')+'" data-sday="'+k+'" style="font-size:16px">День '+k+'</button>';}).join("")+'</div></div></div></div>';},
+  init:function(st){st.querySelectorAll("[data-sday]").forEach(function(b){b.onclick=function(){DS.shellDay=+b.getAttribute("data-sday");renderDefense(true);};});},
+  notes:"Второй опыт — наблюдение за яичной скорлупой. Я положил одинаковые кусочки в воду, яблочный сок, лимонад и газированный напиток и наблюдал пять дней.|В воде почти ничего не менялось. В кислых напитках появлялись пузырьки, поверхность менялась, скорлупа становилась хрупкой или рыхлой. (Можно переключать дни кнопками.)|Записи в таблице — из моего дневника, а рисунки модельные. Скорлупу я не взвешивал, поэтому это описания, а не измерения. Скорлупа — это модель, а не зуб."},
+ {t:"Эксперимент № 3. Мел и лимонный сок",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 7 · Эксперимент № 3 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Мел и лимонный сок</h2><div style="margin-bottom:14px;display:flex;gap:10px">'+T("data","Результат — данные исследования")+T("viz","Анимация — условная")+'</div><div class="sl-grid" style="grid-template-columns:1fr 1.15fr;align-items:start"><div class="sl-card" style="text-align:center;padding-top:30px"><div class="sl-chalk" style="margin-bottom:18px"><div><div class="sl-glass" id="dgA"><div class="liq" style="background:linear-gradient(180deg,rgba(176,226,250,.75),rgba(143,211,244,.9))"></div><div class="ck"></div></div><b style="font-size:19px">А — вода</b><div id="dlA" style="font-size:16px;min-height:44px;color:#5b6f86"></div></div><div><div class="sl-glass" id="dgB"><div class="liq" style="background:linear-gradient(180deg,rgba(250,240,140,.85),rgba(240,220,90,.95))"></div><div class="ck"></div></div><b style="font-size:19px">Б — лимонный сок</b><div id="dlB" style="font-size:16px;min-height:44px;color:#e8701f;font-weight:700"></div></div></div><button type="button" class="btn orange" id="dChalkGo" style="font-size:20px">Показать опыт</button></div><div style="display:flex;flex-direction:column;gap:14px"><div class="sl-card" style="padding:14px 20px"><h3>Что я увидел</h3><p style="font-size:19px">В воде заметной реакции практически не было. В лимонном соке появились пузырьки, и мел постепенно начал изменяться.</p></div><div class="sl-card" style="padding:14px 20px"><h3>Почему пузырьки</h3><p style="font-size:19px">Мел содержит карбонат кальция. Кислота реагирует с ним — может выделяться углекислый газ.</p></div><div class="sl-card" style="padding:14px 20px;background:#fff7ef;border-color:#ffd7b8"><h3 style="color:#e8701f">Ограничения</h3><ul style="font-size:17px"><li>Количество газа не измерялось, состав мела бывает разным.</li><li>Эмаль — минералы на основе фосфата кальция, а мел — карбонат кальция. Зуб не растворяется так же.</li></ul></div></div></div></div>';},
+  init:function(st){var go=st.querySelector("#dChalkGo");go.onclick=function(){go.disabled=true;st.querySelector("#dgA").classList.add("go");st.querySelector("#dgB").classList.add("go");
+    setTimeout(function(){var a=st.querySelector("#dlA"),b=st.querySelector("#dlB");if(a)a.textContent="Заметной реакции практически нет";if(b)b.textContent="Пузырьки! Мел изменяется";var gl=st.querySelector("#dgB");if(!gl)return;
+      if(RM){for(var i=0;i<14;i++){var e=document.createElement("span");e.className="bub";e.style.left=(25+Math.random()*50)+"%";e.style.bottom=(15+Math.random()*50)+"%";gl.appendChild(e);}return;}
+      var c=0;clearInterval(DS.timer);DS.timer=setInterval(function(){if(!document.body.contains(gl)||c>200){clearInterval(DS.timer);return;}var e=document.createElement("span");e.className="bub";e.style.left=(30+Math.random()*40)+"%";var z=5+Math.random()*9;e.style.width=z+"px";e.style.height=z+"px";gl.appendChild(e);c++;setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},1900);},90);
+    },wait(1100));};},
+  notes:"Третий опыт — мел и лимонный сок. (Нажать «Показать опыт».)|В воде заметной реакции почти не было. В лимонном соке появились пузырьки, и мел постепенно начал изменяться.|Мел содержит карбонат кальция, кислота с ним реагирует, и может выделяться углекислый газ. Но зубная эмаль — это не мел, поэтому опыт показывает только принцип."},
+ {t:"Математический анализ",sec:1,html:function(){var n=DS.freqN,blocks="";for(var i=0;i<n;i++)blocks+='<i style="display:inline-block;width:34px;height:26px;border-radius:7px;background:linear-gradient(180deg,#ffb36e,#f58a3a);margin:3px"></i>';
+   return '<div class="sl"><div class="sl-k">Экран 8 · Математика <span class="key">ключевой</span></div><h2 style="margin-bottom:16px">Математический анализ</h2><div class="sl-grid" style="grid-template-columns:1fr 1fr 1.05fr;align-items:stretch"><div class="sl-card" style="padding:16px 20px"><h3>Проценты по анкете</h3><div style="margin-bottom:8px">'+T("calc","Расчёт по данным")+'</div><div style="font-family:Consolas,monospace;font-size:21px;line-height:1.9;font-weight:700;color:#0e8287">15 ÷ 20 × 100% = 75%<br>16 ÷ 20 × 100% = 80%<br>8 ÷ 20 × 100% = 40%<br>6 ÷ 20 × 100% = 30%<br>17 ÷ 20 × 100% = 85%<br><span style="color:#e8701f">85% − 40% = 45 п. п.</span></div></div>'+
+   '<div class="sl-card" style="padding:16px 20px"><h3>Сравнение pH</h3><div style="margin-bottom:8px">'+T("model","Модель: середины диапазонов")+'</div>'+DRINKS.map(function(d){var m=(d.lo+d.hi)/2,df=7-m;return '<div style="display:grid;grid-template-columns:118px 1fr 40px;gap:8px;align-items:center;font-size:15px;margin:5px 0"><span>'+d.name+'</span><span style="height:14px;background:#e8f5fc;border-radius:99px;overflow:hidden"><i style="display:block;height:100%;width:'+Math.max(3,df/4.5*100)+'%;background:'+phColor(m)+';border-radius:99px"></i></span><b>'+fmt(df)+'</b></div>';}).join("")+'<p style="font-size:15px;color:#36506d;margin-top:8px">Отличие от воды: 7 − 2,5 = 4,5. Шкала pH логарифмическая: pH 3 и pH 4 — примерно в 10 раз разная активность ионов H⁺. Это не «в 10 раз опаснее».</p></div>'+
+   '<div class="sl-card" style="padding:16px 20px"><h3>Частота употребления</h3><div style="margin-bottom:8px">'+T("model","Расчётная модель")+'</div><p style="font-size:18px">T = n × t, t = 20 мин (условно)</p><div style="display:flex;align-items:center;gap:10px;margin:8px 0"><button type="button" class="dbtn" id="dFm" style="font-size:20px;width:44px">−</button><b style="font-size:20px">n = '+n+'</b><button type="button" class="dbtn" id="dFp" style="font-size:20px;width:44px">+</button></div><div style="min-height:72px">'+blocks+'</div><div style="background:#0b2545;color:#fff;border-radius:14px;padding:10px 16px;font-size:22px;font-weight:800">'+n+' × 20 = <span style="color:#8fd3f4">'+(n*20)+' мин</span></div><p style="font-size:14px;color:#5b6f86;margin-top:8px">Слюна нейтрализует кислоты с разной скоростью — это не прогноз повреждения эмали.</p></div></div><div style="margin-top:14px;font-size:17px;color:#36506d;text-align:center"><b>Расчётные сценарии отделены от наблюдений:</b> они объясняют результаты, но не измеряют повреждение зубов.</div></div>';},
+  init:function(st){var m=st.querySelector("#dFm"),p=st.querySelector("#dFp");m.onclick=function(){DS.freqN=Math.max(1,DS.freqN-1);renderDefense(true);};p.onclick=function(){DS.freqN=Math.min(8,DS.freqN+1);renderDefense(true);};},
+  notes:"Дальше я посчитал проценты: например, 15 разделить на 20 и умножить на 100 — получается 75%.|Чтобы сравнить pH, я взял середину каждого диапазона: у воды 7, у лимонада 2,5 — разница 4,5 единицы. Шкала pH логарифмическая, но это не значит, что напиток во столько же раз опаснее.|Ещё я сделал модель частоты: если пить напиток понемногу четыре раза, условное время воздействия — 4 × 20 = 80 минут, а за один приём — 20 минут. Это расчёты, а не опыты, и они не показывают повреждение зубов."},
+ {t:"Результаты и проверка гипотезы",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 9 · Проверка гипотезы <span class="key">ключевой</span></div><h2 style="margin-bottom:14px">Результаты и проверка гипотезы</h2><table class="sl-tbl"><thead><tr><th>Что я ожидал</th><th>Что получил</th><th>Итог</th></tr></thead><tbody><tr><td>Напитки будут иметь разный pH</td><td>От pH 2–3 (лимонад, газировка) до pH ≈ 7 (вода)</td><td><b style="color:#2fa866">✓ Подтверждается</b></td></tr><tr><td>В кислых напитках скорлупа будет меняться заметнее, чем в воде</td><td>В воде — почти без изменений; в соке, лимонаде, газировке — пузырьки, хрупкость, рыхлость</td><td><b style="color:#2fa866">✓ Подтверждается качественно</b></td></tr></tbody></table><div class="sl-grid" style="grid-template-columns:1.2fr 1fr;margin-top:18px"><div class="sl-card" style="background:#fff7ef;border-color:#ffd7b8;padding:14px 20px"><h3 style="color:#e8701f">Что НЕ доказано</h3><ul style="font-size:18px"><li>Скорлупа теряет определённый процент массы — <b>не установлено</b> (взвешивания не было)</li><li>Напиток с самым низким pH быстрее разрушает зубы — <b>не доказано</b> (опытов с эмалью не было)</li><li>Дети изменили привычки — <b>не установлено</b> (повторного опроса нет)</li></ul></div><div class="sl-card" style="background:linear-gradient(135deg,#13a3a8,#1b7fb0);color:#fff;border:0;display:flex;align-items:center"><p class="sl-big" style="font-size:25px">Гипотеза подтверждается в пределах выбранных моделей и приблизительных методов.</p></div></div></div>';},
+  notes:"Теперь я проверю гипотезу. Я ожидал, что напитки будут разными по pH, — это подтвердилось.|Я ожидал, что в кислых напитках скорлупа будет меняться заметнее, чем в воде, — это тоже подтвердилось. Значит, гипотеза подтверждается в пределах моих опытов.|Но я не доказал, что напиток с самым низким pH быстрее разрушает зубы: опытов с настоящей эмалью не было. Скорлупу я не взвешивал, а повторного опроса не проводил."},
+ {t:"Практический результат",sec:2,html:function(){function card(ic,bg,title,txt,pg){return '<div class="sl-card sl-prod"><div class="ic" style="background:'+bg+'">'+ic+'</div><h3 style="color:#0b2545;text-transform:none;letter-spacing:0;font-size:24px">'+title+'</h3><p style="font-size:18px;flex:1">'+txt+'</p><button type="button" class="btn ghost" data-dgo="'+pg+'" style="align-self:flex-start;font-size:17px">Показать на сайте →</button></div>';}
+   return '<div class="sl"><div class="sl-k">Экран 10</div><h2>Практический результат</h2><div class="sl-grid" style="grid-template-columns:repeat(3,1fr)">'+card("⚗","linear-gradient(135deg,#13a3a8,#1b8fb8)","Цифровая лаборатория","Виртуальное определение pH, модели опытов, диаграммы, паспорта напитков. Работает без интернета.","ph")+card("☺","linear-gradient(135deg,#ff8c42,#ffad5c)","Памятка «Береги свою улыбку!»","7 правил с объяснениями, мини-тест и версия для печати.","smile")+card("★","linear-gradient(135deg,#0b2545,#2a5d9c)","Игра «Зубной детектив»","7 заданий на закрепление, до 70 баллов.","game")+'</div><div class="sl-card" style="margin-top:18px;padding:14px 22px;font-size:19px"><b>Все материалы созданы после исследования</b>, чтобы показать его результаты другим школьникам. Цифровая лаборатория не заменяет реальные опыты. Также подготовлен макет «Зубной детектив: кто атакует эмаль?».</div></div>';},
+  notes:"После исследования я сделал памятку «Береги свою улыбку!», макет и цифровую лабораторию «Зубной детектив».|В лаборатории можно провести опыт с pH, посмотреть модели опытов, диаграммы и сыграть в игру из семи заданий.|Эти материалы помогают рассказать о моих результатах другим ребятам. Они не заменяют настоящие опыты."},
+ {t:"Выводы и рефлексия",sec:2,html:function(){return '<div class="sl"><div class="sl-k">Экран 11</div><h2>Выводы и рефлексия</h2><div class="sl-grid" style="grid-template-columns:repeat(3,1fr)"><div class="sl-card"><h3>Что я выяснил</h3><ul style="font-size:18px"><li>Напитки различаются по кислотности</li><li>Вода близка к нейтральной, чай слабокислый, соки, лимонад и газировка — кислые</li><li>В кислых напитках скорлупа менялась заметнее</li><li>Лимонный сок реагировал с мелом — пузырьки</li></ul></div><div class="sl-card"><h3>Чему я научился</h3><ul style="font-size:18px"><li>Сравнивать напитки по шкале pH</li><li>Вычислять проценты по ответам одноклассников</li><li>Делать выводы из таблиц</li><li>Понимать, что модель не повторяет настоящий зуб</li></ul></div><div class="sl-card"><h3>Что можно улучшить</h3><ul style="font-size:18px"><li>Провести больше повторных измерений</li><li>Сравнить напитки разных производителей</li><li>Взвешивать скорлупу до и после опыта</li><li>Измерять pH откалиброванным pH-метром</li></ul></div></div><div style="margin-top:18px;text-align:center;font-size:23px;font-weight:700;color:#0e8287">«Здоровая улыбка начинается не только с зубной щётки, но и с разумного выбора того, что мы пьём»</div></div>';},
+  notes:"Я выяснил, что напитки отличаются по кислотности, а кислоты могут взаимодействовать с карбонатными материалами.|Я научился работать с pH-полосками, считать проценты и делать выводы из таблиц. Я понял, что модель не полностью повторяет настоящий зуб и результаты нельзя преувеличивать.|В следующий раз я хочу провести больше повторных измерений и сравнить напитки разных производителей.|Главный вывод: здоровая улыбка начинается не только с зубной щётки, но и с разумного выбора того, что мы пьём."},
+ {t:"Спасибо за внимание",sec:2,html:function(){var qa=DS.qa;return '<div class="sl sl-title"><div class="sl-z">'+zubikSVG()+'</div><h1 style="font-size:'+(qa?'54':'72')+'px">'+(qa?'Готов ответить на ваши вопросы!':'Спасибо за внимание!')+'</h1><div style="font-size:22px;color:#36506d">Сагидолда Ибрахим, 4 «Б» класс · «Кислотность напитков и их влияние на зубы»</div>'+
+   (qa?'<div class="sl-qchips">'+[["Анкета",3],["pH напитков",4],["Скорлупа",5],["Мел",6],["Расчёты",7],["Гипотеза",8],["Памятка и сайт",9]].map(function(c){return '<button type="button" data-dj="'+c[1]+'">'+c[0]+'</button>';}).join("")+'</div><button type="button" class="btn ghost" id="dQa" style="margin-top:20px;font-size:18px">Скрыть кнопки</button>':'<button type="button" class="btn orange" id="dQa" style="margin-top:28px;font-size:24px;padding:16px 34px">Вопросы жюри</button>')+'</div>';},
+  init:function(st){st.querySelector("#dQa").onclick=function(){DS.qa=!DS.qa;renderDefense(true);};st.querySelectorAll("[data-dj]").forEach(function(b){b.onclick=function(){gotoSlide(+b.getAttribute("data-dj"));};});},
+  notes:"Спасибо за внимание! Я готов ответить на ваши вопросы. (Нажать «Вопросы жюри» — появятся кнопки быстрого перехода к нужному экрану.)|<b>Почему скорлупа, а не зуб?</b> Скорлупа доступна и содержит карбонат кальция. Это модель, а не зуб: состав эмали другой.|<b>Почему pH записан диапазоном?</b> Полоска даёт примерный результат. Для точности нужны pH-метр и повторные измерения.|<b>Откуда пузырьки в газировке?</b> Это может быть и реакция, и выделение растворённого газа.|<b>Значит, кислые напитки пить нельзя?</b> Нет. Важно знать меру, не пить маленькими глотками часами и полоскать рот водой."}
+];
+var SEC_NAMES=["Начало","Моё исследование","Итоги"];
+function buildDefense(){
+  document.addEventListener("click",function(e){var b=e.target.closest("[data-defense]");if(b)openDefense();});
+  $("dPrev").onclick=function(){gotoSlide(DS.i-1);};
+  $("dNext").onclick=function(){gotoSlide(DS.i+1);};
+  $("dMenuBtn").onclick=function(e){e.stopPropagation();toggleMenu();};
+  $("dNotesBtn").onclick=function(){toggleNotes();};
+  $("dNotesClose").onclick=function(){toggleNotes(false);};
+  $("dRestart").onclick=function(){DS.shellDay=5;DS.freqN=4;DS.qa=false;toggleNotes(false);gotoSlide(0);};
+  $("dExit").onclick=closeDefense;
+  $("dFullBtn").onclick=function(){
+    var el=document.documentElement;
+    try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
+      else{var r=el.requestFullscreen||el.webkitRequestFullscreen;if(r){var pr=r.call(el);if(pr&&pr.catch)pr.catch(function(){dToast("Браузер не разрешил полноэкранный режим. Нажми F11.");});}else dToast("Нажми F11 для полноэкранного режима.");}}
+    catch(x){dToast("Нажми F11 для полноэкранного режима.");}
+  };
+  var m="";SLIDES.forEach(function(s,i){if(i===0||SLIDES[i-1].sec!==s.sec)m+='<div class="sec">'+SEC_NAMES[s.sec]+'</div>';m+='<button type="button" data-di="'+i+'" class="'+(s.sec===1?'key':'')+'"><i>'+(i+1)+'</i>'+s.t+'</button>';});
+  $("dMenu").innerHTML=m;
+  $("dMenu").addEventListener("click",function(e){var b=e.target.closest("[data-di]");if(b){toggleMenu(false);gotoSlide(+b.getAttribute("data-di"));}});
+  $("dDots").innerHTML=SLIDES.map(function(s,i){return '<button type="button" data-di="'+i+'" class="'+(s.sec===1?'key':'')+'" aria-label="Экран '+(i+1)+': '+s.t+'" title="'+(i+1)+'. '+s.t+'"></button>';}).join("");
+  $("dDots").addEventListener("click",function(e){var b=e.target.closest("[data-di]");if(b)gotoSlide(+b.getAttribute("data-di"));});
+  $("dStage").addEventListener("click",function(e){var b=e.target.closest("[data-dgo]");if(b){var p=b.getAttribute("data-dgo");closeDefense();go(p);}});
+  $("defense").addEventListener("click",function(e){if(!e.target.closest("#dMenu")&&!e.target.closest("#dMenuBtn"))toggleMenu(false);});
+  document.addEventListener("keydown",function(e){
+    if($("defense").classList.contains("hidden"))return;
+    var tag=(e.target&&e.target.tagName)||"";if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return;
+    var k=e.key;
+    if(k==="ArrowRight"||k==="PageDown"){e.preventDefault();gotoSlide(DS.i+1);}
+    else if(k==="ArrowLeft"||k==="PageUp"){e.preventDefault();gotoSlide(DS.i-1);}
+    else if(k===" "&&tag!=="BUTTON"){e.preventDefault();gotoSlide(DS.i+1);}
+    else if(k==="Home"){e.preventDefault();gotoSlide(0);}
+    else if(k==="End"){e.preventDefault();gotoSlide(SLIDES.length-1);}
+    else if(k==="Escape"){toggleMenu(false);}
+  });
+  window.addEventListener("resize",fitStage);
+}
+function openDefense(idx){
+  if(typeof idx==="number")DS.i=Math.max(0,Math.min(SLIDES.length-1,idx));
+  $("defense").classList.remove("hidden");document.body.style.overflow="hidden";
+  renderDefense();requestAnimationFrame(fitStage);
+}
+function closeDefense(){
+  clearInterval(DS.timer);toggleMenu(false);
+  try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch(e){}
+  $("defense").classList.add("hidden");document.body.style.overflow="";
+  try{history.replaceState(null,"","#"+current);}catch(e){}
+}
+function gotoSlide(i){if(i<0||i>=SLIDES.length)return;DS.i=i;renderDefense();}
+function renderDefense(same){
+  clearInterval(DS.timer);
+  var s=SLIDES[DS.i],st=$("dStage");
+  st.innerHTML=s.html();var sl=st.firstChild;if(!same&&sl)sl.classList.add("anim");
+  if(s.init)s.init(st);
+  $("dCount").textContent=(DS.i+1)+" / "+SLIDES.length;
+  $("dPrev").disabled=DS.i===0;$("dNext").disabled=DS.i===SLIDES.length-1;
+  var ds=$("dDots").querySelectorAll("button");for(var k=0;k<ds.length;k++)ds[k].classList.toggle("cur",k===DS.i);
+  var ms=$("dMenu").querySelectorAll("[data-di]");for(k=0;k<ms.length;k++)ms[k].classList.toggle("cur",k===DS.i);
+  $("dNotesText").innerHTML='<div class="task-k" style="margin-top:.6rem">Экран '+(DS.i+1)+'. '+s.t+'</div>'+s.notes.split("|").map(function(p){return '<p>'+p+'</p>';}).join("");
+  try{history.replaceState(null,"","#defense-"+(DS.i+1));}catch(e){}
+}
+function fitStage(){
+  if($("defense").classList.contains("hidden"))return;
+  var w=$("dStage").parentNode,r=w.getBoundingClientRect();
+  var sc=Math.min((r.width-24)/1280,(r.height-24)/720);if(!(sc>0))sc=.1;
+  $("dStage").style.transform="translate(-50%,-50%) scale("+sc+")";
+}
+function toggleMenu(on){var m=$("dMenu");if(on===undefined)on=m.classList.contains("hidden");m.classList.toggle("hidden",!on);$("dMenuBtn").setAttribute("aria-expanded",on);}
+function toggleNotes(on){var n=$("dNotes");if(on===undefined)on=n.classList.contains("hidden");n.classList.toggle("hidden",!on);$("dNotesBtn").classList.toggle("on",on);$("dNotesBtn").setAttribute("aria-pressed",on);requestAnimationFrame(fitStage);}
+var dToastT;
+function dToast(t){var el=$("dToast");if(!el){el=document.createElement("div");el.id="dToast";el.className="d-toast";$("defense").appendChild(el);}el.textContent=t;el.classList.add("on");clearTimeout(dToastT);dToastT=setTimeout(function(){el.classList.remove("on");},4000);}
+function renderSummary(){
+  var labs=[["ph","Лаборатория pH"],["shell","Скорлупа"],["chalk","Мел"]];
+  var dr=S.journal.length?S.journal.map(function(id){var d=D(id);return d?'<span class="pill" style="margin:.1rem">'+d.name+'</span>':"";}).join(" "):'<span class="muted">Пока нет. Загляни в лабораторию pH.</span>';
+  var lb=labs.map(function(l){return '<div>'+(S.visited[l[0]]?'<b style="color:var(--ok)">✓</b> ':'<span class="muted">○</span> ')+l[1]+'</div>';}).join("");
+  var g=S.game.last?'<div>Последняя игра: <b>'+S.game.last.score+'</b> баллов ('+S.game.last.correct+' из 7, '+S.game.last.pct+'%)</div><div>Лучший результат: <b>'+S.game.best+'</b> из 70</div><div class="muted" style="font-size:.8rem">Сохранённых результатов: '+S.game.history.length+'</div>':'<span class="muted">Игра ещё не пройдена.</span>';
+  $("jSummary").innerHTML='<div class="jbox"><h4>Исследованные напитки ('+S.journal.length+'/6)</h4>'+dr+'</div><div class="jbox"><h4>Пройденные лаборатории</h4>'+lb+'</div><div class="jbox"><h4>Игра и баллы</h4>'+g+'</div>'+(canStore?'':'<div class="muted" style="grid-column:1/-1;font-size:.8rem">Сохранение в этом браузере недоступно — данные будут только до закрытия страницы.</div>');
+}
+
+/* ================= TOOLS ================= */
+function buildTools(){
+  function applyBig(){document.documentElement.classList.toggle("big",!!S.big);$("btnBig").classList.toggle("on",!!S.big);}
+  $("btnBig").addEventListener("click",function(){S.big=!S.big;save();applyBig();if(current==="math")drawCharts();});
+  applyBig();
+  $("btnFull").addEventListener("click",function(){
+    var el=document.documentElement;
+    try{
+      if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
+      else{var r=(el.requestFullscreen||el.webkitRequestFullscreen);if(r){var pr=r.call(el);if(pr&&pr.catch)pr.catch(function(){say("Браузер не разрешил полноэкранный режим. Нажми F11.");});}else say("Нажми F11 для полноэкранного режима.");}
+    }catch(e){say("Нажми F11 для полноэкранного режима.");}
+  });
+  $("btnReset").addEventListener("click",function(){$("modal").classList.remove("hidden");});
+  $("mNo").addEventListener("click",function(){$("modal").classList.add("hidden");});
+  $("mYes").addEventListener("click",function(){
+    var big=S.big;S=fresh();S.big=big;try{window.localStorage.removeItem(KEY);}catch(e){}save();
+    $("modal").classList.add("hidden");
+    resetBench();renderJournal();$("cmpOut").innerHTML="";
+    shellSeen={};shellDay=1;renderShellTable(null);renderCups();
+    resetChalk();passSel=[];passOpen={};$("passCmpOut").innerHTML="";renderPass();
+    newGame();resetSmile();updateProgress();go("home");say("Всё сброшено. Начнём исследование заново!");
+  });
+}
+
+/* ================= INIT ================= */
+function init(){
+  load();buildNav();buildHome();buildFlow();buildLab1();buildLab2();buildLab3();buildMath();buildModels();buildPass();buildSmile();buildPrintMemo();buildDefense();buildTools();newGame();updateProgress();
+  var h=(location.hash||"").replace("#","");
+  var dm=/^defense(?:-(\d+))?$/.exec(h);
+  if(dm){go("home");openDefense(dm[1]?(+dm[1]-1):0);}else go(pageMap[h]?h:"home");
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();
+</script>
+</body>
+</html>
