@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -418,184 +419,6 @@ html.big .game{grid-template-columns:1fr}
 html.big .side-zubik{display:none}
 html.big .bench{height:24rem}
 
-/* ---------- v2 additions to labs ---------- */
-.day-rec{font-size:.82rem;background:#e6f7ef;border-radius:10px;padding:.35rem .5rem;width:100%;min-height:2.6rem}
-.day-rec b{color:#17805a}
-.sh-tbl td,.sh-tbl th{font-size:.84rem}
-.sh-tbl .hl{background:#fff3e6}
-.model-box{background:#fff;border-radius:16px;padding:1rem;box-shadow:var(--shadow2)}
-.model-box h4{margin:0 0 .3rem;font-size:.98rem}
-.model-box p{font-size:.84rem;margin:0 0 .6rem}
-.freq-l{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;font-weight:600}
-.freq-l input{accent-color:var(--orange);width:100%}
-.freq-bar{display:flex;gap:3px;margin:.6rem 0;flex-wrap:wrap}
-.freq-bar i{height:1.4rem;width:2.2rem;border-radius:6px;background:linear-gradient(180deg,#ffb36e,#f58a3a);animation:pageIn .3s}
-.mid-row{display:grid;grid-template-columns:7.2rem 1fr 2.6rem;gap:.4rem;align-items:center;font-size:.82rem;margin:.25rem 0}
-.mid-row .tr{height:.9rem;background:var(--light);border-radius:99px;overflow:hidden}
-.mid-row .tr i{display:block;height:100%;border-radius:99px}
-
-/* ---------- HOME v2 ---------- */
-.hero-actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;position:relative;z-index:1}
-.hbtn{display:flex;align-items:center;gap:.7rem;text-align:left;border:0;border-radius:18px;padding:.85rem .9rem;color:#fff;box-shadow:0 8px 20px rgba(11,37,69,.15);transition:transform .15s,filter .2s;min-height:4.6rem}
-.hbtn:hover{transform:translateY(-3px);filter:brightness(1.05)}
-.hbtn .hi{width:2.4rem;height:2.4rem;border-radius:12px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
-.hbtn b{display:block;font-size:.98rem;line-height:1.2}
-.hbtn small{display:block;font-size:.75rem;opacity:.85;margin-top:.15rem}
-.hbtn.lab{background:linear-gradient(135deg,var(--teal),#1b8fb8)}
-.hbtn.smile{background:linear-gradient(135deg,var(--orange),#ffad5c)}
-.hbtn.def{background:linear-gradient(135deg,var(--navy),#2a5d9c)}
-.author-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed var(--line)}
-.author-grid b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--teal2)}
-.author-grid span{font-weight:600;font-size:.92rem}
-.def-side{background:linear-gradient(135deg,var(--orange),#ffad5c);color:#fff;border:0;border-radius:12px;padding:.65rem .8rem;font-weight:800;letter-spacing:.02em;text-align:left;box-shadow:0 6px 16px rgba(255,140,66,.35)}
-.def-side:hover{filter:brightness(1.06)}
-.smile-head.cta{border:0;cursor:pointer;width:100%;margin:0;transition:transform .15s}
-.smile-head.cta:hover{transform:translateY(-3px)}
-.smile-head.navy{background:linear-gradient(135deg,var(--navy),#2a5d9c)}
-.cta-ic{width:4rem;height:4rem;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:1.6rem;flex-shrink:0}
-
-/* ---------- SMILE PAGE ---------- */
-.smile-hero{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.6rem 1.8rem;border-radius:26px;background:linear-gradient(135deg,#fff3e8,#fff 55%,#e3f6f6);border:1px solid #fff;box-shadow:var(--shadow)}
-.smile-hero h2{font-size:2.3rem;margin:.4rem 0;color:var(--navy)}
-.smile-hero p{margin:0;color:#36506d;max-width:36rem}
-.badge-w{background:var(--orange);color:#fff;border-radius:10px;padding:.3rem .65rem;font-size:.75rem;font-weight:800;letter-spacing:.06em}
-.smile-hero-z{width:9rem;flex-shrink:0}
-.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1rem;margin-top:1rem;align-items:start}
-.rule{background:#fff;border-radius:22px;box-shadow:var(--shadow2);padding:1rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.6rem;border:2px solid transparent;transition:border .2s,transform .2s}
-.rule:hover{transform:translateY(-2px)}
-.rule.open{border-color:var(--sky)}
-.rule-art{height:8.5rem;border-radius:16px;background:linear-gradient(180deg,var(--light),#f6fbfe);display:grid;place-items:center;position:relative}
-.rule-art svg{height:7.4rem;width:auto}
-.rule-n{position:absolute;left:.6rem;top:.6rem;width:2rem;height:2rem;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem}
-.rule h3{font-size:1.08rem;line-height:1.3}
-.rule .why{align-self:flex-start}
-.rule-ex{font-size:.92rem;color:#2a4562;background:#f2fafb;border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:.7rem .85rem;display:none}
-.rule.open .rule-ex{display:block;animation:ruleIn .45s ease}
-.rule.open .rule-art svg{animation:ruleBounce .6s ease}
-@keyframes ruleIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@keyframes ruleBounce{0%,100%{transform:scale(1)}40%{transform:scale(1.08)}}
-.sq-q{font-size:1.1rem;font-weight:700;margin-bottom:.2rem}
-.sq-steps{display:flex;gap:.3rem;margin-bottom:.8rem}
-.sq-steps i{flex:1;height:.4rem;border-radius:99px;background:var(--line)}
-.sq-steps i.ok{background:var(--ok)}.sq-steps i.no{background:var(--bad)}.sq-steps i.cur{background:var(--sky)}
-
-#printMemo{display:none}
-.rule.advice{background:linear-gradient(180deg,#fff7ef,#fff)}
-.d-toast{position:absolute;left:50%;bottom:5rem;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:.7rem 1.1rem;border-radius:12px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10}
-.d-toast.on{opacity:1;transform:translateX(-50%)}
-
-/* ---------- DEFENSE MODE ---------- */
-#defense{position:fixed;inset:0;z-index:300;background:#f6fafd;display:flex;flex-direction:column;color:var(--navy)}
-#defense.hidden{display:none!important}
-.d-top{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.6rem 1rem;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.d-brand{display:flex;align-items:center;gap:.6rem}
-.d-brand svg{width:2.4rem;height:2.6rem}
-.d-brand b{display:block;font-size:1rem}
-.d-brand small{color:var(--muted);font-size:.78rem}
-.d-ctrl{display:flex;gap:.4rem;flex-wrap:wrap}
-.dbtn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;padding:.45rem .75rem;font-weight:700;font-size:.85rem}
-.dbtn:hover{background:var(--light)}
-.dbtn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-.dbtn.exit{background:var(--navy);color:#fff;border-color:var(--navy)}
-.dbtn.sm{padding:.3rem .6rem;font-size:.78rem}
-.d-menu{position:absolute;top:3.6rem;right:1rem;z-index:5;background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:.6rem;width:22rem;max-height:75vh;overflow:auto;border:1px solid var(--line)}
-.d-menu button{display:flex;gap:.6rem;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:.5rem .6rem;border-radius:10px;font-size:.92rem;color:var(--navy)}
-.d-menu button:hover{background:var(--light)}
-.d-menu button.cur{background:var(--navy);color:#fff}
-.d-menu button i{font-style:normal;width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;background:var(--light);font-weight:800;font-size:.78rem;flex-shrink:0;color:var(--navy)}
-.d-menu button.key i{background:#ffe3cc;color:var(--orange2)}
-.d-menu .sec{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.5rem .6rem .2rem}
-.d-body{flex:1;position:relative;min-height:0;display:flex}
-.d-stage-wrap{flex:1;position:relative;overflow:hidden}
-.d-stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;background:#fff;border-radius:22px;box-shadow:0 20px 50px rgba(11,37,69,.12);overflow:hidden;font-size:22px;line-height:1.4}
-.d-notes{width:24rem;flex-shrink:0;background:#fffdf6;border-left:3px solid var(--orange);padding:1rem 1.1rem;overflow:auto;font-size:1.02rem;line-height:1.55;box-shadow:-10px 0 24px rgba(11,37,69,.08)}
-.d-notes.hidden{display:none}
-#dNotesText p{margin:.7rem 0}
-.d-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 1rem;background:#fff;border-top:1px solid var(--line)}
-.d-ind{display:flex;align-items:center;gap:.8rem;font-weight:800;min-width:0}
-.d-dots{display:flex;gap:.3rem;flex-wrap:wrap}
-.d-dots button{width:1.6rem;height:.55rem;border:0;border-radius:99px;background:var(--line);padding:0}
-.d-dots button.key{background:#ffd6b5}
-.d-dots button.cur{background:var(--teal);width:2.4rem}
-.d-dots button.key.cur{background:var(--orange)}
-/* slide internals (px inside 1280x720 stage) */
-.sl{position:absolute;inset:0;padding:44px 60px 40px;display:flex;flex-direction:column}
-.sl.anim{animation:slIn .4s ease}
-@keyframes slIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
-.sl-k{font-size:16px;font-weight:800;letter-spacing:.12em;color:var(--teal2);text-transform:uppercase;display:flex;align-items:center;gap:12px}
-.sl-k .key{background:#ffe8d6;color:var(--orange2);border-radius:8px;padding:3px 10px;font-size:13px;letter-spacing:.06em}
-.sl h2{font-size:44px;margin:8px 0 22px;color:var(--navy);line-height:1.12}
-.sl-grid{display:grid;gap:22px;flex:1;min-height:0}
-.sl-card{background:#f4f9fc;border-radius:20px;padding:22px 26px;border:1px solid #e3eef5}
-.sl-card h3{font-size:22px;color:var(--teal2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
-.sl-card p{margin:0}
-.sl-big{font-size:30px;font-weight:700;line-height:1.3}
-.sl ul{margin:0;padding-left:28px}
-.sl li{margin:6px 0}
-.sl-tbl{width:100%;border-collapse:collapse;font-size:20px}
-.sl-tbl th{text-align:left;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid #dbe7ef}
-.sl-tbl td{padding:9px 10px;border-bottom:1px solid #e6eef4}
-.sl-tag{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:800;padding:4px 12px;border-radius:99px}
-.sl-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
-.sl-tag.data{background:#dcf4ea;color:#17805a}.sl-tag.model{background:#fff0d9;color:#b2620d}.sl-tag.calc{background:#e1ecfd;color:#2457b8}.sl-tag.viz{background:#efe6fb;color:#6b3fb3}
-.sl-title{align-items:center;justify-content:center;text-align:center;background:radial-gradient(800px 400px at 85% 0%,#d4effa,transparent 60%),radial-gradient(700px 400px at 0% 100%,#d7f3f1,transparent 60%),#fff}
-.sl-title h1{font-size:64px;margin:6px 0 4px;background:linear-gradient(90deg,var(--navy),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
-.sl-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 40px;margin-top:30px;text-align:left;font-size:22px}
-.sl-meta b{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal2)}
-.sl-z svg{width:150px}
-.sl-chalk{display:flex;gap:40px;justify-content:center;align-items:flex-end}
-.sl-glass{width:170px;height:200px;border:5px solid rgba(11,37,69,.3);border-top:0;border-radius:0 0 30px 30px;position:relative;overflow:hidden;background:#fff}
-.sl-glass .liq{position:absolute;left:0;right:0;bottom:0;height:72%}
-.sl-glass .ck{position:absolute;left:50%;margin-left:-35px;width:70px;height:26px;background:linear-gradient(180deg,#fff,#e8e8e0);border-radius:6px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08);top:-40px;transition:top 1s cubic-bezier(.5,0,.7,1)}
-.sl-glass.go .ck{top:calc(100% - 34px)}
-.sl-glass .bub{bottom:30px}
-.freq-days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
-.freq-day{background:#fff;border-radius:12px;padding:6px 4px;text-align:center;font-size:14px;font-weight:700;border:1px solid #e3eef5;min-height:86px}
-.freq-day .drops{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:6px}
-.freq-day .drops i{width:12px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#f58a3a}
-.d-range{position:relative;height:30px;border-radius:8px;background:linear-gradient(90deg,#d7263d,#f0533a,#f58a3a,#f7b733,#f2d43b,#b5d334,#3fb950,#1fa59a,#2b7bd6,#4b4fc4,#6a2c91);opacity:.22}
-.sl-qchips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
-.sl-qchips button{border:2px solid #dbe7ef;background:#fff;border-radius:14px;padding:10px 16px;font-size:18px;font-weight:700;color:var(--navy)}
-.sl-qchips button:hover{border-color:var(--teal)}
-.sl-prod{display:flex;flex-direction:column;gap:10px}
-.sl-prod .ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;color:#fff}
-
-@media (max-width:900px){
-  .hero-actions{grid-template-columns:1fr}
-  .author-grid{grid-template-columns:1fr 1fr}
-  .def-side{flex-shrink:0}
-  .smile-hero{flex-direction:column-reverse;align-items:flex-start;padding:1.2rem}
-  .smile-hero h2{font-size:1.8rem}
-  .smile-hero-z{width:6rem}
-  .d-notes{position:absolute;right:0;top:0;bottom:0;width:min(24rem,90vw);z-index:4}
-  .d-brand small{display:none}
-}
-@media (max-width:560px){.author-grid{grid-template-columns:1fr}.d-dots{display:none}}
-html.big .hero-actions{grid-template-columns:1fr}
-html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
-
-/* ---------- PRINT ---------- */
-@media print{
-  @page{size:A4;margin:12mm}
-  body{background:#fff!important}
-  .side,.helper,.modal,#defense,.actions,.tools{display:none!important}
-  .main{padding:0!important}
-  html.print-memo body>*:not(#printMemo){display:none!important}
-  html.print-memo #printMemo{display:block!important;color:#0b2545;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-  .pm-head{display:flex;align-items:center;gap:14px;border-bottom:3px solid #13a3a8;padding-bottom:8px;margin-bottom:10px}
-  .pm-head svg{width:62px;height:68px}
-  .pm-head h1{font-size:26pt;margin:0;color:#0b2545}
-  .pm-head p{margin:2px 0 0;font-size:10.5pt;color:#36506d}
-  .pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .pm-rule{border:1.5px solid #cfe3ee;border-radius:12px;padding:8px 10px;display:flex;gap:10px;break-inside:avoid;page-break-inside:avoid}
-  .pm-rule svg{width:58px;height:58px;flex-shrink:0}
-  .pm-rule b{font-size:12pt;display:block;margin-bottom:2px}
-  .pm-rule span{font-size:9.5pt;color:#2a4562;line-height:1.35}
-  .pm-rule .n{display:inline-block;background:#0b2545;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;font-size:9pt;line-height:18px;margin-right:4px}
-  .pm-foot{margin-top:10px;font-size:9pt;color:#36506d;border-top:1px dashed #b9cfdc;padding-top:6px}
-  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
-
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
   .bub{animation:none!important;opacity:.85}
@@ -608,8 +431,7 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
   <aside class="side">
     <div class="brand"><span id="brandZ"></span><div><b>ЗУБНОЙ ДЕТЕКТИВ</b><small>лаборатория напитков</small></div></div>
     <nav class="nav" id="nav"></nav>
-    <button class="def-side" data-defense="1" type="button">▶ Защита проекта</button>
-    <div class="progress-box"><p id="progText">Прогресс исследования: 0 из 9 этапов</p><div class="pbar"><i id="progBar"></i></div></div>
+    <div class="progress-box"><p id="progText">Прогресс исследования: 0 из 8 этапов</p><div class="pbar"><i id="progBar"></i></div></div>
     <div class="tools">
       <button id="btnBig" type="button">⤢ Крупный экран</button>
       <button id="btnFull" type="button">⛶ Полноэкранный режим</button>
@@ -624,18 +446,17 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
     <div class="hero">
       <div>
         <h1>ЗУБНОЙ ДЕТЕКТИВ</h1>
-        <div class="sub">Интерактивная лаборатория исследования кислотности напитков</div>
+        <div class="sub">Интерактивная исследовательская лаборатория напитков</div>
         <p class="desc">Почему одни напитки более кислые, чем другие? Что покажет индикаторная полоска? Как кислая среда взаимодействует с минеральными веществами? Проведи виртуальные эксперименты и раскрой тайну шести напитков!</p>
+        <div class="row" style="margin-top:1.3rem">
+          <button class="btn orange" data-go="research" type="button">НАЧАТЬ ИССЛЕДОВАНИЕ</button>
+          <button class="btn ghost" data-go="ph" type="button">Открыть лабораторию</button>
+        </div>
       </div>
       <div class="hero-art" id="heroArt">
         <div class="hero-strip"></div>
         <div class="hero-glasses" id="heroGlasses"></div>
         <div class="hero-scale"><span style="left:0">0</span><span style="left:50%">7</span><span style="left:100%">14</span></div>
-      </div>
-      <div class="hero-actions">
-        <button class="hbtn lab" data-go="ph" type="button"><span class="hi">⚗</span><span><b>Начать исследование</b><small>Открыть лабораторию pH</small></span></button>
-        <button class="hbtn smile" data-go="smile" type="button"><span class="hi">☺</span><span><b>Береги свою улыбку!</b><small>Интерактивная памятка</small></span></button>
-        <button class="hbtn def" data-defense="1" type="button"><span class="hi">▶</span><span><b>Защита проекта</b><small>Режим выступления для жюри</small></span></button>
       </div>
     </div>
     <div class="card stats-card" style="margin-top:1.2rem">
@@ -644,14 +465,8 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
         <div class="stat"><span class="n">3</span><span class="l">эксперимента<br><span class="muted" style="font-weight:400;font-size:.85rem">pH, скорлупа, мел</span></span></div>
         <div class="stat"><span class="n">20</span><span class="l">участников<br><span class="muted" style="font-weight:400;font-size:.85rem">анкетирования</span></span></div>
       </div>
-      <div class="author-grid">
-        <div><b>Исследовательская тема</b><span>«Кислотность напитков и их влияние на зубы»</span></div>
-        <div><b>Автор</b><span>Сагидолда Ибрахим, 4 «Б» класс</span></div>
-        <div><b>Руководитель</b><span>Токашова С. Заманбековна</span></div>
-        <div><b>Школа</b><span>КГУ «Средняя школа имени Шокана Уалиханова», село Тугыл, 2026 год</span></div>
-      </div>
       <div class="author">
-        <span class="muted" style="font-size:.88rem">Сайт создан по результатам исследования и является его практическим продуктом.</span>
+        <div><b>Тема:</b> <span class="muted"> «Кислотность напитков и их влияние на зубы»</span></div>
         <button class="btn" data-go="ph" type="button">Открыть лабораторию →</button>
       </div>
     </div>
@@ -659,22 +474,21 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
 
   <!-- ================= 2. RESEARCH ================= -->
   <section class="page" id="p-research">
-    <div class="ph-title"><span class="badge">РАЗДЕЛ 2</span><div><h2>Моё исследование</h2><p>Исследовательская карта работы Ибрахима</p></div></div>
+    <div class="ph-title"><span class="badge">РАЗДЕЛ 2</span><div><h2>Моё исследование</h2><p>Исследовательская карта проекта</p></div></div>
     <div class="grid g2">
       <div class="card">
-        <div class="task-k">Проблемный вопрос</div>
-        <p class="rq">«Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами?»</p>
+        <div class="task-k">Исследовательский вопрос</div>
+        <p class="rq">«Все ли напитки имеют одинаковую кислотность и как кислая среда взаимодействует с минеральными материалами?»</p>
         <div class="info-list">
-          <div class="info-item"><b>Цель</b><span>Сравнить кислотность шести распространённых напитков и на основе собственных наблюдений объяснить, почему следует разумно употреблять кислые напитки.</span></div>
-          <div class="info-item"><b>Гипотеза</b><span>Среди выбранных напитков будут образцы с разным pH, а в кислых напитках изменения яичной скорлупы будут заметнее, чем в воде. Влияние напитков непосредственно на человеческую эмаль в опытах не проверялось.</span></div>
-          <div class="info-item"><b>Задачи</b><span>1) изучить понятие pH; 2) выяснить особенности зубной эмали; 3) проанализировать ответы одноклассников; 4) сравнить кислотность напитков; 5) обобщить наблюдения за скорлупой и мелом; 6) создать понятные рекомендации и наглядный продукт.</span></div>
+          <div class="info-item"><b>Цель</b><span>Сравнить кислотность различных напитков и исследовать взаимодействие кислой среды с яичной скорлупой и мелом.</span></div>
+          <div class="info-item"><b>Гипотеза</b><span>Предполагаю, что исследуемые напитки отличаются по кислотности, а более кислая среда может вызывать заметные изменения некоторых минеральных материалов.</span></div>
         </div>
       </div>
       <div class="card">
         <div class="info-list">
-          <div class="info-item"><b>Объект</b><span>Распространённые напитки.</span></div>
-          <div class="info-item"><b>Предмет</b><span>Их кислотность и наблюдаемое взаимодействие кислых жидкостей с минеральными материалами.</span></div>
-          <div class="info-item"><b>Методы</b><div class="chips"><span class="chip">Изучение литературы</span><span class="chip">Анкетирование</span><span class="chip">Сравнение</span><span class="chip">Наблюдение</span><span class="chip">Индикаторные полоски</span><span class="chip">Расчёт процентов</span><span class="chip">Таблицы и диаграммы</span><span class="chip">Моделирование</span></div></div>
+          <div class="info-item"><b>Объект</b><span>Напитки, употребляемые школьниками.</span></div>
+          <div class="info-item"><b>Предмет</b><span>Кислотность напитков и взаимодействие кислой среды с минеральными материалами.</span></div>
+          <div class="info-item"><b>Методы</b><div class="chips"><span class="chip">Анкетирование</span><span class="chip">Наблюдение</span><span class="chip">Эксперимент</span><span class="chip">Сравнение</span><span class="chip">Индикаторные полоски</span><span class="chip">Математический анализ</span><span class="chip">Обобщение</span></div></div>
         </div>
       </div>
     </div>
@@ -739,7 +553,7 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
   <!-- ================= 4. LAB SHELL ================= -->
   <section class="page" id="p-shell">
     <div class="ph-title"><span class="badge">ЛАБОРАТОРИЯ №2</span><div><h2>Пять дней со скорлупой</h2><p>Кусочек яичной скорлупы в четырёх напитках · наблюдение 5 дней</p></div></div>
-    <div class="legend-tags"><span class="tag data">Записи по дням — данные исследования</span><span class="tag viz">Рисунки скорлупы — условная визуализация</span></div>
+    <div class="legend-tags"><span class="tag data">Итоговые наблюдения — данные исследования</span><span class="tag viz">Изменения по дням — условная визуализация</span></div>
     <div class="card">
       <div class="cups" id="cups"></div>
       <div class="timeline" id="timeline"></div>
@@ -749,12 +563,11 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
       <div class="card">
         <h3>Таблица наблюдений</h3>
         <div class="row" style="margin-top:.6rem"><select id="shSel"></select><button class="btn sm" id="bShSel" type="button">Показать итог</button></div>
-        <div style="overflow-x:auto"><table class="tbl sh-tbl" style="margin-top:.8rem"><thead id="shHead"></thead><tbody id="shBody"></tbody></table></div>
-        <div id="shSum"></div>
+        <table class="tbl" style="margin-top:.8rem"><thead><tr><th>Напиток</th><th>Итог наблюдения за 5 дней</th></tr></thead><tbody id="shBody"></tbody></table>
       </div>
       <div class="card">
         <div class="note" style="margin-top:0"><b>Важно знать</b><br>Яичная скорлупа состоит преимущественно из карбоната кальция. Зубная эмаль имеет другой минеральный состав. Поэтому опыт со скорлупой помогает наблюдать взаимодействие кислой среды с минеральным материалом, но не показывает точную скорость повреждения настоящих зубов.</div>
-        <p class="muted" style="font-size:.88rem">В исследовании скорлупу не взвешивали: слова «хрупкая», «тоньше», «рыхлая» — это описания, а не измерения. Поэтому нельзя рассчитать, сколько вещества потерял каждый образец. В газированном напитке пузырьки могут быть связаны не только с реакцией, но и с выделением растворённого газа.</p>
+        <p class="muted" style="font-size:.88rem">В исследовании не измерялись масса, толщина или скорость разрушения скорлупы. Здесь показаны только наблюдаемые изменения.</p>
       </div>
     </div>
   </section>
@@ -784,7 +597,7 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
       </div>
       <div class="card">
         <div id="chalkExplain" class="hidden fade-in" style="margin-bottom:1rem">
-          <div class="note" style="margin-top:0;border-color:var(--teal);background:#e6f7f7"><b style="color:var(--teal2)">Объяснение</b><br>Мел содержит карбонат кальция. При взаимодействии с кислотой может выделяться углекислый газ. Поэтому мы наблюдаем пузырьки.<br><span class="muted" style="font-size:.88rem">Ограничения: опыт демонстрационный — количество газа не измерялось, а состав школьного мела бывает разным. Опыт не показывает, что эмаль зуба растворяется так же.</span></div>
+          <div class="note" style="margin-top:0;border-color:var(--teal);background:#e6f7f7"><b style="color:var(--teal2)">Объяснение</b><br>Мел содержит карбонат кальция. При взаимодействии с кислотой может выделяться углекислый газ. Поэтому мы наблюдаем пузырьки.</div>
         </div>
         <h3>Почему в лимонном соке появились пузырьки?</h3>
         <div class="quiz-opts" id="chalkQuiz"></div>
@@ -797,8 +610,8 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
   <section class="page" id="p-math">
     <div class="ph-title"><span class="badge">АНАЛИТИЧЕСКИЙ ЦЕНТР</span><div><h2>Математика исследования</h2><p>Анкетирование 20 школьников: диаграммы, проценты, сравнения</p></div></div>
     <div class="math-head">
-      <div><b style="font-size:1.1rem">Результаты анкетирования 20 школьников</b><br><span style="opacity:.8;font-size:.88rem">Фактические ответы из исследовательской работы: 20 учащихся, 6 вопросов с ответами «да» и «нет». Проценты — расчёт по этим ответам.</span></div>
-      <span class="tag data" style="font-size:.8rem">Данные исследования</span>
+      <div><b style="font-size:1.1rem">Модельные данные анкетирования на основе исследования 20 школьников</b><br><span style="opacity:.8;font-size:.88rem">Числа ответов взяты из паспорта проекта. Если часть ответов восстановлена для модели, весь набор считается модельным и не выдаётся за фактически полученные ответы.</span></div>
+      <span class="tag model" style="font-size:.8rem">Модельные данные</span>
     </div>
     <div class="kpis" id="kpis"></div>
     <div class="grid g2">
@@ -824,30 +637,6 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
       <div class="row" style="justify-content:space-between"><h3>Сравнительный анализ</h3><span class="tag cal">Расчёты на основе данных анкеты</span></div>
       <p class="muted" style="font-size:.88rem;margin:.3rem 0 .8rem">Нажми на карточку, чтобы увидеть объяснение вычисления.</p>
       <div class="ops" id="ops"></div>
-    </div>
-    <div class="card" style="margin-top:1rem">
-      <div class="row" style="justify-content:space-between"><h3>Расчётные модели из исследования</h3><span class="tag model">Расчётная модель — не измерение</span></div>
-      <p class="muted" style="font-size:.88rem;margin:.3rem 0 .8rem">Модели помогают объяснить результаты. Они не заменяют наблюдения и не прогнозируют повреждение зубной эмали.</p>
-      <div class="grid g3 models">
-        <div class="model-box">
-          <h4>Модель 1. Середины диапазонов pH</h4>
-          <p class="muted">Середина диапазона — расчётная точка для сравнения с водой (раздел 2.8).</p>
-          <div id="midChart"></div>
-        </div>
-        <div class="model-box">
-          <h4>Модель 2. Частота употребления</h4>
-          <p class="muted">T = n × t, где t — условные 20 минут после одного приёма (раздел 2.11).</p>
-          <label class="freq-l">Сколько отдельных приёмов: <b id="freqN">4</b><input type="range" id="freqR" min="1" max="8" value="4"></label>
-          <div class="freq-bar" id="freqBar"></div>
-          <div class="calc-out" id="freqOut" style="font-size:1rem;min-height:auto"></div>
-        </div>
-        <div class="model-box">
-          <h4>Модель 3. Логарифмическая шкала pH</h4>
-          <p class="muted">R = 10<sup>(5 − pH)</sup>: во сколько раз выше активность ионов водорода, чем при pH 5 (раздел 2.12).</p>
-          <table class="tbl"><thead><tr><th>pH</th><th>R</th></tr></thead><tbody><tr><td>5</td><td>1</td></tr><tr><td>4</td><td>10</td></tr><tr><td>3</td><td>100</td></tr><tr><td>2</td><td>1000</td></tr></tbody></table>
-          <p class="muted" style="font-size:.82rem;margin:.5rem 0 0">Это не значит, что напиток в 10 или 100 раз опаснее для зубов.</p>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -891,31 +680,9 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
         <div class="note"><b>Научная точность</b><br>Зубная эмаль состоит преимущественно из минералов на основе фосфата кальция, а скорлупа и мел — преимущественно из карбоната кальция. На воздействие напитков на эмаль влияют не только pH, но и другие свойства напитка, частота употребления и защитные свойства слюны.</div>
       </div>
     </div>
-    <div class="grid g2" style="margin-top:1rem">
-      <button type="button" class="smile-head cta" data-go="smile"><span id="smileZ" style="width:4rem;display:block"></span><div style="text-align:left"><h3>БЕРЕГИ СВОЮ УЛЫБКУ!</h3><span style="opacity:.9">7 правил, мини-тест и памятка для печати →</span></div></button>
-      <button type="button" class="smile-head cta navy" data-defense="1"><span class="cta-ic">▶</span><div style="text-align:left"><h3>ЗАЩИТА ПРОЕКТА</h3><span style="opacity:.9">12 экранов для выступления перед жюри →</span></div></button>
-    </div>
-  </section>
-
-  <!-- ================= 10. SMILE ================= -->
-  <section class="page" id="p-smile">
-    <div class="smile-hero">
-      <div>
-        <span class="badge-w">ПАМЯТКА</span>
-        <h2>Береги свою улыбку!</h2>
-        <p>Семь простых правил, которые помогают заботиться о зубах. Открой каждую карточку и узнай, почему это важно.</p>
-        <div class="row" style="margin-top:1rem">
-          <button class="btn orange" id="bSmileOpenAll" type="button">Открыть все объяснения</button>
-          <button class="btn ghost" id="bPrintMemo" type="button">🖨 Распечатать памятку</button>
-        </div>
-      </div>
-      <span id="smileHeroZ" class="smile-hero-z"></span>
-    </div>
-    <div class="rules" id="rules"></div>
-    <div class="note" style="margin-top:1rem"><b>Важно</b><br>Эти советы основаны на общих правилах ухода за зубами и на результатах исследования кислотности напитков. Они не заменяют консультацию стоматолога. Опыты со скорлупой и мелом показывают действие кислоты на карбонат кальция, а не измеряют повреждение зубной эмали.</div>
     <div class="card" style="margin-top:1rem">
-      <div class="row" style="justify-content:space-between"><h3>Мини-тест «Умеешь ли ты беречь улыбку?»</h3><span class="score" id="sqScore">0 / 5</span></div>
-      <div id="sq" style="margin-top:.8rem"></div>
+      <div class="smile-head"><span id="smileZ" style="width:4rem;display:block"></span><div><h3>БЕРЕГИ СВОЮ УЛЫБКУ!</h3><span style="opacity:.9">Нажми на карточку, чтобы перевернуть её</span></div></div>
+      <div class="memo" id="memo"></div>
     </div>
   </section>
 
@@ -923,33 +690,6 @@ html.big .rules{grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))}
 </div>
 
 <div class="helper"><div class="say" id="say"></div><span id="helperZ"></span></div>
-
-<!-- ================= PRINT MEMO (A4) ================= -->
-<div id="printMemo" aria-hidden="true"></div>
-
-<!-- ================= DEFENSE MODE ================= -->
-<div id="defense" class="hidden" role="dialog" aria-label="Режим защиты проекта">
-  <div class="d-top">
-    <div class="d-brand"><span id="dBrandZ"></span><div><b>Защита проекта</b><small>«Кислотность напитков и их влияние на зубы»</small></div></div>
-    <div class="d-ctrl">
-      <button type="button" class="dbtn" id="dMenuBtn" aria-expanded="false">☰ Экраны</button>
-      <button type="button" class="dbtn" id="dNotesBtn" aria-pressed="false">📝 Текст выступления</button>
-      <button type="button" class="dbtn" id="dFullBtn">⛶ Полный экран</button>
-      <button type="button" class="dbtn" id="dRestart">↺ Начать защиту заново</button>
-      <button type="button" class="dbtn exit" id="dExit">✕ Вернуться на сайт</button>
-    </div>
-  </div>
-  <div class="d-menu hidden" id="dMenu"></div>
-  <div class="d-body" id="dBody">
-    <div class="d-stage-wrap"><div class="d-stage" id="dStage"></div></div>
-    <aside class="d-notes hidden" id="dNotes"><div class="row" style="justify-content:space-between"><b>Текст выступления</b><button type="button" class="dbtn sm" id="dNotesClose">Скрыть</button></div><div id="dNotesText"></div><p class="muted" style="font-size:.8rem;margin-top:1rem">Подсказка видна только на этом экране. Перед показом жюри нажми «Скрыть».</p></aside>
-  </div>
-  <div class="d-bottom">
-    <button type="button" class="btn ghost" id="dPrev">← Назад</button>
-    <div class="d-ind"><div class="d-dots" id="dDots"></div><span id="dCount">1 / 12</span></div>
-    <button type="button" class="btn" id="dNext">Далее →</button>
-  </div>
-</div>
 <div class="modal hidden" id="modal"><div class="card"><h3 id="mTitle">Начать заново?</h3><p id="mText">Журнал, прогресс и результаты игры будут удалены.</p><div class="row" style="justify-content:flex-end"><button class="btn ghost" id="mNo" type="button">Отмена</button><button class="btn orange" id="mYes" type="button">Да, начать заново</button></div></div></div>
 
 <script>
@@ -962,9 +702,9 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 
 /* ================= DATA ================= */
 var DRINKS=[
- {id:"water",name:"Вода",lo:7,hi:7,ph:"около 7",color:"#bfe6fb",env:"Близкая к нейтральной",
-  explain:"Вода показала pH около 7 — среда, близкая к нейтральной: не кислая и не щелочная.",
-  shell:"Почти без изменений все пять дней; на 5-й день существенных изменений нет.",
+ {id:"water",name:"Вода",lo:7,hi:7,ph:"около 7",color:"#bfe6fb",env:"Нейтральная",
+  explain:"Вода показала pH около 7 — это нейтральная среда: не кислая и не щелочная.",
+  shell:"Существенных изменений не отмечено.",
   comment:"Вода — нейтральный образец. С ней удобно сравнивать остальные напитки."},
  {id:"tea",name:"Чай",lo:5,hi:6,ph:"5–6",color:"#c98a3e",env:"Слабокислая",
   explain:"Чай показал pH 5–6 — слабокислая среда. Он кислее воды, но менее кислый, чем соки и лимонад в этом исследовании.",
@@ -972,30 +712,23 @@ var DRINKS=[
   comment:"Среди исследованных напитков чай оказался ближе всего к воде по кислотности."},
  {id:"apple",name:"Яблочный сок",lo:3,hi:4,ph:"3–4",color:"#f3cf55",env:"Кислая",
   explain:"Яблочный сок показал pH 3–4 — кислая среда. Во фруктовых соках есть природные кислоты.",
-  shell:"Небольшие пузырьки, поверхность стала шероховатее, скорлупа — более хрупкой и тоньше; на 5-й день поверхность заметно изменилась.",
+  shell:"Наблюдались изменения поверхности, шероховатость и повышение хрупкости.",
   comment:"Даже натуральный фруктовый сок может быть кислым."},
  {id:"orange",name:"Апельсиновый сок",lo:3,hi:4,ph:"3–4",color:"#ffa53a",env:"Кислая",
   explain:"Апельсиновый сок показал pH 3–4 — кислая среда, как у яблочного сока.",
   shell:null,
   comment:"По индикатору его диапазон совпал с яблочным соком."},
- {id:"lemonade",name:"Лимонад",lo:2,hi:3,ph:"2–3",color:"#e6f29a",env:"Кислая",
-  explain:"Лимонад показал pH 2–3 — кислая среда. Вместе с газированным напитком это самые низкие значения в таблице.",
-  shell:"Пузырьки, изменения поверхности становились всё заметнее; на 5-й день скорлупа стала хрупкой.",
+ {id:"lemonade",name:"Лимонад",lo:2,hi:3,ph:"2–3",color:"#e6f29a",env:"Сильнокислая",
+  explain:"Лимонад показал pH 2–3 — один из самых кислых диапазонов в исследовании.",
+  shell:"Отмечались пузырьки и изменения поверхности скорлупы.",
   comment:"Диапазон лимонада совпал с газированным напитком."},
- {id:"soda",name:"Газированный напиток",lo:2,hi:3,ph:"2–3",color:"#7a3a1a",env:"Кислая",
-  explain:"Газированный напиток показал pH 2–3 — кислая среда, одно из самых низких значений в таблице.",
-  shell:"Пузырьки, изменилась поверхность, появилась рыхлость; на 5-й день скорлупа рыхлая.",
+ {id:"soda",name:"Газированный напиток",lo:2,hi:3,ph:"2–3",color:"#7a3a1a",env:"Сильнокислая",
+  explain:"Газированный напиток показал pH 2–3 — сильнокислая среда.",
+  shell:"Отмечались пузырьки, изменения поверхности и рыхлость.",
   comment:"Вместе с лимонадом — самый кислый диапазон в исследовании."}
 ];
 function D(id){for(var i=0;i<DRINKS.length;i++){if(DRINKS[i].id===id)return DRINKS[i];}return null;}
 var SHELL_IDS=["water","apple","lemonade","soda"];
-/* Таблица наблюдений по дням — из исследовательской работы (раздел 2.4) */
-var SHELL_DAYS={
- water:["Почти без изменений","Почти без изменений","Незначительные изменения","Почти без изменений","Без существенных изменений"],
- apple:["Небольшие пузырьки","Поверхность шероховатее","Более хрупкая","Скорлупа стала тоньше","Поверхность заметно изменилась"],
- lemonade:["Пузырьки","Изменения заметнее","Поверхность заметно изменилась","Изменения хорошо заметны","Скорлупа стала хрупкой"],
- soda:["Пузырьки","Поверхность изменилась","Появилась рыхлость","Более рыхлая","Скорлупа рыхлая"]
-};
 var SURVEY=[
  ["Пьёшь ли ты газированные напитки?",15,5],
  ["Часто ли ты пьёшь соки или лимонад?",16,4],
@@ -1004,8 +737,8 @@ var SURVEY=[
  ["Обращаешь ли ты внимание на состав напитка?",6,14],
  ["Готов ли ты чаще выбирать воду?",17,3]
 ];
-var STAGES=[["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Опыт со скорлупой"],["chalk","Опыт с мелом"],["math","Математика"],["pass","Паспорта напитков"],["game","Игра"],["disc","Мои открытия"],["smile","Памятка"]];
-var PAGES=[["home","Главная"],["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Эксперимент со скорлупой"],["chalk","Эксперимент с мелом"],["math","Математика исследования"],["pass","Паспорта напитков"],["game","Игра «Зубной детектив»"],["disc","Мои открытия"],["smile","Береги свою улыбку!"]];
+var STAGES=[["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Опыт со скорлупой"],["chalk","Опыт с мелом"],["math","Математика"],["pass","Паспорта напитков"],["game","Игра"],["disc","Мои открытия"]];
+var PAGES=[["home","Главная"],["research","Моё исследование"],["ph","Лаборатория pH"],["shell","Эксперимент со скорлупой"],["chalk","Эксперимент с мелом"],["math","Математика исследования"],["pass","Паспорта напитков"],["game","Игра «Зубной детектив»"],["disc","Мои открытия"]];
 var TIPS={
  home:"Привет! Я Зубик. Начнём расследование шести напитков?",
  research:"Каждое исследование начинается с вопроса. Нажми на этапы пути!",
@@ -1015,8 +748,7 @@ var TIPS={
  math:"Здесь работают проценты: количество ÷ всего × 100%.",
  pass:"У каждого напитка — свой паспорт. Сравни любые два!",
  game:"Пора проверить, какой из тебя детектив. Удачи!",
- disc:"Посмотри, что ты открыл. И береги свою улыбку!",
- smile:"Открой каждую карточку и пройди мини-тест. Памятку можно распечатать!"
+ disc:"Посмотри, что ты открыл. И береги свою улыбку!"
 };
 
 /* ================= STATE ================= */
@@ -1116,13 +848,13 @@ function buildNav(){
   $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)go(b.getAttribute("data-page"));});
   document.addEventListener("click",function(e){var g=e.target.closest("[data-go]");if(g)go(g.getAttribute("data-go"));});
 }
-var pageMap={home:"p-home",research:"p-research",ph:"p-ph",shell:"p-shell",chalk:"p-chalk",math:"p-math",pass:"p-pass",game:"p-game",disc:"p-disc",smile:"p-smile"};
+var pageMap={home:"p-home",research:"p-research",ph:"p-ph",shell:"p-shell",chalk:"p-chalk",math:"p-math",pass:"p-pass",game:"p-game",disc:"p-disc"};
 function go(p){
   if(!pageMap[p])p="home";current=p;
   for(var k in pageMap){$(pageMap[k]).classList.toggle("show",k===p);}
   var btns=$("nav").querySelectorAll("button");
   for(var i=0;i<btns.length;i++)btns[i].classList.toggle("active",btns[i].getAttribute("data-page")===p);
-  if(p==="research"||p==="math"||p==="disc"||p==="smile")mark(p);
+  if(p==="research"||p==="math"||p==="disc")mark(p);
   if(p==="math")drawCharts();
   if(p==="disc")renderSummary();
   if(p==="shell")renderCups();
@@ -1142,20 +874,18 @@ function buildHome(){
   $("brandZ").innerHTML=zubikSVG();$("brandZ").querySelector("svg").style.width="2.8rem";
   $("helperZ").innerHTML=zubikSVG();$("helperZ").addEventListener("click",function(){say(TIPS[current]);});
   $("smileZ").innerHTML=zubikSVG();
-  $("smileHeroZ").innerHTML=zubikSVG();
-  $("dBrandZ").innerHTML=zubikSVG();
   $("gZubik").innerHTML=zubikSVG();
 }
 
 /* ================= RESEARCH ================= */
 var FLOW=[
- ["ПРОБЛЕМА","?","Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами? Школьники каждый день пьют соки, лимонад и газировку, но редко задумываются об их кислотности."],
- ["ГИПОТЕЗА","!","Среди выбранных напитков будут образцы с разным pH, а в кислых напитках изменения яичной скорлупы будут заметнее, чем в воде. Влияние напитков непосредственно на эмаль в опытах не проверялось."],
+ ["ПРОБЛЕМА","?","Школьники часто пьют соки, лимонад и газированные напитки, но не всегда знают, что многие напитки кислые и как кислая среда может действовать на минеральные вещества."],
+ ["ГИПОТЕЗА","!","Предполагаю, что исследуемые напитки отличаются по кислотности, а более кислая среда может вызывать заметные изменения некоторых минеральных материалов."],
  ["АНКЕТИРОВАНИЕ","20","В анкетировании участвовали 20 школьников: что они пьют, знают ли о кислотах в напитках и готовы ли чаще выбирать воду."],
  ["ИЗМЕРЕНИЕ pH","pH","Кислотность шести напитков (вода, чай, яблочный сок, апельсиновый сок, лимонад, газированный напиток) оценивалась индикаторными полосками. Результаты — ориентировочные диапазоны."],
- ["ЭКСПЕРИМЕНТЫ","⚗","Опыт № 2: кусочки яичной скорлупы 5 дней находились в воде, яблочном соке, лимонаде и газированном напитке. Опыт № 3: мел помещали в воду и в лимонный сок."],
- ["АНАЛИЗ","%","Ответы анкеты переведены в проценты, построены таблицы и диаграммы. Добавлены три расчётные модели: середины диапазонов pH, частота употребления и логарифмическая шкала pH."],
- ["ВЫВОДЫ","✓","Напитки различаются по pH; в кислых напитках скорлупа менялась заметнее, чем в воде. Гипотеза подтверждается в пределах выбранных моделей. Прямое влияние на зубную эмаль экспериментально не доказано."]
+ ["ЭКСПЕРИМЕНТЫ","⚗","Опыт 1: кусочки яичной скорлупы 5 дней находились в воде, яблочном соке, лимонаде и газированном напитке. Опыт 2: мел помещали в воду и в лимонный сок."],
+ ["АНАЛИЗ","%","Результаты анкеты переведены в проценты, построены диаграммы, напитки сравнены по диапазонам pH и наблюдениям."],
+ ["ВЫВОДЫ","✓","Напитки отличаются по кислотности. Кислая среда взаимодействует с некоторыми минеральными материалами, но опыты не являются прямым измерением повреждения зубной эмали."]
 ];
 function buildFlow(){
   var h="";FLOW.forEach(function(f,i){h+='<div class="flow-step"><button type="button" data-i="'+i+'"><i>'+f[1]+'</i>'+f[0]+'</button>'+(i<FLOW.length-1?'<span class="flow-line"></span>':'')+'</div>';});
@@ -1231,7 +961,7 @@ function showResult(){
   $("phResult").innerHTML='<div class="result"><div class="swatch" style="background:'+phColor(mid)+'"></div><div><div class="row"><h3>'+d.name+'</h3><span class="pill">pH '+d.ph+'</span><span class="pill" style="background:'+phColor(mid)+';color:#fff">'+d.env+' среда</span><span class="tag data">Данные исследования</span></div><p style="margin:.4rem 0 0">'+d.explain+'</p><p class="muted" style="margin:.3rem 0 0;font-size:.85rem">Индикаторная полоска даёт ориентировочный диапазон, а не точное лабораторное значение.</p></div></div>';
   $("benchLbl").innerHTML="Результат: pH "+d.ph+"<small>Шаг 6. Добавь результат в журнал</small>";
   $("bLog").disabled=false;
-  say(d.id==="water"?"Близко к нейтральной! Полоска стала зелёной.":"Полоска показала кислую среду: pH "+d.ph+".");
+  say(d.id==="water"?"Нейтрально! Полоска стала зелёной.":"Полоска показала кислую среду: pH "+d.ph+".");
 }
 function logIt(){
   if(L1.stage!==3)return;var d=L1.drink;
@@ -1269,7 +999,7 @@ function compareTwo(){
 
 /* ================= LAB 2 SHELL ================= */
 var shellDay=1,shellSeen={};
-var DAYCAP={1:"День 1. Кусочки скорлупы помещены в четыре напитка.",2:"День 2. Наблюдаем за поверхностью скорлупы.",3:"День 3. В кислых напитках изменения заметнее.",4:"День 4. Наблюдение продолжается.",5:"День 5. Итог наблюдения — нажми «Посмотреть наблюдения»."};
+var DAYCAP={1:"День 1. Кусочки скорлупы помещены в четыре напитка.",2:"День 2. Наблюдаем за поверхностью скорлупы.",3:"День 3. В некоторых стаканах заметны изменения.",4:"День 4. Наблюдение продолжается.",5:"День 5. Итог наблюдения — нажми «Посмотреть наблюдения»."};
 function buildLab2(){
   var tl="";for(var i=1;i<=5;i++)tl+='<button type="button" data-day="'+i+'">День '+i+'</button>';
   $("timeline").innerHTML=tl;
@@ -1282,15 +1012,13 @@ function buildLab2(){
 function renderCups(){
   $("cups").innerHTML=SHELL_IDS.map(function(id){var d=D(id);
     var obs=shellSeen[id]?'<div class="obs fade-in"><span class="tag data">Итог за 5 дней</span><br>'+d.shell+'</div>':'<div class="obs muted">Нажми, чтобы увидеть итог исследования</div>';
-    return '<div class="cup"><h3>'+d.name+'</h3>'+shellCupSVG(id,shellDay,true)+'<div class="day-rec"><b>День '+shellDay+':</b> '+SHELL_DAYS[id][shellDay-1]+'</div><button type="button" class="btn sm ghost" data-obs="'+id+'">Посмотреть наблюдения</button>'+obs+'</div>';}).join("");
+    return '<div class="cup"><h3>'+d.name+'</h3>'+shellCupSVG(id,shellDay,true)+'<button type="button" class="btn sm ghost" data-obs="'+id+'">Посмотреть наблюдения</button>'+obs+'</div>';}).join("");
   var bs=$("timeline").querySelectorAll("button");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",+bs[i].getAttribute("data-day")===shellDay);
-  $("dayCap").innerHTML=DAYCAP[shellDay]+' <span class="tag data">запись — данные</span> <span class="tag viz">рисунок — условно</span>';
+  $("dayCap").innerHTML=DAYCAP[shellDay]+(shellDay>1&&shellDay<5?' <span class="tag viz">условно</span>':'');
 }
 function renderShellTable(hl){
-  $("shHead").innerHTML='<tr><th>День</th>'+SHELL_IDS.map(function(id){return '<th'+(hl===id?' class="hl"':'')+'>'+D(id).name+'</th>';}).join("")+'</tr>';
-  var rows="";for(var dd=0;dd<5;dd++){rows+='<tr><td><b>'+(dd+1)+'</b></td>'+SHELL_IDS.map(function(id){return '<td'+(hl===id?' class="hl"':'')+'>'+SHELL_DAYS[id][dd]+'</td>';}).join("")+'</tr>';}
-  $("shBody").innerHTML=rows;
-  $("shSum").innerHTML=hl?'<div class="feedback ok" style="margin-top:.8rem"><b>'+D(hl).name+' — итог за 5 дней.</b> '+D(hl).shell+(hl==="soda"?' <br><span class="muted">В газированном напитке пузырьки могут быть связаны не только с реакцией, но и с выделением растворённого газа.</span>':'')+'</div>':'';
+  $("shBody").innerHTML=SHELL_IDS.map(function(id){var d=D(id);var shown=shellSeen[id];
+    return '<tr'+(hl===id?' style="background:#fff7ef"':'')+'><td><span class="dot" style="background:'+d.color+'"></span><b>'+d.name+'</b></td><td>'+(shown?d.shell:'<span class="muted">Выбери напиток и нажми «Показать итог»</span>')+'</td></tr>';}).join("");
 }
 
 /* ================= LAB 3 CHALK ================= */
@@ -1321,7 +1049,7 @@ function dropChalk(g){
   if(g==="A"){setTimeout(function(){$("lblA").innerHTML='Заметная реакция отсутствует';},wait(1100));say("В воде мел просто лежит на дне.");}
   else{
     setTimeout(function(){
-      $("lblB").innerHTML='<span style="color:var(--orange2)">Появляются пузырьки!</span><br><small class="muted">Мел постепенно изменяется</small>';
+      $("lblB").innerHTML='<span style="color:var(--orange2)">Появляются пузырьки!</span>';
       spawnBubbles(gl);$("chalkExplain").classList.remove("hidden");mark("chalk");
       moodZ($("helperZ"),"wow");say("Ого! Пузырьки! Это выделяется углекислый газ.");
     },wait(1100));
@@ -1372,11 +1100,7 @@ function buildMath(){
    ["17 ÷ 20 × 100% = 85%","Выбор воды","17 из 20 готовы чаще выбирать воду. 17 ÷ 20 = 0,85 → 85%."],
    ["17 − 3 = 14","Вода: «да» против «нет»","Готовых чаще выбирать воду (17) на 14 учеников больше, чем не готовых (3)."],
    ["15 − 5 = 10","Газировка: «да» против «нет»","Пьющих газированные напитки (15) на 10 учеников больше, чем не пьющих (5)."],
-   ["16 − 4 = 12","Соки: «да» против «нет»","Часто пьющих соки или лимонад (16) на 12 учеников больше, чем тех, кто пьёт их редко (4)."],
-   ["60% − 40% = 20 п. п.","Расчёт 1. Знания об эмали","Знают о влиянии кислых напитков на эмаль 8 из 20 (40%), не знают 12 из 20 (60%). Разница между группами — 20 процентных пунктов."],
-   ["6 ÷ 20 × 100% = 30%","Расчёт 2. Состав напитка","На состав обращают внимание 6 из 20 (30%), не обращают 14 из 20 (70%). Разница — 40 процентных пунктов."],
-   ["85% − 40% = 45 п. п.","Расчёт 3. Вода и знания","Готовы чаще выбирать воду 85%, знают о влиянии на эмаль 40%. Разница 45 п. п. Это разные вопросы, поэтому расчёт не доказывает, что дети изменили поведение."],
-   ["73 ÷ 120 × 100% ≈ 60,8%","Расчёт 4. Все ответы «да»","Ответов «да»: 15 + 16 + 11 + 8 + 6 + 17 = 73, всего ответов 20 × 6 = 120. 73 ÷ 120 × 100% ≈ 60,8%. Показатель описательный: вопросы измеряют разное."]
+   ["16 − 4 = 12","Соки: «да» против «нет»","Часто пьющих соки или лимонад (16) на 12 учеников больше, чем тех, кто пьёт их редко (4)."]
   ];
   $("ops").innerHTML=OPS.map(function(o){return '<button type="button" class="op"><div class="hint">'+o[1]+'</div><div class="f">'+o[0]+'</div><div class="ex">'+o[2]+'</div></button>';}).join("");
   $("ops").addEventListener("click",function(e){var b=e.target.closest(".op");if(b)b.classList.toggle("open");});
@@ -1461,7 +1185,7 @@ function passCompare(){
 }
 
 /* ================= GAME ================= */
-var ZONES=[{id:"z1",lo:2,hi:3,name:"Кислая",lab:"pH 2–3"},{id:"z2",lo:3,hi:4,name:"Кислая",lab:"pH 3–4"},{id:"z3",lo:5,hi:6,name:"Слабокислая",lab:"pH 5–6"},{id:"z4",lo:7,hi:7,name:"Близкая к нейтр.",lab:"pH ≈ 7"}];
+var ZONES=[{id:"z1",lo:2,hi:3,name:"Сильнокислая",lab:"pH 2–3"},{id:"z2",lo:3,hi:4,name:"Кислая",lab:"pH 3–4"},{id:"z3",lo:5,hi:6,name:"Слабокислая",lab:"pH 5–6"},{id:"z4",lo:7,hi:7,name:"Нейтральная",lab:"pH ≈ 7"}];
 function zoneOk(d,z){return d.lo<=z.hi&&z.lo<=d.hi;}
 var TASKS=[
  {k:"Задание 1",t:"Найди нейтральную среду",type:"pick"},
@@ -1576,231 +1300,19 @@ function finish(){
 }
 
 /* ================= DISCOVERIES ================= */
-/* ================= SMILE: памятка «Береги свою улыбку!» ================= */
-var TOOTH_D="M0 18 C-1 4 13 1 20 9 C27 1 41 4 40 18 C40.5 32 37 40 35 53 C33.5 66 28.5 73 25.5 64 C23.5 57 16.5 57 14.5 64 C11.5 73 6.5 66 5 53 C3 40 -0.5 32 0 18Z";
-function toothG(x,y,s,fill){return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="'+TOOTH_D+'" fill="'+(fill||"#fff")+'" stroke="#0b2545" stroke-width="'+(3.5/s)+'" stroke-linejoin="round"/></g>';}
-function badge(cx,cy,color,inner){return '<circle cx="'+cx+'" cy="'+cy+'" r="15" fill="'+color+'"/>'+inner;}
-var CHECK=function(cx,cy){return '<path d="M'+(cx-7)+' '+cy+' l5 5 l9 -10" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>';};
-function ruleSVG(n){
-  var s='<svg viewBox="0 0 120 120" aria-hidden="true">';
-  if(n===1){s+='<path d="M28 18 L36 104 Q37 110 43 110 L73 110 Q79 110 80 104 L88 18Z" fill="#fff" stroke="#0b2545" stroke-opacity=".45" stroke-width="4"/><path d="M31 44 L36.6 103 Q37.5 106 43 106 L73 106 Q78.5 106 79.4 103 L85 44Z" fill="#8fd3f4"/><path d="M58 54 C50 66 48 72 48 77 a10 10 0 0 0 20 0 C68 72 66 66 58 54Z" fill="#fff" opacity=".9"/><rect x="36" y="24" width="5" height="70" rx="2.5" fill="#fff" opacity=".7"/>'+badge(96,26,"#2fa866",CHECK(96,26));}
-  else if(n===2){s+='<rect x="32" y="20" width="46" height="88" rx="11" fill="#e0524a"/><rect x="32" y="20" width="46" height="11" rx="5.5" fill="#b83a33"/><rect x="32" y="97" width="46" height="11" rx="5.5" fill="#b83a33"/><rect x="37" y="48" width="36" height="28" rx="5" fill="#fff" opacity=".9"/><circle cx="47" cy="62" r="3.5" fill="#e0524a"/><circle cx="56" cy="56" r="2.6" fill="#e0524a"/><circle cx="63" cy="66" r="4" fill="#e0524a"/><rect x="38" y="34" width="4" height="56" rx="2" fill="#fff" opacity=".35"/>'+badge(96,28,"#ff8c42",'<rect x="88" y="25" width="16" height="6" rx="3" fill="#fff"/>');}
-  else if(n===3){s+='<path d="M18 42 L24 108 Q25 112 30 112 L56 112 Q61 112 62 108 L68 42Z" fill="#fff" stroke="#0b2545" stroke-opacity=".45" stroke-width="4"/><path d="M21 64 L25 107 Q26 109 30 109 L56 109 Q60 109 61 107 L65 64Z" fill="#ffa53a"/><path d="M48 54 L56 14 L68 14" fill="none" stroke="#13a3a8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="88" cy="74" r="22" fill="#fff" stroke="#0b2545" stroke-width="4"/><path d="M88 60 L88 74 L98 80" fill="none" stroke="#ff8c42" stroke-width="4" stroke-linecap="round"/><path d="M70 98 L106 50" stroke="#e0524a" stroke-width="5.5" stroke-linecap="round"/>';}
-  else if(n===4){s+='<path d="M18 46 Q60 104 102 46 Q60 62 18 46Z" fill="#e0524a" stroke="#0b2545" stroke-width="4" stroke-linejoin="round"/><path d="M30 52 Q60 62 90 52 L87 59 Q60 68 33 59Z" fill="#fff"/><path d="M60 74 L60 110 M49 99 L60 110 L71 99" fill="none" stroke="#13a3a8" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="98" cy="22" r="14" fill="#fff" stroke="#0b2545" stroke-width="3"/><path d="M98 14 L98 22 L104 25" stroke="#0b2545" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M86 34 L110 10" stroke="#e0524a" stroke-width="4" stroke-linecap="round"/>';}
-  else if(n===5){s+=toothG(40,10,1,"#fff")+'<path d="M14 92 Q26 84 38 92 T62 92 T86 92 T110 92" fill="none" stroke="#13a3a8" stroke-width="5" stroke-linecap="round"/><path d="M14 106 Q26 98 38 106 T62 106 T86 106 T110 106" fill="none" stroke="#8fd3f4" stroke-width="5" stroke-linecap="round"/><path d="M22 40 C17 47 16 51 16 54 a6 6 0 0 0 12 0 C28 51 27 47 22 40Z" fill="#8fd3f4"/><path d="M100 30 C95 37 94 41 94 44 a6 6 0 0 0 12 0 C106 41 105 37 100 30Z" fill="#8fd3f4"/>';}
-  else if(n===6){s+=toothG(14,8,.95,"#fff")+'<path d="M64 20 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3Z" fill="#ff8c42"/><path d="M98 44 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2Z" fill="#13a3a8"/><rect x="8" y="92" width="80" height="13" rx="6.5" fill="#13a3a8"/><rect x="72" y="84" width="40" height="13" rx="4" fill="#0e8287"/>';
-    for(var bx=75;bx<=105;bx+=6)s+='<rect x="'+bx+'" y="68" width="4" height="17" rx="2" fill="#fff" stroke="#8fd3f4" stroke-width="1.5"/>';
-    s+='<path d="M74 68 Q80 58 88 64 Q95 56 103 64 Q110 60 110 68Z" fill="#fff" stroke="#ff8c42" stroke-width="2"/>';}
-  else if(n===7){s+='<rect x="14" y="24" width="86" height="84" rx="12" fill="#fff" stroke="#0b2545" stroke-width="4"/><rect x="14" y="24" width="86" height="22" rx="11" fill="#13a3a8"/><rect x="14" y="36" width="86" height="10" fill="#13a3a8"/><rect x="32" y="14" width="7" height="20" rx="3.5" fill="#0b2545"/><rect x="76" y="14" width="7" height="20" rx="3.5" fill="#0b2545"/>'+toothG(42,54,.72,"#e8f5fc")+badge(98,96,"#2fa866",CHECK(98,96));}
-  return s+'</svg>';
-}
-var RULES=[
- ["Чаще выбирай обычную питьевую воду","Вода — простой вариант для ежедневного питья. В исследовании вода показала pH около 7 — среду, близкую к нейтральной. 17 из 20 опрошенных ответили, что готовы чаще выбирать воду."],
- ["Не злоупотребляй газированными напитками","Многие газированные напитки имеют кислую среду. В исследовании газированный напиток показал pH около 2–3 — одно из самых низких значений. Отказываться полностью не обязательно: важно знать меру."],
- ["Не пей кислые напитки маленькими глотками в течение нескольких часов","Чем дольше кислота контактирует с зубами, тем больше времени она действует на эмаль. В расчётной модели из работы четыре отдельных приёма дают условно 4 × 20 = 80 минут воздействия, а один приём — 20 минут."],
- ["Не задерживай кислый напиток во рту","Не держи кислый напиток во рту и не полощи им рот: так кислота дольше соприкасается с зубами."],
- ["После кислого напитка прополощи рот водой","Обычная вода помогает уменьшить количество кислоты во рту. Слюна тоже помогает нейтрализовать кислоты, но ей нужно время."],
- ["Регулярно и правильно чисти зубы","Забота о гигиене — важная часть защиты зубов. Чисти зубы регулярно и так, как советует стоматолог."],
- ["Посещай стоматолога для профилактического осмотра","Профилактический осмотр помогает вовремя заметить проблемы, даже если зубы не болят. Врач подскажет, как беречь именно твои зубы."]
+var MEMO=[
+ ["1","Чаще выбирай обычную воду","Вода в исследовании показала pH около 7 — нейтральную среду."],
+ ["2","Не пей кислые напитки маленькими глотками долго","Если долго потягивать кислый напиток, зубы дольше находятся в кислой среде."],
+ ["3","Обращай внимание на состав","На этикетке можно найти кислоты, например лимонную. Это подсказка о кислотности."],
+ ["4","Прополощи рот водой","После кислого напитка можно прополоскать рот обычной водой."],
+ ["5","Соблюдай гигиену полости рта","Чисти зубы утром и вечером — это важная защита эмали."],
+ ["6","Регулярно посещай стоматолога","Врач вовремя заметит проблемы и подскажет, как беречь зубы."],
+ ["7","Кислотность — не единственный фактор","На здоровье зубов влияют и другие свойства напитков, частота их употребления и слюна."]
 ];
-var MAIN_ADVICE="«Не обязательно полностью отказываться от любимого напитка — важно знать меру и заботиться о своих зубах!»";
-var SQ=[
- ["Какой напиток в исследовании показал среду, близкую к нейтральной?",["Лимонад","Вода","Апельсиновый сок"],1,"Вода показала pH около 7. Лимонад и сок оказались кислыми (pH 2–3 и 3–4)."],
- ["Ты пьёшь лимонад. Как лучше поступить?",["Пить его маленькими глотками весь день","Выпить за один раз, а потом прополоскать рот водой","Подольше подержать напиток во рту"],1,"Если растянуть напиток на весь день, зубы дольше находятся в кислой среде. Лучше выпить его за один раз и прополоскать рот водой."],
- ["Что можно сделать сразу после кислого напитка?",["Прополоскать рот обычной водой","Съесть дольку лимона","Ничего не делать — это не важно"],0,"Вода помогает уменьшить количество кислоты во рту."],
- ["Зачем ходить к стоматологу, если зубы не болят?",["Незачем: к врачу идут только когда болит","Чтобы на профилактическом осмотре вовремя заметить проблемы","Чтобы получить конфету"],1,"Профилактический осмотр помогает заметить изменения раньше, чем появится боль."],
- ["Правда ли: «Один стакан кислого напитка обязательно испортит зубы»?",["Правда","Неправда: важно, как часто и как долго пьёшь, и как заботишься о зубах"],1,"Отдельный контакт с кислым напитком нельзя приравнивать к разрушению зуба. Значение имеют частота, время контакта, слюна и гигиена."]
-];
-var SQS={i:0,score:0,res:[],answered:false};
-function buildSmile(){
-  $("rules").innerHTML=RULES.map(function(r,i){return '<div class="rule" data-r="'+i+'"><div class="rule-art"><span class="rule-n">'+(i+1)+'</span>'+ruleSVG(i+1)+'</div><h3>'+r[0]+'</h3><button type="button" class="btn sm ghost why" aria-expanded="false">Почему это важно?</button><div class="rule-ex">'+r[1]+'</div></div>';}).join("")+
-   '<div class="rule advice"><div class="rule-art" style="background:linear-gradient(135deg,#ff8c42,#ffb057)"><span style="color:#fff;font-size:3rem;font-weight:900">!</span></div><h3>Мой главный совет</h3><p style="margin:0;font-weight:600;color:#36506d">'+MAIN_ADVICE+'</p></div>';
-  $("rules").addEventListener("click",function(e){var b=e.target.closest(".why");if(!b)return;var r=b.closest(".rule");var on=!r.classList.contains("open");r.classList.toggle("open",on);b.textContent=on?"Скрыть объяснение":"Почему это важно?";b.setAttribute("aria-expanded",on);});
-  $("bSmileOpenAll").addEventListener("click",function(){var rs=$("rules").querySelectorAll(".rule[data-r]"),all=true;for(var i=0;i<rs.length;i++)if(!rs[i].classList.contains("open"))all=false;
-    for(i=0;i<rs.length;i++){rs[i].classList.toggle("open",!all);var b=rs[i].querySelector(".why");b.textContent=!all?"Скрыть объяснение":"Почему это важно?";b.setAttribute("aria-expanded",!all);}
-    this.textContent=all?"Открыть все объяснения":"Скрыть все объяснения";});
-  $("bPrintMemo").addEventListener("click",printMemo);
-  renderSQ();
+function buildDisc(){
+  $("memo").innerHTML=MEMO.map(function(m){return '<button type="button" class="flip"><div class="flip-in"><div class="flip-f"><span class="ic">'+m[0]+'</span>'+m[1]+'</div><div class="flip-b">'+m[2]+'</div></div></button>';}).join("");
+  $("memo").addEventListener("click",function(e){var f=e.target.closest(".flip");if(f)f.classList.toggle("on");});
 }
-function renderSQ(){
-  var box=$("sq");$("sqScore").textContent=SQS.score+" / "+SQ.length;
-  var steps='<div class="sq-steps">'+SQ.map(function(q,i){return '<i class="'+(i<SQS.res.length?(SQS.res[i]?"ok":"no"):(i===SQS.i?"cur":""))+'"></i>';}).join("")+'</div>';
-  if(SQS.i>=SQ.length){
-    var c=SQS.score===5?"Отлично! Ты знаешь, как беречь улыбку.":SQS.score>=3?"Хороший результат! Перечитай карточки — и будет 5 из 5.":"Открой карточки с правилами и попробуй ещё раз.";
-    box.innerHTML=steps+'<div class="final fade-in" style="padding:.4rem"><div class="big" style="font-size:2.6rem">'+SQS.score+' из '+SQ.length+'</div><p style="font-weight:700">'+c+'</p><button type="button" class="btn orange" id="sqAgain">Пройти ещё раз</button></div>';
-    $("sqAgain").onclick=function(){resetSQ();};return;
-  }
-  var q=SQ[SQS.i];
-  box.innerHTML=steps+'<div class="task-k">Вопрос '+(SQS.i+1)+' из '+SQ.length+'</div><div class="sq-q">'+q[0]+'</div><div class="quiz-opts">'+q[1].map(function(o,k){return '<button type="button" class="qopt" data-k="'+k+'"><b>'+"АБВ"[k]+'.</b> '+o+'</button>';}).join("")+'</div><div id="sqFb"></div>';
-  box.querySelector(".quiz-opts").onclick=function(e){var b=e.target.closest(".qopt");if(!b||SQS.answered)return;SQS.answered=true;var k=+b.getAttribute("data-k"),ok=k===q[2];
-    var bs=box.querySelectorAll(".qopt");for(var j=0;j<bs.length;j++){bs[j].disabled=true;if(j===q[2])bs[j].classList.add("right");}if(!ok)b.classList.add("wrong");
-    SQS.res.push(ok);if(ok)SQS.score++;$("sqScore").textContent=SQS.score+" / "+SQ.length;
-    $("sqFb").innerHTML='<div class="feedback '+(ok?'ok':'no')+'"><b>'+(ok?'Верно!':'Не совсем.')+'</b> '+q[3]+'</div><div class="row" style="margin-top:.7rem"><button type="button" class="btn" id="sqNext">'+(SQS.i===SQ.length-1?'Узнать результат':'Следующий вопрос →')+'</button></div>';
-    $("sqNext").onclick=function(){SQS.i++;SQS.answered=false;renderSQ();};
-    moodZ($("helperZ"),ok?"joy":"sad");
-  };
-}
-function resetSQ(){SQS={i:0,score:0,res:[],answered:false};renderSQ();}
-function resetSmile(){var rs=$("rules").querySelectorAll(".rule.open");for(var i=0;i<rs.length;i++){rs[i].classList.remove("open");var b=rs[i].querySelector(".why");if(b){b.textContent="Почему это важно?";b.setAttribute("aria-expanded","false");}}$("bSmileOpenAll").textContent="Открыть все объяснения";resetSQ();}
-function buildPrintMemo(){
-  $("printMemo").innerHTML='<div class="pm-head">'+zubikSVG()+'<div><h1>БЕРЕГИ СВОЮ УЛЫБКУ!</h1><p>7 простых правил по итогам исследования «Кислотность напитков и их влияние на зубы»</p></div></div>'+
-   '<div class="pm-grid">'+RULES.map(function(r,i){return '<div class="pm-rule">'+ruleSVG(i+1)+'<div><b><span class="n">'+(i+1)+'</span>'+r[0]+'</b><span>'+r[1]+'</span></div></div>';}).join("")+
-   '<div class="pm-rule" style="background:#fff4ea;border-color:#ffc9a0"><div><b>Мой главный совет</b><span>'+MAIN_ADVICE+'</span><br><br><span><b style="display:inline;font-size:9.5pt">Что показали pH-полоски:</b> вода — около 7, чай — 5–6, яблочный и апельсиновый сок — 3–4, лимонад и газированный напиток — 2–3 (примерные значения).</span></div></div></div>'+
-   '<div class="pm-foot">Автор: Сагидолда Ибрахим, 4 «Б» класс · Руководитель: Токашова С. Заманбековна · КГУ «Средняя школа имени Шокана Уалиханова», село Тугыл, 2026 год. Советы не заменяют консультацию стоматолога.</div>';
-}
-function printMemo(){
-  var h=document.documentElement;h.classList.add("print-memo");
-  var off=function(){h.classList.remove("print-memo");window.removeEventListener("afterprint",off);};
-  window.addEventListener("afterprint",off);
-  try{window.print();}catch(e){say("Печать недоступна в этом окне. Открой файл в браузере и нажми Ctrl+P.");}
-  setTimeout(off,1500);
-}
-
-/* ================= MATH: расчётные модели ================= */
-function fmt(x){return String(x).replace(".",",");}
-function buildModels(){
-  $("midChart").innerHTML=DRINKS.map(function(d){var m=(d.lo+d.hi)/2,diff=7-m;return '<div class="mid-row"><span>'+d.name+'</span><span class="tr"><i style="width:'+Math.max(3,diff/4.5*100)+'%;background:'+phColor(m)+'"></i></span><b>'+fmt(diff)+'</b></div>';}).join("")+'<p class="muted" style="font-size:.78rem;margin:.4rem 0 0">Число справа — отличие от воды: 7 − середина диапазона. Например, лимонад: 7 − 2,5 = 4,5.</p>';
-  var r=$("freqR");function upd(){var n=+r.value;$("freqN").textContent=n;var b="";for(var i=0;i<n;i++)b+='<i title="20 минут"></i>';$("freqBar").innerHTML=b;$("freqOut").innerHTML="T = "+n+" × 20 = <big style='font-size:1.4rem'>"+(n*20)+" мин</big>"+(n>1?" — в "+n+" раз больше, чем один приём":" — один приём");}
-  r.addEventListener("input",upd);upd();
-}
-
-/* ================= DEFENSE MODE ================= */
-var SURVEY_TAG='<span class="sl-tag data">Фактические ответы 20 школьников — данные исследования</span> <span class="sl-tag calc">Проценты — расчёт</span>';
-function T(kind,text){return '<span class="sl-tag '+kind+'">'+text+'</span>';}
-var DS={i:0,shellDay:5,freqN:4,qa:false,timer:null};
-function surveyBarsSVG(){
-  var W=540,rowH=50,top=6,x0=54,bw=460,H=top+rowH*6+36,s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block" role="img" aria-label="Ответы да и нет">';
-  SURVEY.forEach(function(q,i){var y=top+i*rowH,wy=bw*q[1]/20;
-    s+='<text x="0" y="'+(y+25)+'" font-size="19" font-weight="800" fill="#0e8287">В'+(i+1)+'</text><rect x="'+x0+'" y="'+y+'" width="'+bw+'" height="36" rx="9" fill="#ff8c42"/><rect x="'+x0+'" y="'+y+'" width="'+wy+'" height="36" rx="9" fill="#13a3a8"/>'+
-       '<text x="'+(x0+12)+'" y="'+(y+25)+'" font-size="18" font-weight="800" fill="#fff">'+q[1]+'</text><text x="'+(x0+bw-12)+'" y="'+(y+25)+'" font-size="18" font-weight="800" fill="#fff" text-anchor="end">'+q[2]+'</text>';});
-  var ly=top+rowH*6+14;
-  s+='<rect x="'+x0+'" y="'+ly+'" width="16" height="16" rx="4" fill="#13a3a8"/><text x="'+(x0+24)+'" y="'+(ly+14)+'" font-size="16" fill="#0b2545">Да</text><rect x="'+(x0+80)+'" y="'+ly+'" width="16" height="16" rx="4" fill="#ff8c42"/><text x="'+(x0+104)+'" y="'+(ly+14)+'" font-size="16" fill="#0b2545">Нет</text><text x="'+(x0+bw)+'" y="'+(ly+14)+'" font-size="15" fill="#5b6f86" text-anchor="end">длина полосы = 20 учеников</text>';
-  return s+'</svg>';
-}
-function phRangeSVG(){
-  var W=740,x0=200,x1=720,sc=(x1-x0)/14,rowH=52,top=24,H=top+rowH*6+56,s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block" role="img" aria-label="Диапазоны pH шести напитков">';
-  s+='<defs><linearGradient id="dphg">'+STOPS.map(function(st){return '<stop offset="'+(st[0]/14*100)+'%" stop-color="'+st[1]+'"/>';}).join("")+'</linearGradient></defs>';
-  for(var p=0;p<=14;p++){var x=x0+p*sc;s+='<line x1="'+x+'" x2="'+x+'" y1="'+top+'" y2="'+(top+rowH*6)+'" stroke="#0b2545" stroke-opacity=".07"/>';}
-  var nx=x0+7*sc;s+='<line x1="'+nx+'" x2="'+nx+'" y1="'+(top-14)+'" y2="'+(top+rowH*6)+'" stroke="#3fb950" stroke-width="3" stroke-dasharray="7 6"/><text x="'+(nx+8)+'" y="'+(top-2)+'" font-size="15" font-weight="700" fill="#2fa866">нейтральная среда (7)</text>';
-  DRINKS.forEach(function(d,i){var y=top+i*rowH+10,m=(d.lo+d.hi)/2;
-    s+='<text x="0" y="'+(y+21)+'" font-size="20" font-weight="700" fill="#0b2545">'+d.name+'</text>';
-    if(d.lo===d.hi)s+='<circle cx="'+(x0+d.lo*sc)+'" cy="'+(y+15)+'" r="15" fill="'+phColor(m)+'"/>';
-    else s+='<rect x="'+(x0+d.lo*sc)+'" y="'+y+'" width="'+((d.hi-d.lo)*sc)+'" height="30" rx="15" fill="'+phColor(m)+'"/>';
-    s+='<text x="'+(x0+d.hi*sc+22)+'" y="'+(y+21)+'" font-size="18" font-weight="700" fill="#5b6f86">pH '+d.ph+'</text>';});
-  var ay=top+rowH*6+10;s+='<rect x="'+x0+'" y="'+ay+'" width="'+(14*sc)+'" height="14" rx="7" fill="url(#dphg)"/>';
-  for(p=0;p<=14;p+=2)s+='<text x="'+(x0+p*sc)+'" y="'+(ay+36)+'" font-size="15" text-anchor="middle" fill="#5b6f86">'+p+'</text>';
-  s+='<text x="'+x0+'" y="'+(ay+52)+'" font-size="0"></text>';
-  return s+'</svg>';
-}
-var SLIDES=[
- {t:"Титульный экран",sec:0,html:function(){return '<div class="sl sl-title"><div class="sl-z">'+zubikSVG()+'</div><div class="sl-k" style="justify-content:center">Исследовательская работа</div><h1>Кислотность напитков<br>и их влияние на зубы</h1><div style="font-size:24px;color:#36506d">Практический продукт — цифровая лаборатория «Зубной детектив»</div><div class="sl-meta"><div><b>Автор</b>Сагидолда Ибрахим, 4 «Б» класс</div><div><b>Руководитель</b>Токашова С. Заманбековна</div><div><b>Школа</b>КГУ «Средняя школа имени Шокана Уалиханова»</div><div><b>Место и год</b>село Тугыл, 2026 год</div></div></div>';},
-  notes:"Здравствуйте, уважаемые члены жюри! Меня зовут Сагидолда Ибрахим, я учусь в 4 «Б» классе школы имени Шокана Уалиханова.|Я представляю исследовательскую работу «Кислотность напитков и их влияние на зубы». Мой руководитель — Токашова С. Заманбековна."},
- {t:"Почему я выбрал эту тему",sec:0,html:function(){return '<div class="sl"><div class="sl-k">Экран 2 · Актуальность</div><h2>Почему я выбрал эту тему</h2><div class="sl-grid" style="grid-template-columns:1fr 1fr"><div class="sl-card"><h3>Актуальность</h3><p>Каждый день мы выбираем, что пить: воду, чай, сок или лимонад. Мы смотрим на вкус и упаковку, но редко думаем о кислотности.</p><p style="margin-top:14px">Кислые напитки могут часто контактировать с зубами. Поэтому детям полезно понимать, что такое pH и почему важно не задерживать напиток во рту.</p></div><div class="sl-card" style="background:linear-gradient(135deg,#0b2545,#1d4f86);color:#fff;border:0"><h3 style="color:#8fd3f4">Проблемный вопрос</h3><p class="sl-big">Какие напитки из выбранных образцов имеют более кислую среду и что показывают простые опыты с минеральными материалами?</p></div></div><div class="sl-card" style="margin-top:22px;padding:16px 26px"><b style="color:#0e8287">Новизна:</b> в одной работе соединены сравнение pH шести напитков, анкета одноклассников, наглядные опыты и цифровая лаборатория.</div></div>';},
-  notes:"Каждый день мы выбираем, что пить: воду, чай, сок или лимонад. Обычно мы смотрим на вкус и упаковку и почти не думаем о кислотности.|Мне стало интересно: какие из знакомых напитков более кислые и почему это важно для зубов?|Мой проблемный вопрос: какие напитки из выбранных имеют более кислую среду и что показывают простые опыты с минеральными материалами?"},
- {t:"Цель, задачи и гипотеза",sec:0,html:function(){return '<div class="sl"><div class="sl-k">Экран 3</div><h2>Цель, задачи и гипотеза</h2><div class="sl-card" style="margin-bottom:20px"><h3>Цель</h3><p style="font-size:24px">Сравнить кислотность шести напитков и на основе своих наблюдений объяснить, почему кислые напитки нужно пить разумно.</p></div><div class="sl-grid" style="grid-template-columns:1.1fr 1fr"><div class="sl-card"><h3>Задачи</h3><ul style="columns:2;column-gap:30px;font-size:20px"><li>Узнать, что такое pH</li><li>Узнать, как устроена зубная эмаль</li><li>Опросить одноклассников</li><li>Сравнить кислотность напитков</li><li>Обобщить опыты со скорлупой и мелом</li><li>Сделать памятку и наглядный продукт</li></ul></div><div class="sl-card" style="background:#fff7ef;border-color:#ffd7b8"><h3 style="color:#e8701f">Гипотеза</h3><p style="font-size:21px">Среди напитков будут образцы с разным pH, а в кислых напитках скорлупа будет меняться заметнее, чем в воде.</p><p style="font-size:16px;color:#5b6f86;margin-top:10px">Влияние напитков на настоящую эмаль в опытах не проверялось.</p></div></div></div>';},
-  notes:"Цель моей работы — сравнить кислотность шести напитков и на основе своих наблюдений объяснить, почему кислые напитки нужно пить разумно.|Для этого я поставил шесть задач: узнать, что такое pH и как устроена эмаль, опросить одноклассников, сравнить напитки, обобщить опыты и сделать памятку.|Моя гипотеза: среди напитков будут образцы с разным pH, а в кислых напитках скорлупа будет меняться заметнее, чем в воде. Влияние на настоящую эмаль я не проверял — это важно сказать честно."},
- {t:"Анкетирование",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 4 · Моё исследование <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Анкетирование: 20 участников, 6 вопросов</h2><div style="margin-bottom:14px">'+SURVEY_TAG+'</div><div class="sl-grid" style="grid-template-columns:1.15fr 1fr;align-items:start"><table class="sl-tbl"><thead><tr><th></th><th>Вопрос</th><th>Да</th><th>Нет</th><th>Да, %</th></tr></thead><tbody>'+SURVEY.map(function(q,i){return '<tr><td><b style="color:#0e8287">В'+(i+1)+'</b></td><td style="font-size:17px">'+q[0]+'</td><td><b>'+q[1]+'</b></td><td>'+q[2]+'</td><td><b>'+pct(q[1],20)+'%</b></td></tr>';}).join("")+'</tbody></table><div>'+surveyBarsSVG()+'</div></div><div class="sl-card" style="margin-top:12px;padding:12px 22px;font-size:20px"><b>Вывод:</b> ребята часто пьют кислые напитки, но только 8 из 20 знают об их возможном влиянии на эмаль.</div></div>';},
-  notes:"Сначала я провёл анкетирование. В нём участвовали 20 школьников, я задал 6 вопросов с ответами «да» и «нет».|15 ребят пьют газированные напитки, 16 часто пьют соки или лимонад. Но только 8 из 20 знают, что кислые напитки могут воздействовать на эмаль.|А 17 из 20 готовы чаще выбирать воду. Это показало мне, что тема действительно нужна."},
- {t:"Эксперимент № 1. pH напитков",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 5 · Эксперимент № 1 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Сравнение кислотности шести напитков</h2><div style="margin-bottom:14px">'+T("data","Ориентировочные диапазоны pH — данные исследования")+'</div><div class="sl-grid" style="grid-template-columns:1.75fr 1fr;align-items:start"><div class="sl-card" style="background:#fff;padding:16px 18px">'+phRangeSVG()+'</div><div style="display:flex;flex-direction:column;gap:16px"><div class="sl-card" style="padding:16px 20px"><h3>Метод</h3><p style="font-size:19px">Индикаторную полоску опускали в напиток и сравнивали цвет со шкалой производителя.</p></div><div class="sl-card" style="padding:16px 20px"><h3>От кислых к нейтральным</h3><p style="font-size:19px">лимонад, газировка (2–3) → яблочный и апельсиновый сок (3–4) → чай (5–6) → вода (≈7)</p></div><div class="sl-card" style="padding:16px 20px;background:#fff7ef;border-color:#ffd7b8"><p style="font-size:17px">Внутри пары с одинаковым диапазоном нельзя сказать, какой напиток кислее.</p></div></div></div></div>';},
-  notes:"Первый опыт — сравнение pH. Я наливал напитки в стаканы, опускал индикаторную полоску и сравнивал её цвет со шкалой.|Вода оказалась близкой к нейтральной — около 7. Чай — слабокислый, 5–6. Соки — 3–4. Самые низкие значения — у лимонада и газированного напитка: 2–3.|Полоски дают примерный результат, поэтому внутри пары я не могу сказать, какой напиток кислее."},
- {t:"Эксперимент № 2. Скорлупа, 5 дней",sec:1,html:function(){var d=DS.shellDay;return '<div class="sl"><div class="sl-k">Экран 6 · Эксперимент № 2 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Пять дней наблюдения за яичной скорлупой</h2><div style="margin-bottom:12px;display:flex;gap:10px">'+T("data","Записи по дням — данные исследования")+T("viz","Рисунки — модельные изображения")+'</div><div class="sl-grid" style="grid-template-columns:1.35fr 1fr;align-items:start"><div><table class="sl-tbl" style="font-size:16px"><thead><tr><th>День</th>'+SHELL_IDS.map(function(id){return '<th>'+D(id).name+'</th>';}).join("")+'</tr></thead><tbody>'+[0,1,2,3,4].map(function(k){return '<tr style="'+(k===d-1?'background:#fff3e6;font-weight:700':'')+'"><td><b>'+(k+1)+'</b></td>'+SHELL_IDS.map(function(id){return '<td>'+SHELL_DAYS[id][k]+'</td>';}).join("")+'</tr>';}).join("")+'</tbody></table><p style="font-size:16px;color:#5b6f86;margin:12px 0 0">Скорлупу не взвешивали: «хрупкая», «тоньше», «рыхлая» — это описания, а не измерения.</p></div><div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+SHELL_IDS.map(function(id){return '<div style="text-align:center;font-size:15px;font-weight:700"><div style="height:150px">'+shellCupSVG(id,d,false).replace("<svg ",'<svg style="height:150px" ')+'</div>'+D(id).name+'</div>';}).join("")+'</div><div class="d-days" style="display:flex;gap:6px;justify-content:center;margin-top:10px">'+[1,2,3,4,5].map(function(k){return '<button type="button" class="dbtn'+(k===d?' on':'')+'" data-sday="'+k+'" style="font-size:16px">День '+k+'</button>';}).join("")+'</div></div></div></div>';},
-  init:function(st){st.querySelectorAll("[data-sday]").forEach(function(b){b.onclick=function(){DS.shellDay=+b.getAttribute("data-sday");renderDefense(true);};});},
-  notes:"Второй опыт — наблюдение за яичной скорлупой. Я положил одинаковые кусочки в воду, яблочный сок, лимонад и газированный напиток и наблюдал пять дней.|В воде почти ничего не менялось. В кислых напитках появлялись пузырьки, поверхность менялась, скорлупа становилась хрупкой или рыхлой. (Можно переключать дни кнопками.)|Записи в таблице — из моего дневника, а рисунки модельные. Скорлупу я не взвешивал, поэтому это описания, а не измерения. Скорлупа — это модель, а не зуб."},
- {t:"Эксперимент № 3. Мел и лимонный сок",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 7 · Эксперимент № 3 <span class="key">ключевой</span></div><h2 style="margin-bottom:10px">Мел и лимонный сок</h2><div style="margin-bottom:14px;display:flex;gap:10px">'+T("data","Результат — данные исследования")+T("viz","Анимация — условная")+'</div><div class="sl-grid" style="grid-template-columns:1fr 1.15fr;align-items:start"><div class="sl-card" style="text-align:center;padding-top:30px"><div class="sl-chalk" style="margin-bottom:18px"><div><div class="sl-glass" id="dgA"><div class="liq" style="background:linear-gradient(180deg,rgba(176,226,250,.75),rgba(143,211,244,.9))"></div><div class="ck"></div></div><b style="font-size:19px">А — вода</b><div id="dlA" style="font-size:16px;min-height:44px;color:#5b6f86"></div></div><div><div class="sl-glass" id="dgB"><div class="liq" style="background:linear-gradient(180deg,rgba(250,240,140,.85),rgba(240,220,90,.95))"></div><div class="ck"></div></div><b style="font-size:19px">Б — лимонный сок</b><div id="dlB" style="font-size:16px;min-height:44px;color:#e8701f;font-weight:700"></div></div></div><button type="button" class="btn orange" id="dChalkGo" style="font-size:20px">Показать опыт</button></div><div style="display:flex;flex-direction:column;gap:14px"><div class="sl-card" style="padding:14px 20px"><h3>Что я увидел</h3><p style="font-size:19px">В воде заметной реакции практически не было. В лимонном соке появились пузырьки, и мел постепенно начал изменяться.</p></div><div class="sl-card" style="padding:14px 20px"><h3>Почему пузырьки</h3><p style="font-size:19px">Мел содержит карбонат кальция. Кислота реагирует с ним — может выделяться углекислый газ.</p></div><div class="sl-card" style="padding:14px 20px;background:#fff7ef;border-color:#ffd7b8"><h3 style="color:#e8701f">Ограничения</h3><ul style="font-size:17px"><li>Количество газа не измерялось, состав мела бывает разным.</li><li>Эмаль — минералы на основе фосфата кальция, а мел — карбонат кальция. Зуб не растворяется так же.</li></ul></div></div></div></div>';},
-  init:function(st){var go=st.querySelector("#dChalkGo");go.onclick=function(){go.disabled=true;st.querySelector("#dgA").classList.add("go");st.querySelector("#dgB").classList.add("go");
-    setTimeout(function(){var a=st.querySelector("#dlA"),b=st.querySelector("#dlB");if(a)a.textContent="Заметной реакции практически нет";if(b)b.textContent="Пузырьки! Мел изменяется";var gl=st.querySelector("#dgB");if(!gl)return;
-      if(RM){for(var i=0;i<14;i++){var e=document.createElement("span");e.className="bub";e.style.left=(25+Math.random()*50)+"%";e.style.bottom=(15+Math.random()*50)+"%";gl.appendChild(e);}return;}
-      var c=0;clearInterval(DS.timer);DS.timer=setInterval(function(){if(!document.body.contains(gl)||c>200){clearInterval(DS.timer);return;}var e=document.createElement("span");e.className="bub";e.style.left=(30+Math.random()*40)+"%";var z=5+Math.random()*9;e.style.width=z+"px";e.style.height=z+"px";gl.appendChild(e);c++;setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},1900);},90);
-    },wait(1100));};},
-  notes:"Третий опыт — мел и лимонный сок. (Нажать «Показать опыт».)|В воде заметной реакции почти не было. В лимонном соке появились пузырьки, и мел постепенно начал изменяться.|Мел содержит карбонат кальция, кислота с ним реагирует, и может выделяться углекислый газ. Но зубная эмаль — это не мел, поэтому опыт показывает только принцип."},
- {t:"Математический анализ",sec:1,html:function(){var n=DS.freqN,blocks="";for(var i=0;i<n;i++)blocks+='<i style="display:inline-block;width:34px;height:26px;border-radius:7px;background:linear-gradient(180deg,#ffb36e,#f58a3a);margin:3px"></i>';
-   return '<div class="sl"><div class="sl-k">Экран 8 · Математика <span class="key">ключевой</span></div><h2 style="margin-bottom:16px">Математический анализ</h2><div class="sl-grid" style="grid-template-columns:1fr 1fr 1.05fr;align-items:stretch"><div class="sl-card" style="padding:16px 20px"><h3>Проценты по анкете</h3><div style="margin-bottom:8px">'+T("calc","Расчёт по данным")+'</div><div style="font-family:Consolas,monospace;font-size:21px;line-height:1.9;font-weight:700;color:#0e8287">15 ÷ 20 × 100% = 75%<br>16 ÷ 20 × 100% = 80%<br>8 ÷ 20 × 100% = 40%<br>6 ÷ 20 × 100% = 30%<br>17 ÷ 20 × 100% = 85%<br><span style="color:#e8701f">85% − 40% = 45 п. п.</span></div></div>'+
-   '<div class="sl-card" style="padding:16px 20px"><h3>Сравнение pH</h3><div style="margin-bottom:8px">'+T("model","Модель: середины диапазонов")+'</div>'+DRINKS.map(function(d){var m=(d.lo+d.hi)/2,df=7-m;return '<div style="display:grid;grid-template-columns:118px 1fr 40px;gap:8px;align-items:center;font-size:15px;margin:5px 0"><span>'+d.name+'</span><span style="height:14px;background:#e8f5fc;border-radius:99px;overflow:hidden"><i style="display:block;height:100%;width:'+Math.max(3,df/4.5*100)+'%;background:'+phColor(m)+';border-radius:99px"></i></span><b>'+fmt(df)+'</b></div>';}).join("")+'<p style="font-size:15px;color:#36506d;margin-top:8px">Отличие от воды: 7 − 2,5 = 4,5. Шкала pH логарифмическая: pH 3 и pH 4 — примерно в 10 раз разная активность ионов H⁺. Это не «в 10 раз опаснее».</p></div>'+
-   '<div class="sl-card" style="padding:16px 20px"><h3>Частота употребления</h3><div style="margin-bottom:8px">'+T("model","Расчётная модель")+'</div><p style="font-size:18px">T = n × t, t = 20 мин (условно)</p><div style="display:flex;align-items:center;gap:10px;margin:8px 0"><button type="button" class="dbtn" id="dFm" style="font-size:20px;width:44px">−</button><b style="font-size:20px">n = '+n+'</b><button type="button" class="dbtn" id="dFp" style="font-size:20px;width:44px">+</button></div><div style="min-height:72px">'+blocks+'</div><div style="background:#0b2545;color:#fff;border-radius:14px;padding:10px 16px;font-size:22px;font-weight:800">'+n+' × 20 = <span style="color:#8fd3f4">'+(n*20)+' мин</span></div><p style="font-size:14px;color:#5b6f86;margin-top:8px">Слюна нейтрализует кислоты с разной скоростью — это не прогноз повреждения эмали.</p></div></div><div style="margin-top:14px;font-size:17px;color:#36506d;text-align:center"><b>Расчётные сценарии отделены от наблюдений:</b> они объясняют результаты, но не измеряют повреждение зубов.</div></div>';},
-  init:function(st){var m=st.querySelector("#dFm"),p=st.querySelector("#dFp");m.onclick=function(){DS.freqN=Math.max(1,DS.freqN-1);renderDefense(true);};p.onclick=function(){DS.freqN=Math.min(8,DS.freqN+1);renderDefense(true);};},
-  notes:"Дальше я посчитал проценты: например, 15 разделить на 20 и умножить на 100 — получается 75%.|Чтобы сравнить pH, я взял середину каждого диапазона: у воды 7, у лимонада 2,5 — разница 4,5 единицы. Шкала pH логарифмическая, но это не значит, что напиток во столько же раз опаснее.|Ещё я сделал модель частоты: если пить напиток понемногу четыре раза, условное время воздействия — 4 × 20 = 80 минут, а за один приём — 20 минут. Это расчёты, а не опыты, и они не показывают повреждение зубов."},
- {t:"Результаты и проверка гипотезы",sec:1,html:function(){return '<div class="sl"><div class="sl-k">Экран 9 · Проверка гипотезы <span class="key">ключевой</span></div><h2 style="margin-bottom:14px">Результаты и проверка гипотезы</h2><table class="sl-tbl"><thead><tr><th>Что я ожидал</th><th>Что получил</th><th>Итог</th></tr></thead><tbody><tr><td>Напитки будут иметь разный pH</td><td>От pH 2–3 (лимонад, газировка) до pH ≈ 7 (вода)</td><td><b style="color:#2fa866">✓ Подтверждается</b></td></tr><tr><td>В кислых напитках скорлупа будет меняться заметнее, чем в воде</td><td>В воде — почти без изменений; в соке, лимонаде, газировке — пузырьки, хрупкость, рыхлость</td><td><b style="color:#2fa866">✓ Подтверждается качественно</b></td></tr></tbody></table><div class="sl-grid" style="grid-template-columns:1.2fr 1fr;margin-top:18px"><div class="sl-card" style="background:#fff7ef;border-color:#ffd7b8;padding:14px 20px"><h3 style="color:#e8701f">Что НЕ доказано</h3><ul style="font-size:18px"><li>Скорлупа теряет определённый процент массы — <b>не установлено</b> (взвешивания не было)</li><li>Напиток с самым низким pH быстрее разрушает зубы — <b>не доказано</b> (опытов с эмалью не было)</li><li>Дети изменили привычки — <b>не установлено</b> (повторного опроса нет)</li></ul></div><div class="sl-card" style="background:linear-gradient(135deg,#13a3a8,#1b7fb0);color:#fff;border:0;display:flex;align-items:center"><p class="sl-big" style="font-size:25px">Гипотеза подтверждается в пределах выбранных моделей и приблизительных методов.</p></div></div></div>';},
-  notes:"Теперь я проверю гипотезу. Я ожидал, что напитки будут разными по pH, — это подтвердилось.|Я ожидал, что в кислых напитках скорлупа будет меняться заметнее, чем в воде, — это тоже подтвердилось. Значит, гипотеза подтверждается в пределах моих опытов.|Но я не доказал, что напиток с самым низким pH быстрее разрушает зубы: опытов с настоящей эмалью не было. Скорлупу я не взвешивал, а повторного опроса не проводил."},
- {t:"Практический результат",sec:2,html:function(){function card(ic,bg,title,txt,pg){return '<div class="sl-card sl-prod"><div class="ic" style="background:'+bg+'">'+ic+'</div><h3 style="color:#0b2545;text-transform:none;letter-spacing:0;font-size:24px">'+title+'</h3><p style="font-size:18px;flex:1">'+txt+'</p><button type="button" class="btn ghost" data-dgo="'+pg+'" style="align-self:flex-start;font-size:17px">Показать на сайте →</button></div>';}
-   return '<div class="sl"><div class="sl-k">Экран 10</div><h2>Практический результат</h2><div class="sl-grid" style="grid-template-columns:repeat(3,1fr)">'+card("⚗","linear-gradient(135deg,#13a3a8,#1b8fb8)","Цифровая лаборатория","Виртуальное определение pH, модели опытов, диаграммы, паспорта напитков. Работает без интернета.","ph")+card("☺","linear-gradient(135deg,#ff8c42,#ffad5c)","Памятка «Береги свою улыбку!»","7 правил с объяснениями, мини-тест и версия для печати.","smile")+card("★","linear-gradient(135deg,#0b2545,#2a5d9c)","Игра «Зубной детектив»","7 заданий на закрепление, до 70 баллов.","game")+'</div><div class="sl-card" style="margin-top:18px;padding:14px 22px;font-size:19px"><b>Все материалы созданы после исследования</b>, чтобы показать его результаты другим школьникам. Цифровая лаборатория не заменяет реальные опыты. Также подготовлен макет «Зубной детектив: кто атакует эмаль?».</div></div>';},
-  notes:"После исследования я сделал памятку «Береги свою улыбку!», макет и цифровую лабораторию «Зубной детектив».|В лаборатории можно провести опыт с pH, посмотреть модели опытов, диаграммы и сыграть в игру из семи заданий.|Эти материалы помогают рассказать о моих результатах другим ребятам. Они не заменяют настоящие опыты."},
- {t:"Выводы и рефлексия",sec:2,html:function(){return '<div class="sl"><div class="sl-k">Экран 11</div><h2>Выводы и рефлексия</h2><div class="sl-grid" style="grid-template-columns:repeat(3,1fr)"><div class="sl-card"><h3>Что я выяснил</h3><ul style="font-size:18px"><li>Напитки различаются по кислотности</li><li>Вода близка к нейтральной, чай слабокислый, соки, лимонад и газировка — кислые</li><li>В кислых напитках скорлупа менялась заметнее</li><li>Лимонный сок реагировал с мелом — пузырьки</li></ul></div><div class="sl-card"><h3>Чему я научился</h3><ul style="font-size:18px"><li>Сравнивать напитки по шкале pH</li><li>Вычислять проценты по ответам одноклассников</li><li>Делать выводы из таблиц</li><li>Понимать, что модель не повторяет настоящий зуб</li></ul></div><div class="sl-card"><h3>Что можно улучшить</h3><ul style="font-size:18px"><li>Провести больше повторных измерений</li><li>Сравнить напитки разных производителей</li><li>Взвешивать скорлупу до и после опыта</li><li>Измерять pH откалиброванным pH-метром</li></ul></div></div><div style="margin-top:18px;text-align:center;font-size:23px;font-weight:700;color:#0e8287">«Здоровая улыбка начинается не только с зубной щётки, но и с разумного выбора того, что мы пьём»</div></div>';},
-  notes:"Я выяснил, что напитки отличаются по кислотности, а кислоты могут взаимодействовать с карбонатными материалами.|Я научился работать с pH-полосками, считать проценты и делать выводы из таблиц. Я понял, что модель не полностью повторяет настоящий зуб и результаты нельзя преувеличивать.|В следующий раз я хочу провести больше повторных измерений и сравнить напитки разных производителей.|Главный вывод: здоровая улыбка начинается не только с зубной щётки, но и с разумного выбора того, что мы пьём."},
- {t:"Спасибо за внимание",sec:2,html:function(){var qa=DS.qa;return '<div class="sl sl-title"><div class="sl-z">'+zubikSVG()+'</div><h1 style="font-size:'+(qa?'54':'72')+'px">'+(qa?'Готов ответить на ваши вопросы!':'Спасибо за внимание!')+'</h1><div style="font-size:22px;color:#36506d">Сагидолда Ибрахим, 4 «Б» класс · «Кислотность напитков и их влияние на зубы»</div>'+
-   (qa?'<div class="sl-qchips">'+[["Анкета",3],["pH напитков",4],["Скорлупа",5],["Мел",6],["Расчёты",7],["Гипотеза",8],["Памятка и сайт",9]].map(function(c){return '<button type="button" data-dj="'+c[1]+'">'+c[0]+'</button>';}).join("")+'</div><button type="button" class="btn ghost" id="dQa" style="margin-top:20px;font-size:18px">Скрыть кнопки</button>':'<button type="button" class="btn orange" id="dQa" style="margin-top:28px;font-size:24px;padding:16px 34px">Вопросы жюри</button>')+'</div>';},
-  init:function(st){st.querySelector("#dQa").onclick=function(){DS.qa=!DS.qa;renderDefense(true);};st.querySelectorAll("[data-dj]").forEach(function(b){b.onclick=function(){gotoSlide(+b.getAttribute("data-dj"));};});},
-  notes:"Спасибо за внимание! Я готов ответить на ваши вопросы. (Нажать «Вопросы жюри» — появятся кнопки быстрого перехода к нужному экрану.)|<b>Почему скорлупа, а не зуб?</b> Скорлупа доступна и содержит карбонат кальция. Это модель, а не зуб: состав эмали другой.|<b>Почему pH записан диапазоном?</b> Полоска даёт примерный результат. Для точности нужны pH-метр и повторные измерения.|<b>Откуда пузырьки в газировке?</b> Это может быть и реакция, и выделение растворённого газа.|<b>Значит, кислые напитки пить нельзя?</b> Нет. Важно знать меру, не пить маленькими глотками часами и полоскать рот водой."}
-];
-var SEC_NAMES=["Начало","Моё исследование","Итоги"];
-function buildDefense(){
-  document.addEventListener("click",function(e){var b=e.target.closest("[data-defense]");if(b)openDefense();});
-  $("dPrev").onclick=function(){gotoSlide(DS.i-1);};
-  $("dNext").onclick=function(){gotoSlide(DS.i+1);};
-  $("dMenuBtn").onclick=function(e){e.stopPropagation();toggleMenu();};
-  $("dNotesBtn").onclick=function(){toggleNotes();};
-  $("dNotesClose").onclick=function(){toggleNotes(false);};
-  $("dRestart").onclick=function(){DS.shellDay=5;DS.freqN=4;DS.qa=false;toggleNotes(false);gotoSlide(0);};
-  $("dExit").onclick=closeDefense;
-  $("dFullBtn").onclick=function(){
-    var el=document.documentElement;
-    try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
-      else{var r=el.requestFullscreen||el.webkitRequestFullscreen;if(r){var pr=r.call(el);if(pr&&pr.catch)pr.catch(function(){dToast("Браузер не разрешил полноэкранный режим. Нажми F11.");});}else dToast("Нажми F11 для полноэкранного режима.");}}
-    catch(x){dToast("Нажми F11 для полноэкранного режима.");}
-  };
-  var m="";SLIDES.forEach(function(s,i){if(i===0||SLIDES[i-1].sec!==s.sec)m+='<div class="sec">'+SEC_NAMES[s.sec]+'</div>';m+='<button type="button" data-di="'+i+'" class="'+(s.sec===1?'key':'')+'"><i>'+(i+1)+'</i>'+s.t+'</button>';});
-  $("dMenu").innerHTML=m;
-  $("dMenu").addEventListener("click",function(e){var b=e.target.closest("[data-di]");if(b){toggleMenu(false);gotoSlide(+b.getAttribute("data-di"));}});
-  $("dDots").innerHTML=SLIDES.map(function(s,i){return '<button type="button" data-di="'+i+'" class="'+(s.sec===1?'key':'')+'" aria-label="Экран '+(i+1)+': '+s.t+'" title="'+(i+1)+'. '+s.t+'"></button>';}).join("");
-  $("dDots").addEventListener("click",function(e){var b=e.target.closest("[data-di]");if(b)gotoSlide(+b.getAttribute("data-di"));});
-  $("dStage").addEventListener("click",function(e){var b=e.target.closest("[data-dgo]");if(b){var p=b.getAttribute("data-dgo");closeDefense();go(p);}});
-  $("defense").addEventListener("click",function(e){if(!e.target.closest("#dMenu")&&!e.target.closest("#dMenuBtn"))toggleMenu(false);});
-  document.addEventListener("keydown",function(e){
-    if($("defense").classList.contains("hidden"))return;
-    var tag=(e.target&&e.target.tagName)||"";if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return;
-    var k=e.key;
-    if(k==="ArrowRight"||k==="PageDown"){e.preventDefault();gotoSlide(DS.i+1);}
-    else if(k==="ArrowLeft"||k==="PageUp"){e.preventDefault();gotoSlide(DS.i-1);}
-    else if(k===" "&&tag!=="BUTTON"){e.preventDefault();gotoSlide(DS.i+1);}
-    else if(k==="Home"){e.preventDefault();gotoSlide(0);}
-    else if(k==="End"){e.preventDefault();gotoSlide(SLIDES.length-1);}
-    else if(k==="Escape"){toggleMenu(false);}
-  });
-  window.addEventListener("resize",fitStage);
-}
-function openDefense(idx){
-  if(typeof idx==="number")DS.i=Math.max(0,Math.min(SLIDES.length-1,idx));
-  $("defense").classList.remove("hidden");document.body.style.overflow="hidden";
-  renderDefense();requestAnimationFrame(fitStage);
-}
-function closeDefense(){
-  clearInterval(DS.timer);toggleMenu(false);
-  try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch(e){}
-  $("defense").classList.add("hidden");document.body.style.overflow="";
-  try{history.replaceState(null,"","#"+current);}catch(e){}
-}
-function gotoSlide(i){if(i<0||i>=SLIDES.length)return;DS.i=i;renderDefense();}
-function renderDefense(same){
-  clearInterval(DS.timer);
-  var s=SLIDES[DS.i],st=$("dStage");
-  st.innerHTML=s.html();var sl=st.firstChild;if(!same&&sl)sl.classList.add("anim");
-  if(s.init)s.init(st);
-  $("dCount").textContent=(DS.i+1)+" / "+SLIDES.length;
-  $("dPrev").disabled=DS.i===0;$("dNext").disabled=DS.i===SLIDES.length-1;
-  var ds=$("dDots").querySelectorAll("button");for(var k=0;k<ds.length;k++)ds[k].classList.toggle("cur",k===DS.i);
-  var ms=$("dMenu").querySelectorAll("[data-di]");for(k=0;k<ms.length;k++)ms[k].classList.toggle("cur",k===DS.i);
-  $("dNotesText").innerHTML='<div class="task-k" style="margin-top:.6rem">Экран '+(DS.i+1)+'. '+s.t+'</div>'+s.notes.split("|").map(function(p){return '<p>'+p+'</p>';}).join("");
-  try{history.replaceState(null,"","#defense-"+(DS.i+1));}catch(e){}
-}
-function fitStage(){
-  if($("defense").classList.contains("hidden"))return;
-  var w=$("dStage").parentNode,r=w.getBoundingClientRect();
-  var sc=Math.min((r.width-24)/1280,(r.height-24)/720);if(!(sc>0))sc=.1;
-  $("dStage").style.transform="translate(-50%,-50%) scale("+sc+")";
-}
-function toggleMenu(on){var m=$("dMenu");if(on===undefined)on=m.classList.contains("hidden");m.classList.toggle("hidden",!on);$("dMenuBtn").setAttribute("aria-expanded",on);}
-function toggleNotes(on){var n=$("dNotes");if(on===undefined)on=n.classList.contains("hidden");n.classList.toggle("hidden",!on);$("dNotesBtn").classList.toggle("on",on);$("dNotesBtn").setAttribute("aria-pressed",on);requestAnimationFrame(fitStage);}
-var dToastT;
-function dToast(t){var el=$("dToast");if(!el){el=document.createElement("div");el.id="dToast";el.className="d-toast";$("defense").appendChild(el);}el.textContent=t;el.classList.add("on");clearTimeout(dToastT);dToastT=setTimeout(function(){el.classList.remove("on");},4000);}
 function renderSummary(){
   var labs=[["ph","Лаборатория pH"],["shell","Скорлупа"],["chalk","Мел"]];
   var dr=S.journal.length?S.journal.map(function(id){var d=D(id);return d?'<span class="pill" style="margin:.1rem">'+d.name+'</span>':"";}).join(" "):'<span class="muted">Пока нет. Загляни в лабораторию pH.</span>';
@@ -1829,19 +1341,19 @@ function buildTools(){
     resetBench();renderJournal();$("cmpOut").innerHTML="";
     shellSeen={};shellDay=1;renderShellTable(null);renderCups();
     resetChalk();passSel=[];passOpen={};$("passCmpOut").innerHTML="";renderPass();
-    newGame();resetSmile();updateProgress();go("home");say("Всё сброшено. Начнём исследование заново!");
+    newGame();updateProgress();go("home");say("Всё сброшено. Начнём исследование заново!");
   });
 }
 
 /* ================= INIT ================= */
 function init(){
-  load();buildNav();buildHome();buildFlow();buildLab1();buildLab2();buildLab3();buildMath();buildModels();buildPass();buildSmile();buildPrintMemo();buildDefense();buildTools();newGame();updateProgress();
-  var h=(location.hash||"").replace("#","");
-  var dm=/^defense(?:-(\d+))?$/.exec(h);
-  if(dm){go("home");openDefense(dm[1]?(+dm[1]-1):0);}else go(pageMap[h]?h:"home");
+  load();buildNav();buildHome();buildFlow();buildLab1();buildLab2();buildLab3();buildMath();buildPass();buildDisc();buildTools();newGame();updateProgress();
+  var h=(location.hash||"").replace("#","");go(pageMap[h]?h:"home");
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
 </body>
 </html>
+
+</body></html>
